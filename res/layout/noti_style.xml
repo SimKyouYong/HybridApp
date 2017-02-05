@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/push_pannel"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#000000">
+
+    <ImageView 
+        android:id="@+id/push_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="7dip"
+        android:src="@drawable/ic_launcher"
+        android:contentDescription="@string/app_name"/>
+    
+    <RelativeLayout
+        android:layout_toRightOf="@+id/push_icon"
+        android:layout_width="fill_parent"
+   		android:layout_height="wrap_content"
+   		android:paddingTop="5dip"
+   		android:paddingLeft="7dip">
+   		
+        <TextView
+        android:id="@+id/push_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+        
+        <TextView
+        android:id="@+id/push_message"
+        android:layout_below="@+id/push_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#CCCCCC"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:paddingBottom="5dip"
+        android:textSize="12sp" />
+      	  
+    </RelativeLayout>
+  
+</RelativeLayout>

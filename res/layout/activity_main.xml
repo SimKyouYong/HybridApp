@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    android:id="@+id/mainBody"
+    tools:context=".MainActivity">
+
+	<ProgressBar android:id="@+id/progress_horizontal" style="?android:attr/progressBarStyleHorizontal"
+			android:progressDrawable="@drawable/progress_bar" 
+			android:layout_width="fill_parent"
+			android:layout_height="4dp"
+			android:layout_gravity="top"
+			android:max="100"
+			android:visibility="gone"
+		    />    
+	    
+	<LinearLayout
+        android:id="@+id/bottomMenu"
+	    android:layout_width="fill_parent"
+	    android:layout_height="40dp"
+	    android:orientation="horizontal"
+	    android:layout_alignParentBottom="true"
+		android:background="@drawable/tab_bg" >
+		
+		<LinearLayout  
+	        android:layout_width="0px" 
+	        android:layout_height="fill_parent"
+	        android:layout_weight="35"/>
+		<ImageButton
+		    android:id="@+id/prevBtn"
+		    android:layout_width="0px"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="30"  
+		    android:layout_gravity="center_vertical|center_horizontal"
+		    android:background="@drawable/tab_prev_click"/>
+		<LinearLayout  
+	        android:layout_width="0px" 
+	        android:layout_height="fill_parent"
+	        android:layout_weight="35"/>		
+		<ImageButton
+		    android:id="@+id/nextBtn"
+		    android:layout_width="0px"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="center_vertical|center_horizontal"
+		    android:layout_weight="30"
+		    android:background="@drawable/tab_next_click" />	
+		<LinearLayout  
+	        android:layout_width="0px" 
+	        android:layout_height="fill_parent"
+	        android:layout_weight="35"/>		    
+		<ImageButton
+		    android:id="@+id/homeBtn"
+		    android:layout_width="0px"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="center_vertical|center_horizontal"
+		    android:layout_weight="30"
+		    android:background="@drawable/tab_home_click" />
+		<LinearLayout  
+	        android:layout_width="0px" 
+	        android:layout_height="fill_parent"
+	        android:layout_weight="35"/>			
+		<ImageButton
+		    android:id="@+id/reloadBtn"
+		    android:layout_width="0px"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="center_vertical|center_horizontal"
+		    android:layout_weight="30"
+		    android:background="@drawable/tab_reload_click" />
+		<LinearLayout  
+	        android:layout_width="0px" 
+	        android:layout_height="fill_parent"
+	        android:layout_weight="35"/>		
+		<ImageButton
+		    android:id="@+id/shareBtn"
+		    android:layout_width="0px"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="center_vertical|center_horizontal"
+		    android:layout_weight="30"		    
+		    android:background="@drawable/tab_share_click" />	
+		<LinearLayout  
+	        android:layout_width="0px" 
+	        android:layout_height="fill_parent"
+	        android:layout_weight="35"/>		    		    							    		    	
+	</LinearLayout>	
+	<WebView
+	        android:id="@+id/webview"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:layout_below="@id/progress_horizontal"
+	        android:layout_above="@id/bottomMenu"
+	        android:focusable="true"
+			android:focusableInTouchMode="true"
+	        /> 	        
+</RelativeLayout> 

@@ -1,25 +1,25 @@
-package co.kr.hybridapp;
+package co.kr.hybridapp.common;
 
 public class DEFINE {
 
-	// GCM ID ¸¦ ¼³Á¤ÇØ ÁÖ¼¼¿ä(°¡ÀÌµå¹®¼­ ÂüÁ¶)
-	public static final String GCM_ID ="ÇÁ·ÎÁ§Æ®³Ñ¹ö¸¦ ÀÔ·ÂÇØ ÁÖ¼¼¿ä";
+	// GCM ID 
+	public static final String GCM_ID ="ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½Ñ¹ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½ï¿½ ï¿½Ö¼ï¿½ï¿½ï¿½";
 	
-	// ±âº» ¿¬°á È¨ÆäÀÌÁö ÁÖ¼Ò
-	public static final String DEFAULT_URL = "È¨ÆäÀÌÁöÁÖ¼Ò¸¦ ÀÔ·ÂÇØ ÁÖ¼¼¿ä";
+	// URL ì£¼
+	public static final String DEFAULT_URL = "http://sap40.cafe24.com/Hybrid/hybridmain.html";
 
-	// ¹®ÀÚ¼Â(euc-kr , utf-8)
-	public static final String URI_ENCODE="euc-kr";
+	// ì¸ì½”ë”© 
+	public static final String URI_ENCODE="utf-8";
 	
-	// ¹Ù·Î°¡±â »ı¼ºÀ¯¹«
+	// ì¸íŠ¸ë¡œí™”ë©´ ì œì–´
 	public static final Boolean SHORT_CUT = false;
 	
-	// ÇÏ´Ü ³×ºñ°ÔÀÌ¼Ç ¸Ş´º »ö»ó(±âº»:default ¶É´À RGB hexcode ¿¹: #FF0000)
+	// ï¿½Ï´ï¿½ ï¿½×ºï¿½ï¿½ï¿½Ì¼ï¿½ ï¿½Ş´ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½âº»:default ï¿½É´ï¿½ RGB hexcode ï¿½ï¿½: #FF0000)
 	public static final String BOTTOM_MENU_TABSTYLE = "default";
 	
-	// ½ºÇÃ·¡½¬(·ÎµùÈ­¸é) À¯Áö½Ã°£
+	// ì¸íŠ¸ë¡œ ì‹œê°„ 
 	public static final int SPLASH_TIME = 1000;
 	
-	// ³×Æ®¿öÅ© ¿¬°á ½Ã°£
+	// íƒ€ì„ì•„ì›ƒ 
 	public static final int TIME_OUT = 50000;
 }

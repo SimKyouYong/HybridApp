@@ -1,4 +1,4 @@
-package co.kr.hybridapp;
+package co.kr.hybridapp.common;
 
 import java.util.regex.Pattern;
 
@@ -16,6 +16,11 @@ import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 import android.util.Log;
 import android.widget.RemoteViews;
+import co.kr.hybridapp.MainActivity;
+import co.kr.hybridapp.R;
+import co.kr.hybridapp.ShowMSGActivity;
+import co.kr.hybridapp.SplashActivity;
+
 import com.google.android.gcm.GCMBaseIntentService;
 
 public class GCMIntentService extends GCMBaseIntentService{

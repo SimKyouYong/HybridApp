@@ -1,4 +1,4 @@
-package co.kr.hybridapp;
+package co.kr.hybridapp.common;
 
 import java.io.InputStream;
 

@@ -4,7 +4,7 @@ package co.kr.hybridapp;
 import com.google.android.gcm.GCMRegistrar;
 
 import co.kr.hybridapp.R;
-
+import co.kr.hybridapp.common.DEFINE;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package co.kr.hybridapp;
+package co.kr.hybridapp.common;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import co.kr.hybridapp.R;
 
 public class CustomDialog extends Dialog{
 

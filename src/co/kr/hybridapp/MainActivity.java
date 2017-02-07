@@ -1,6 +1,9 @@
 package co.kr.hybridapp;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -41,12 +44,13 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+import co.kr.hybridapp.common.ActivityEx;
 import co.kr.hybridapp.common.CustomDialog;
 import co.kr.hybridapp.common.DEFINE;
 
 
 @SuppressLint("JavascriptInterface")
-public class MainActivity extends Activity {
+public class MainActivity extends ActivityEx {
 
 	public static Context mContext;
 	WebView mWebView,pWebView;
@@ -81,23 +85,62 @@ public class MainActivity extends Activity {
 
 		setContentView(R.layout.activity_main);
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
 		CookieSyncManager.createInstance(this);
 		CookieSyncManager.getInstance().startSync();
-
 		mContext = this;
-		mainBody = (RelativeLayout)findViewById(R.id.mainBody);
-		bottomMenu = (LinearLayout)findViewById(R.id.bottomMenu);
-
+		
 		SharedPreferences prefs = getSharedPreferences("co.kr.hybrid", MODE_PRIVATE);
 		boolean isShortcut = prefs.getBoolean("isShortcut",false);
 		boolean isAddShortcut = prefs.getBoolean("isAddShortcut",DEFINE.SHORT_CUT);
 		boolean pushAgreeCheck = prefs.getBoolean("pushAgreeCheck", false);
 		String tabstyle = prefs.getString("tabstyle",DEFINE.BOTTOM_MENU_TABSTYLE);  
 
+		
+		WebSetting();
+		inint();
+		
+		
+		Intent i = getIntent();
+		openURL = i.getStringExtra("openurl");      
+		String homeURL = (!openURL.equals("")) ? openURL:DEFINE.DEFAULT_URL;
+		if(isAddShortcut&&!isShortcut){
+			SharedPreferences.Editor editor = prefs.edit();
+			editor.putBoolean("isShortcut", true);
+			editor.commit();
+			addShortcut();
+		}
+		if(!tabstyle.equals("default")){
+			setBottomMenuStyleColor(tabstyle);
+		}
+		if(!pushAgreeCheck){
+			askPushAgree();
+		}
+		mWebView.loadUrl(homeURL);
+	}
+	private void inint(){
+		mainBody = (RelativeLayout)findViewById(R.id.mainBody);
+		bottomMenu = (LinearLayout)findViewById(R.id.bottomMenu);
 		mProgressHorizontal = (ProgressBar) findViewById(R.id.progress_horizontal);
 		mProgressHorizontal.setProgress(R.drawable.progress_bar);
 
+		btn1 = (ImageButton)findViewById(R.id.prevBtn);
+		btn2 = (ImageButton)findViewById(R.id.nextBtn);
+		btn3 = (ImageButton)findViewById(R.id.homeBtn);
+		btn4 = (ImageButton)findViewById(R.id.reloadBtn);
+		btn5 = (ImageButton)findViewById(R.id.shareBtn);
+
+		findViewById(R.id.prevBtn).setOnClickListener(btnListener); 
+		findViewById(R.id.nextBtn).setOnClickListener(btnListener); 
+		findViewById(R.id.homeBtn).setOnClickListener(btnListener); 
+		findViewById(R.id.reloadBtn).setOnClickListener(btnListener); 
+		findViewById(R.id.shareBtn).setOnClickListener(btnListener); 
+
+		btn1.getBackground().setAlpha(90);
+		btn1.setClickable(false);  
+		btn2.getBackground().setAlpha(90);
+		btn2.setClickable(false);  
+	}
+	private void WebSetting(){
 		mWebView = (WebView) findViewById(R.id.webview);
 		mWebView.setVerticalScrollbarOverlay(true);
 		mWebView.setHorizontalScrollbarOverlay(true);
@@ -118,40 +161,6 @@ public class MainActivity extends Activity {
 		mWebView.getSettings().setUserAgentString(mWebView.getSettings().getUserAgentString()+" Hybrid 2.0");
 		mWebView.setWebChromeClient(new SMOWebChromeClient(this));
 		mWebView.setWebViewClient(new ITGOWebChromeClient());
-
-		Intent i = getIntent();
-		openURL = i.getStringExtra("openurl");      
-		String homeURL = (!openURL.equals("")) ? openURL:DEFINE.DEFAULT_URL;
-		if(isAddShortcut&&!isShortcut){
-			SharedPreferences.Editor editor = prefs.edit();
-			editor.putBoolean("isShortcut", true);
-			editor.commit();
-			addShortcut();
-		}
-
-		btn1 = (ImageButton)findViewById(R.id.prevBtn);
-		btn2 = (ImageButton)findViewById(R.id.nextBtn);
-		btn3 = (ImageButton)findViewById(R.id.homeBtn);
-		btn4 = (ImageButton)findViewById(R.id.reloadBtn);
-		btn5 = (ImageButton)findViewById(R.id.shareBtn);
-
-		findViewById(R.id.prevBtn).setOnClickListener(btnListener); 
-		findViewById(R.id.nextBtn).setOnClickListener(btnListener); 
-		findViewById(R.id.homeBtn).setOnClickListener(btnListener); 
-		findViewById(R.id.reloadBtn).setOnClickListener(btnListener); 
-		findViewById(R.id.shareBtn).setOnClickListener(btnListener); 
-
-		btn1.getBackground().setAlpha(90);
-		btn1.setClickable(false);  
-		btn2.getBackground().setAlpha(90);
-		btn2.setClickable(false);  
-		if(!tabstyle.equals("default")){
-			setBottomMenuStyleColor(tabstyle);
-		}
-		if(!pushAgreeCheck){
-			askPushAgree();
-		}
-		mWebView.loadUrl(homeURL);
 	}
 	//버튼 리스너 구현 부분 
 	View.OnClickListener btnListener = new View.OnClickListener() {
@@ -239,22 +248,41 @@ public class MainActivity extends Activity {
 		public void onPageStarted(WebView view, String url, android.graphics.Bitmap favicon){
 			super.onPageStarted(view, url, favicon);
 			mProgressHorizontal.setVisibility(View.VISIBLE);
+			
+			//인터넷 확인후 시작
+			if (!checkNetwordState()) {
+				Toast.makeText(getApplicationContext(), "인터넷 끊김! url노출 안됨.", 0).show();
+				return ;
+			}
+			//프로그레스바 띄우기
+			if (DEFINE.PROGRESSBAR) {
+				dialog = new ProgressDialog(mContext);
+				dialog.setMessage(getString(R.string.loading));
+				dialog.show();
+			}
 		}
 
 		@Override
 		public void onPageFinished(WebView view, String url){
 			super.onPageFinished(view, url);
+			Log.e("SKY", "onPageFinished = = = = = = = "+url);
+			if (url.indexOf("js2ios://") != -1) {
+				view.stopLoading();
+				try{
+					url = URLDecoder.decode(url, "UTF-8"); 
+				}catch(Exception e){
+				} 
+				SplitFun(url);
+				Log.e("SKY", "함수 시작");
+			}
 			mProgressHorizontal.setVisibility(View.GONE);
 
 			if(clearHistory){
 				mWebView.clearHistory();
-
 				btn1.getBackground().setAlpha(90);
 				btn1.setClickable(false);
-
 				btn2.getBackground().setAlpha(90);
 				btn2.setClickable(false);
-
 				clearHistory=false;
 			}
 			if(mWebView.canGoBack()){
@@ -272,6 +300,10 @@ public class MainActivity extends Activity {
 				btn2.setClickable(false);            		
 			}
 
+			//프로그레스바 끔.
+			if (DEFINE.PROGRESSBAR) {
+				dialog.dismiss();
+			}
 			CookieSyncManager.getInstance().sync();
 		}
 
@@ -773,5 +805,57 @@ public class MainActivity extends Activity {
 			mUploadMessage = null;
 		}
 	}
-
+	private void SplitFun(String url){
+		url = url.replace("js2ios://", "");
+		String Fun = url.substring(0, url.indexOf("?"));
+		Log.e("SKY", "Fun :: "+Fun);
+		String param[] = url.split("&");
+		String val[]  = new String[param.length];
+		Log.e("SKY", "parameter ea :: "+param.length);
+		String par = "" , return_fun = "";
+		for (int i = 0; i < param.length; i++) {
+			//Log.e("SKY", "parameter ea :: " + "i :: " + i + " ::" +param[i]);
+			val[i] = param[i].substring(param[i].indexOf("=")+1, param[i].length());
+			Log.e("SKY", "parameter ea :: " + "i :: " + i + " ::" +val[i]);
+			if (i == 0) {
+				par = val[i];
+			}else if( i == (param.length-1)){
+				return_fun = val[i];
+			}else{
+				par += "," +val[i];
+			}
+		}
+		try {
+			//String parameter
+			Class[] paramString = new Class[4];
+			paramString[0] = String.class;
+			paramString[1] = Activity.class;
+			paramString[2] = WebView.class;
+			paramString[3] = String.class;
+			@SuppressWarnings("rawtypes")
+			Class cls = Class.forName("co.kr.hybridapp.common.FunNative");
+			Object obj = cls.newInstance();
+			//call the printIt method
+			Method method = cls.getDeclaredMethod(Fun, paramString);
+			method.invoke(obj, new String(par) , MainActivity.this , mWebView , new String(return_fun));
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

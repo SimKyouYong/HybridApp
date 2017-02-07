@@ -3,17 +3,18 @@ package co.kr.hybridapp;
 
 import com.google.android.gcm.GCMRegistrar;
 
-import co.kr.hybridapp.R;
-import co.kr.hybridapp.common.DEFINE;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
+import co.kr.hybridapp.common.DEFINE;
 
 public class SplashActivity extends Activity {
 	
@@ -39,9 +40,44 @@ public class SplashActivity extends Activity {
 		}
 	}
 	private void start(){
-    	Handler h = new Handler ();
-    	h.postDelayed(new splashhandler(), DEFINE.SPLASH_TIME);
+		
+		//GPS 확인
+		if (DEFINE.GPS_SWICH) {
+			//체크해서 알럿 띄우기
+			alertCheckGPS();
+		}else{
+			Handler h = new Handler ();
+	    	h.postDelayed(new splashhandler(), DEFINE.SPLASH_TIME);
+		}
+    	
 	}
+	private void alertCheckGPS() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("원활한 서비스를 위해\nGPS를 활성화를 부탁 드립니다.")
+               .setCancelable(false)
+               .setPositiveButton("확인",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                moveConfigGPS();
+                            }
+                    })
+               .setNegativeButton("취소",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                            	Handler h = new Handler ();
+                            	h.postDelayed(new splashhandler(), DEFINE.SPLASH_TIME);
+                                dialog.cancel();
+                            }
+                    });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    // GPS 설정화면으로 이동
+    private void moveConfigGPS() {
+        Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivity(gpsOptionsIntent);
+    }
 	public class splashhandler implements Runnable{
 		public void run(){
 			

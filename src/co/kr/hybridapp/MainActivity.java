@@ -74,6 +74,7 @@ public class MainActivity extends ActivityEx {
 
 	public RelativeLayout mainBody;
 	public LinearLayout bottomMenu;
+	public View vi;
 
 	private CustomDialog mCustomDialog,mCustomDialog2;
 
@@ -120,6 +121,8 @@ public class MainActivity extends ActivityEx {
 	private void inint(){
 		mainBody = (RelativeLayout)findViewById(R.id.mainBody);
 		bottomMenu = (LinearLayout)findViewById(R.id.bottomMenu);
+		vi = (View)findViewById(R.id.loadingview);
+		
 		mProgressHorizontal = (ProgressBar) findViewById(R.id.progress_horizontal);
 		mProgressHorizontal.setProgress(R.drawable.progress_bar);
 
@@ -260,6 +263,10 @@ public class MainActivity extends ActivityEx {
 				dialog.setMessage(getString(R.string.loading));
 				dialog.show();
 			}
+			//Loading 뷰 가리기
+			if (DEFINE.LOADINGVIEW) {
+				vi.setVisibility(View.VISIBLE);
+			}
 		}
 
 		@Override
@@ -303,6 +310,10 @@ public class MainActivity extends ActivityEx {
 			//프로그레스바 끔.
 			if (DEFINE.PROGRESSBAR) {
 				dialog.dismiss();
+			}
+			//Loading 뷰 가리기
+			if (DEFINE.LOADINGVIEW) {
+				vi.setVisibility(View.GONE);
 			}
 			CookieSyncManager.getInstance().sync();
 		}

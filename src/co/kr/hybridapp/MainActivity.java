@@ -103,7 +103,7 @@ public class MainActivity extends ActivityEx {
 		
 		Intent i = getIntent();
 		openURL = i.getStringExtra("openurl");      
-		String homeURL = (!openURL.equals("")) ? openURL:DEFINE.DEFAULT_URL;
+		String homeURL = DEFINE.DEFAULT_URL;
 		if(isAddShortcut&&!isShortcut){
 			SharedPreferences.Editor editor = prefs.edit();
 			editor.putBoolean("isShortcut", true);
@@ -257,6 +257,17 @@ public class MainActivity extends ActivityEx {
 				Toast.makeText(getApplicationContext(), "인터넷 끊김! url노출 안됨.", 0).show();
 				return ;
 			}
+			
+			if (url.indexOf("js2ios://") != -1) {
+				view.stopLoading();
+				try{
+					url = URLDecoder.decode(url, "UTF-8"); 
+				}catch(Exception e){
+				} 
+				SplitFun(url);
+				Log.e("SKY", "함수 시작");
+			}
+			
 			//프로그레스바 띄우기
 			if (DEFINE.PROGRESSBAR) {
 				dialog = new ProgressDialog(mContext);
@@ -273,6 +284,15 @@ public class MainActivity extends ActivityEx {
 		public void onPageFinished(WebView view, String url){
 			super.onPageFinished(view, url);
 			Log.e("SKY", "onPageFinished = = = = = = = "+url);
+			//프로그레스바 끔.
+			if (DEFINE.PROGRESSBAR) {
+				dialog.dismiss();
+			}
+			//Loading 뷰 가리기
+			if (DEFINE.LOADINGVIEW) {
+				vi.setVisibility(View.GONE);
+			}
+			
 			if (url.indexOf("js2ios://") != -1) {
 				view.stopLoading();
 				try{
@@ -307,14 +327,7 @@ public class MainActivity extends ActivityEx {
 				btn2.setClickable(false);            		
 			}
 
-			//프로그레스바 끔.
-			if (DEFINE.PROGRESSBAR) {
-				dialog.dismiss();
-			}
-			//Loading 뷰 가리기
-			if (DEFINE.LOADINGVIEW) {
-				vi.setVisibility(View.GONE);
-			}
+			
 			CookieSyncManager.getInstance().sync();
 		}
 

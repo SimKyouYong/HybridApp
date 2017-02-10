@@ -33,11 +33,12 @@ public class SplashActivity extends Activity {
 		SharedPreferences prefs = getSharedPreferences("co.kr.hybrid", MODE_PRIVATE);
 		reg_id = prefs.getString("device_id","");
 		
-		if(reg_id.equals("")){
-			GCMRegistration_id();
-		}else{
-			start();
-		}
+		start();
+//		if(reg_id.equals("")){
+//			GCMRegistration_id();
+//		}else{
+//			start();
+//		}
 	}
 	private void start(){
 		

@@ -1,21 +1,24 @@
-# view res/layout/activity_slideview.xml #generated:53
+# view res/layout/activity_slideview.xml #generated:29
 -keep class android.support.v4.view.ViewPager { <init>(...); }
 
 # view res/layout/activity_slideview.xml #generated:1
 -keep class android.support.v4.widget.DrawerLayout { <init>(...); }
 
-# view AndroidManifest.xml #generated:37
+# view AndroidManifest.xml #generated:40
 -keep class co.kr.hybridapp.MainActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:43
+# view AndroidManifest.xml #generated:48
 -keep class co.kr.hybridapp.ShowMSGActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:25
+# view AndroidManifest.xml #generated:29
+-keep class co.kr.hybridapp.SlideViewActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:47
 -keep class co.kr.hybridapp.SplashActivity { <init>(...); }
 
-# view AndroidManifest.xml #generated:54
+# view AndroidManifest.xml #generated:64
 -keep class co.kr.hybridapp.common.GCMIntentService { <init>(...); }
 
-# view AndroidManifest.xml #generated:46
+# view AndroidManifest.xml #generated:53
 -keep class com.google.android.gcm.GCMBroadcastReceiver { <init>(...); }
 

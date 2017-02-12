@@ -19,47 +19,21 @@
             android:gravity="left"
             android:orientation="vertical" >
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+            <RelativeLayout
+                android:id="@+id/include_activity_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#f2f2f2"
+                android:orientation="vertical" >
 
-                <RelativeLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" >
-
-                    <RelativeLayout
-                        android:id="@+id/Topbar"
-                        android:layout_width="fill_parent"
-                        android:layout_height="50dp"
-                        android:layout_alignParentTop="true"
-                        android:background="#d81b21" >
-
-                        <EditText
-                            android:id="@+id/edit_search"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:hint="검색하기" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/include_activity_main"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="#f2f2f2"
-                        android:orientation="vertical" >
-
-
-                        <android.support.v4.view.ViewPager
-                            android:id="@+id/pager"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_below="@+id/ll_tab_menu"
-                            tools:context=".LoginActivity" >
-                        </android.support.v4.view.ViewPager>
-                    </RelativeLayout>
-                </RelativeLayout>
-            </FrameLayout>
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/pager"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/ll_tab_menu"
+                    tools:context=".LoginActivity" >
+                </android.support.v4.view.ViewPager>
+            </RelativeLayout>
         </LinearLayout>
     </FrameLayout>
 
@@ -80,59 +54,141 @@
                 android:id="@+id/View02"
                 android:layout_width="300dp"
                 android:layout_height="fill_parent"
-                android:layout_alignParentTop="true"
                 android:orientation="vertical" >
 
                 <LinearLayout
+                    android:id="@+id/btn1"
                     android:layout_width="fill_parent"
                     android:layout_height="95dp"
-                    android:background="#F05353"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical" >
+                    android:background="#313131"
+                    android:orientation="horizontal" >
 
-
-                    <RelativeLayout
-                        android:layout_width="fill_parent"
+                    <ImageView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="5dp"
-                        android:orientation="horizontal" >
+                        android:background="@drawable/btn_01"
+                        android:visibility="gone" />
 
-                        <LinearLayout
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentTop="true"
-                            android:orientation="vertical" >
+                    <TextView
+                        android:id="@+id/txt1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="홈화면 가기"
+                        android:typeface="sans" />
 
-                            <TextView
-                                android:id="@+id/text_level"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="등급"
-                                android:textColor="#ffffff"
-                                android:textSize="13dp"
-                                android:textStyle="bold" />
+                    <ImageView
+                        android:id="@+id/rednew1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_06" />
+                </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/text_nickname"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="운영자"
-                                android:textColor="#ffffff"
-                                android:textSize="13dp" />
-                        </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/btn2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="95dp"
+                    android:background="#313131"
+                    android:orientation="horizontal" >
 
-                        <TextView
-                            android:id="@+id/text_profile"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:text="꿈꾸는 여행자"
-                            android:textColor="#ffffff"
-                            android:textSize="13dp" />
-                    </RelativeLayout>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_02"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/txt2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="진행중인 이벤트"
+                        android:typeface="sans" />
+
+                    <ImageView
+                        android:id="@+id/rednew2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_06" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn3"
+                    android:layout_width="fill_parent"
+                    android:layout_height="95dp"
+                    android:background="#313131"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_03"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/txt3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="할인쿠폰 보기"
+                        android:typeface="sans" />
+
+                    <ImageView
+                        android:id="@+id/rednew3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_06" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn4"
+                    android:layout_width="fill_parent"
+                    android:layout_height="95dp"
+                    android:background="#313131"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_04"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/txt4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="오시는 길"
+                        android:typeface="sans" />
+
+                    <ImageView
+                        android:id="@+id/rednew4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_06" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn5"
+                    android:layout_width="fill_parent"
+                    android:layout_height="95dp"
+                    android:background="#313131"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_05"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/txt5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="공지사항"
+                        android:typeface="sans" />
+
+                    <ImageView
+                        android:id="@+id/rednew5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_06" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

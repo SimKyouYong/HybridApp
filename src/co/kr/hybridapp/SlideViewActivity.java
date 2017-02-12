@@ -2,10 +2,9 @@ package co.kr.hybridapp;
 
 import android.app.ActionBar;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -13,9 +12,11 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 import co.kr.hybridapp.adapter.SectionsPagerAdapter;
 
 public class SlideViewActivity extends FragmentActivity{
@@ -25,16 +26,38 @@ public class SlideViewActivity extends FragmentActivity{
 	private ActionBarDrawerToggle dtToggle;
 	SectionsPagerAdapter mSectionsPagerAdapter;
 	ViewPager mViewPager;
-	
+	int slie_menu_f = 0;
+
+	public static WebView wc;
+	//	window.location.href = "js2ios://SubActivity?url=&title=11번가&action=left&new=1&button=로그인&button_url=http://snap40.cafe24.com";
+
+	public static String SUB_URL;
+	public static String TITLE;
+	public static String NEW;
+	public static String BUTTON;
+	public static String BUTTON_URL;
+	private Typeface ttf;
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_slideview);
+		ttf = Typeface.createFromAsset(getAssets(), "HANYGO230.TTF");
 
-		
 
+		SUB_URL = getIntent().getStringExtra("SUB_URL");
+		TITLE = getIntent().getStringExtra("TITLE");
+		NEW = getIntent().getStringExtra("NEW");
+		BUTTON = getIntent().getStringExtra("BUTTON");
+		BUTTON_URL = getIntent().getStringExtra("BUTTON_URL");
 
+		/*Test sample*/
+		SUB_URL = "http://www.11st.co.kr/html/bestSellerMain.html";
+		TITLE = "11번가";
+		NEW = "1";
+		BUTTON = "로그인";
+		BUTTON_URL = "http://snap40.cafe24.com";
 		flContainer = (FrameLayout)findViewById(R.id.fl_activity_main_container);
 		drawerView = (View) findViewById(R.id.drawer);
 
@@ -65,7 +88,7 @@ public class SlideViewActivity extends FragmentActivity{
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
 		mViewPager.setBackgroundColor(Color.WHITE);
-		mViewPager.setOffscreenPageLimit(4);
+		mViewPager.setOffscreenPageLimit(1);
 		mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
 			@Override
 			public void onPageSelected(int position) {
@@ -85,8 +108,6 @@ public class SlideViewActivity extends FragmentActivity{
 				Log.e("SKY" , "--onPageScrollStateChanged--");
 			}
 		});
-
-
 		//이미지 가운데 올리기
 		ActionBar actionBar = getActionBar();
 		actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F16261")));
@@ -94,10 +115,34 @@ public class SlideViewActivity extends FragmentActivity{
 
 		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM); 
 		actionBar.setCustomView(R.layout.action_bar_title_main);
-//		actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.img_btn));
+		//		actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.img_btn));
+		init();
+	}
+	private void init(){
+		Button bt = (Button)findViewById(R.id.btn_list);
+		bt.setText("" + BUTTON);
+		bt.setTypeface(ttf);
 
+		TextView tt = (TextView)findViewById(R.id.titlea);
+		tt.setText("" + TITLE);
+		tt.setTypeface(ttf);
 
-//		findViewById(R.id.last_btn2).setOnClickListener(btnListener);
+		
+		TextView txt1 = (TextView)findViewById(R.id.txt1);
+		txt1.setTypeface(ttf);
+		TextView txt2 = (TextView)findViewById(R.id.txt2);
+		txt2.setTypeface(ttf);
+		TextView txt3 = (TextView)findViewById(R.id.txt3);
+		txt3.setTypeface(ttf);
+		TextView txt4 = (TextView)findViewById(R.id.txt4);
+		txt4.setTypeface(ttf);
+		TextView txt5 = (TextView)findViewById(R.id.txt5);
+		txt5.setTypeface(ttf);
+		
+		
+		findViewById(R.id.slide).setOnClickListener(btnListener);
+		findViewById(R.id.btn_list).setOnClickListener(btnListener);
+		findViewById(R.id.btn1).setOnClickListener(btnListener);
 	}
 	//버튼 리스너 구현 부분 
 	View.OnClickListener btnListener = new View.OnClickListener() {
@@ -105,9 +150,25 @@ public class SlideViewActivity extends FragmentActivity{
 		public void onClick(View v) {
 
 			switch (v.getId()) {
-//			case R.id.bt_bottom:	
-//				Log.e("SKY" , "bt_bottom");
-//				break;
+			case R.id.slide:	
+				Log.e("SKY" , "slide");
+				//토글형식으로 온 오프 적용 하기
+				if (slie_menu_f == 0) {
+					slie_menu_f = 1;
+					dlDrawer.openDrawer(drawerView);
+				}else{
+					slie_menu_f = 0;
+					dlDrawer.closeDrawer(drawerView);
+				}
+				break;
+			case R.id.btn_list:	
+				Log.e("SKY" , "btn_list");
+				wc.loadUrl(BUTTON_URL);
+				break;
+			case R.id.btn1:	
+				Log.e("SKY" , "btn1");
+				Toast.makeText(getApplicationContext(), "btn1 Click!!", 0).show();
+				break;
 
 			}
 		}

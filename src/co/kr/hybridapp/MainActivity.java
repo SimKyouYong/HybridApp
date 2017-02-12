@@ -258,15 +258,6 @@ public class MainActivity extends ActivityEx {
 				return ;
 			}
 			
-			if (url.indexOf("js2ios://") != -1) {
-				view.stopLoading();
-				try{
-					url = URLDecoder.decode(url, "UTF-8"); 
-				}catch(Exception e){
-				} 
-				SplitFun(url);
-				Log.e("SKY", "함수 시작");
-			}
 			
 			//프로그레스바 띄우기
 			if (DEFINE.PROGRESSBAR) {

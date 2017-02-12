@@ -28,7 +28,7 @@ public class FunNative  {
 	 * window.location.href = "js2ios://SubActivity?url=urladdress&title=타이틀명&action=left&new=1&button=로그인&button_url=http://snap40.cafe24.com";
 	 * */
 	public void SubActivity(String url , Activity ac , WebView vc , String return_fun){
-		Log.e("SKY" , "--ClipboardCopy-- :: ");
+		Log.e("SKY" , "--SubActivity-- :: ");
 		String val[] = url.split(",");
 		for (int i = 0; i < val.length; i++) {
 			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);

@@ -143,6 +143,10 @@ public class SlideViewActivity extends FragmentActivity{
 		findViewById(R.id.slide).setOnClickListener(btnListener);
 		findViewById(R.id.btn_list).setOnClickListener(btnListener);
 		findViewById(R.id.btn1).setOnClickListener(btnListener);
+		findViewById(R.id.btn2).setOnClickListener(btnListener);
+		findViewById(R.id.btn3).setOnClickListener(btnListener);
+		findViewById(R.id.btn4).setOnClickListener(btnListener);
+		findViewById(R.id.btn5).setOnClickListener(btnListener);
 	}
 	//버튼 리스너 구현 부분 
 	View.OnClickListener btnListener = new View.OnClickListener() {
@@ -168,6 +172,22 @@ public class SlideViewActivity extends FragmentActivity{
 			case R.id.btn1:	
 				Log.e("SKY" , "btn1");
 				Toast.makeText(getApplicationContext(), "btn1 Click!!", 0).show();
+				break;
+			case R.id.btn2:	
+				Log.e("SKY" , "btn2");
+				Toast.makeText(getApplicationContext(), "btn2 Click!!", 0).show();
+				break;
+			case R.id.btn3:	
+				Log.e("SKY" , "btn3");
+				Toast.makeText(getApplicationContext(), "btn3 Click!!", 0).show();
+				break;
+			case R.id.btn4:	
+				Log.e("SKY" , "btn4");
+				Toast.makeText(getApplicationContext(), "btn4 Click!!", 0).show();
+				break;
+			case R.id.btn5:	
+				Log.e("SKY" , "btn5");
+				Toast.makeText(getApplicationContext(), "btn5 Click!!", 0).show();
 				break;
 
 			}

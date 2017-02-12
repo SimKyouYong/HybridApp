@@ -1,5 +1,6 @@
 package co.kr.hybridapp;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
@@ -18,6 +19,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
@@ -50,7 +54,7 @@ import co.kr.hybridapp.common.DEFINE;
 
 
 @SuppressLint("JavascriptInterface")
-public class MainActivity extends ActivityEx {
+public class MainActivity extends ActivityEx implements LocationListener {
 
 	public static Context mContext;
 	WebView mWebView,pWebView;
@@ -65,6 +69,11 @@ public class MainActivity extends ActivityEx {
 	int progress_count=0;
 	float set_progress = 0;
 
+	LocationManager locationManager;
+	LocationListener locationListener;
+	public static double latitude = 0;
+	public static double longitude=0;
+	
 	boolean popup = false;
 	private boolean pan = false;
 	private boolean clearHistory = false;
@@ -141,7 +150,8 @@ public class MainActivity extends ActivityEx {
 		btn1.getBackground().setAlpha(90);
 		btn1.setClickable(false);  
 		btn2.getBackground().setAlpha(90);
-		btn2.setClickable(false);  
+		btn2.setClickable(false);
+		GPS_Start();
 	}
 	private void WebSetting(){
 		mWebView = (WebView) findViewById(R.id.webview);
@@ -250,6 +260,20 @@ public class MainActivity extends ActivityEx {
 		@Override
 		public void onPageStarted(WebView view, String url, android.graphics.Bitmap favicon){
 			super.onPageStarted(view, url, favicon);
+			if (url.indexOf("js2ios://") != -1) {
+				mWebView.stopLoading();
+				try{
+					url = URLDecoder.decode(url, "UTF-8"); 
+					SplitFun(url);
+					Log.e("SKY", "함수 시작");
+				}catch(Exception e){
+					Log.e("SKY", "e :: " + e.toString());
+
+				} 
+				
+				return;
+			}
+			
 			mProgressHorizontal.setVisibility(View.VISIBLE);
 			
 			//인터넷 확인후 시작
@@ -283,16 +307,6 @@ public class MainActivity extends ActivityEx {
 			if (DEFINE.LOADINGVIEW) {
 				vi.setVisibility(View.GONE);
 			}
-			
-			if (url.indexOf("js2ios://") != -1) {
-				view.stopLoading();
-				try{
-					url = URLDecoder.decode(url, "UTF-8"); 
-				}catch(Exception e){
-				} 
-				SplitFun(url);
-				Log.e("SKY", "함수 시작");
-			}
 			mProgressHorizontal.setVisibility(View.GONE);
 
 			if(clearHistory){
@@ -319,13 +333,13 @@ public class MainActivity extends ActivityEx {
 			}
 
 			
-			CookieSyncManager.getInstance().sync();
+			//CookieSyncManager.getInstance().sync();
 		}
 
 		@Override
 		public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
 			super.onReceivedError(view, errorCode, description, failingUrl);
-			Toast.makeText(getApplicationContext(), "Error: "+description, Toast.LENGTH_SHORT).show();
+			//Toast.makeText(getApplicationContext(), "Error: "+description, Toast.LENGTH_SHORT).show();
 		}  
 	}
 	class SMOWebChromeClient extends WebChromeClient{
@@ -872,5 +886,52 @@ public class MainActivity extends ActivityEx {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	private void GPS_Start(){
+		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+		locationListener = new LocationListener() {
+			public void onLocationChanged(Location location) {
+				Log.e("SKY" , "latitude :: onLocationChanged");
+				String gps = android.provider.Settings.Secure.getString(
+						getContentResolver(),
+						android.provider.Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+				if (!(gps.matches(".*gps.*") && gps.matches(".*network.*"))) {
+					latitude = 0;
+					longitude = 0;
+				} else {
+					latitude = location.getLatitude();
+					longitude = location.getLongitude();
+					Log.e("SKY" , "GPS :: latitude :: " + latitude + "//longitude :: " + longitude);
+				}
+				locationManager.removeUpdates(locationListener);
+			}
+			public void onStatusChanged(String provider, int status, Bundle extras) {
+			}
+			public void onProviderEnabled(String provider) {
+			}
+			public void onProviderDisabled(String provider) {
+			}
+		};
+		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, locationListener);
+	}
+	@Override
+	public void onLocationChanged(Location location) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+		
 	}
 }

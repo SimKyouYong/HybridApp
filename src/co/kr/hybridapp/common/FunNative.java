@@ -10,13 +10,16 @@ import android.content.Intent;
 import android.util.Log;
 import android.webkit.WebView;
 import android.widget.Toast;
+import co.kr.hybridapp.MainActivity;
 import co.kr.hybridapp.R;
 import co.kr.hybridapp.SlideViewActivity;
 
 public class FunNative  {
 
-
+	
 	private WebView Webview_copy;
+
+	
 	/*
 	 * param 
 	 * url :: 이동 url 주소 
@@ -36,10 +39,33 @@ public class FunNative  {
 		//인텐트 태우기
 		Intent it = new Intent(ac, SlideViewActivity.class);
 		ac.startActivity(it);
-		ac.overridePendingTransition(R.drawable.anim_slide_in_right, R.drawable.anim_slide_out_left);
+		if (val[2] . equals("top")) {
+			ac.overridePendingTransition(R.drawable.anim_slide_in_top, R.drawable.anim_slide_out_bottom);  // 위에서 -> 아래
+		}else if(val[2] . equals("right")){
+			ac.overridePendingTransition(R.drawable.anim_slide_in_left, R.drawable.anim_slide_out_right);  // ->
+		}else if(val[2] . equals("bottom")){
+			ac.overridePendingTransition(R.drawable.anim_slide_in_bottom, R.drawable.anim_slide_out_top);  // 아래 -> 위로
+		}else{
+			ac.overridePendingTransition(R.drawable.anim_slide_in_right, R.drawable.anim_slide_out_left);  // <-
+		}
+	}
+	/*
+	 * param 
+	 * url :: 안씀 
+	 * name :: 띄울 메시지
+	 * return :: 안씀
+	 * window.location.href = "js2ios://Location?url=null&name=null&return=weblocation";
+	 * */
+	public void Location(String url , Activity ac , WebView vc , String return_fun){
+		Log.e("SKY" , "--Location-- :: ");
+		String val[] = url.split(",");
+		for (int i = 0; i < val.length; i++) {
+			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
+		}
+		Log.e("SKY" , "javascript:"+return_fun + "('" + MainActivity.latitude + "','" + MainActivity.longitude + "')");
+		vc.loadUrl("javascript:"+return_fun + "('" + MainActivity.latitude + "','" + MainActivity.longitude + "')");
 
 	}
-	
 	/*
 	 * param 
 	 * url :: 안씀 
@@ -47,8 +73,6 @@ public class FunNative  {
 	 * return :: 안씀
 	 * window.location.href = "js2ios://ShowToast?url=not&name=문구&return=not";
 	 * */
-	@SuppressLint("ShowToast")
-	@SuppressWarnings("deprecation")
 	public void showToast(String url , Activity ac , WebView vc , String return_fun){
 		Log.e("SKY" , "--showToast-- :: ");
 		String val[] = url.split(",");
@@ -67,8 +91,6 @@ public class FunNative  {
 	 * return :: 안씀
 	 * window.location.href = "js2ios://ClipboardCopy?url=not&name=문구&return=not";
 	 * */
-	@SuppressLint("ShowToast")
-	@SuppressWarnings("deprecation")
 	public void ClipboardCopy(String url , Activity ac , WebView vc , String return_fun){
 		Log.e("SKY" , "--ClipboardCopy-- :: ");
 		String val[] = url.split(",");

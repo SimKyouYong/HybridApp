@@ -10,8 +10,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import co.kr.hybridapp.common.DEFINE;
@@ -20,16 +22,17 @@ public class SplashActivity extends Activity {
 	
 	public static String reg_id = null;
 	public static Context context;
-	
+	LocationManager myLocationManager;
 	Dialog dialog;
-	
 	@Override
-	public void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.splash);
-		
+	public void onResume() {
+		if (myLocationManager == null) {
+			myLocationManager = (LocationManager)getSystemService(
+	        		Context.LOCATION_SERVICE);
+		}
+
 		context = this;
-			
+		
 		SharedPreferences prefs = getSharedPreferences("co.kr.hybrid", MODE_PRIVATE);
 		reg_id = prefs.getString("device_id","");
 		
@@ -39,20 +42,37 @@ public class SplashActivity extends Activity {
 //		}else{
 //			start();
 //		}
+		super.onResume();
+	}
+	@Override
+	public void onCreate(Bundle savedInstanceState){
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.splash);
+		
+		
 	}
 	private void start(){
 		
 		//GPS 확인
 		if (DEFINE.GPS_SWICH) {
 			//체크해서 알럿 띄우기
-			alertCheckGPS();
+			// 시스템 > 설정 > 위치 및 보안 > GPS 위성 사용 여부 체크.
+			Boolean isGpsEnabled = myLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+			Log.e("SKY" , "isGpsEnabled :: " + isGpsEnabled);
+			if (!isGpsEnabled) {
+				alertCheckGPS();
+			}else{
+				Handler h = new Handler ();
+		    	h.postDelayed(new splashhandler(), DEFINE.SPLASH_TIME);
+			}
 		}else{
-			Handler h = new Handler ();
-	    	h.postDelayed(new splashhandler(), DEFINE.SPLASH_TIME);
+			
 		}
     	
 	}
 	private void alertCheckGPS() {
+		
+		
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("원활한 서비스를 위해\nGPS를 활성화를 부탁 드립니다.")
                .setCancelable(false)

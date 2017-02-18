@@ -1,4 +1,4 @@
-package co.kr.hybridapp.common;
+package co.kr.hybridapp;
 
 import java.util.regex.Pattern;
 
@@ -16,10 +16,9 @@ import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 import android.util.Log;
 import android.widget.RemoteViews;
-import co.kr.hybridapp.MainActivity;
 import co.kr.hybridapp.R;
-import co.kr.hybridapp.ShowMSGActivity;
-import co.kr.hybridapp.SplashActivity;
+import co.kr.hybridapp.common.DEFINE;
+import co.kr.hybridapp.common.LoadImageFromWeb;
 
 import com.google.android.gcm.GCMBaseIntentService;
 
@@ -41,6 +40,7 @@ public class GCMIntentService extends GCMBaseIntentService{
 		// TODO Auto-generated method stub
 		if(!regID.equals("") || regID != null){
 			SplashActivity.reg_id = regID;
+			Log.e(TAG, "onRegistered!! " + regID);
 			((SplashActivity)SplashActivity.context).init();
 		}
 	}
@@ -48,7 +48,7 @@ public class GCMIntentService extends GCMBaseIntentService{
 	@Override
 	protected void onUnregistered(Context context, String regID) {
 		// TODO Auto-generated method stub
-		Log.i(TAG, "onUnregistered!! " + regID);
+		Log.e(TAG, "onUnregistered!! " + regID);
 	}
 	
 	@Override
@@ -61,7 +61,7 @@ public class GCMIntentService extends GCMBaseIntentService{
 	@Override
 	protected void onError(Context context, String msg) {
 		// TODO Auto-generated method stub
-		Log.i(TAG, "onError!! " + msg);
+		Log.e(TAG, "onError!! " + msg);
 		
 	}
 	
@@ -116,14 +116,20 @@ public class GCMIntentService extends GCMBaseIntentService{
 				.setContent(remoteViews);
 				
 			if(message_bitmap!=null){
+				Log.e(TAG, "111!! ");
 				NotificationCompat.BigPictureStyle style = new NotificationCompat.BigPictureStyle();
 				if(!push_color.equals("")){
-					style.setBigContentTitle(Html.fromHtml("<font color='#"+txtcolor[0]+"'>"+title+"</font>")).setSummaryText(Html.fromHtml("<font color='#"+txtcolor[0]+"'>"+msg+"</font>")).bigPicture(message_bitmap);
+					style
+					.setBigContentTitle(Html.fromHtml("<font color='#"+txtcolor[0]+"'>"+title+"</font>"))
+					.setSummaryText(Html.fromHtml("<font color='#"+txtcolor[0]+"'>"+msg+"</font>")).
+					bigPicture(message_bitmap);
 				}else{
 					style.setBigContentTitle(title).setSummaryText(msg).bigPicture(message_bitmap);
 				}
 				notiBuilder.setStyle(style);				
-			}else if(!push_color.equals("")){				
+			}else if(!push_color.equals("")){	
+				Log.e(TAG, "222!! ");
+
 				int tcolor = Integer.parseInt(txtcolor[0],16)+0xFF000000;
 				int bcolor = Integer.parseInt(txtcolor[1],16)+0xFF000000;
 				remoteViews.setTextColor(R.id.push_title, tcolor);
@@ -132,6 +138,7 @@ public class GCMIntentService extends GCMBaseIntentService{
 				remoteViews.setTextViewText(R.id.push_title, title);
 				remoteViews.setTextViewText(R.id.push_message, msg+"\n\n");
 			}else{
+				Log.e(TAG, "333!! ");
 				NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
 				style.setSummaryText(getString(R.string.app_name)).setBigContentTitle(title).bigText(msg);
 				notiBuilder.setStyle(style);						
@@ -156,6 +163,8 @@ public class GCMIntentService extends GCMBaseIntentService{
 	
 	@Override
 	protected boolean onRecoverableError(Context context, String errorId) {
+		Log.e(TAG, "onRecoverableError!! " + errorId);
+
 		return super.onRecoverableError(context, errorId);
 	}
 }

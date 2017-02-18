@@ -1,9 +1,12 @@
 package co.kr.hybridapp.common;
+//AIzaSyD7YNmkWY0d19ZZ-Fz_c6qkk43ysCh3xyM
+
+//onRegistered!! APA91bETKUXUnHyo6hSQ5y159q8cCHaAjInRjvfYP7YgKNhWnniGAezj1VcFkXHWzWiUtwar-qqT0cvnQeZ9dQ23ipsCnLplJLbL8-9YTMjcpFbpd-0oaThtqjtYnsODnsL863fL1oMD
 
 public class DEFINE {
 
 	 
-	public static final String GCM_ID ="";  						// GCM ID
+	public static final String GCM_ID ="911440898197";  						// GCM ID
 	public static final String DEFAULT_URL = "http://snap40.cafe24.com/Hybrid/hybridmain.html";     	// URL 주소
 	public static final String URI_ENCODE="utf-8";			// 인코딩 
 	public static final Boolean SHORT_CUT = false;				// 인트로화면 제어

@@ -205,7 +205,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 	class ITGOWebChromeClient extends WebViewClient {
 		@Override
 		public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
-			final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+			final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this , AlertDialog.THEME_DEVICE_DEFAULT_DARK);
 			builder.setMessage("안전하지 않는 페이지 입니다.\n그래도 진행하시겠습니까?");
 			builder.setPositiveButton("continue", new DialogInterface.OnClickListener() {
 				@Override
@@ -274,7 +274,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 				return;
 			}
 			
-			mProgressHorizontal.setVisibility(View.VISIBLE);
+			//mProgressHorizontal.setVisibility(View.VISIBLE);
 			
 			//인터넷 확인후 시작
 			if (!checkNetwordState()) {
@@ -401,7 +401,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		@Override
 		public boolean onJsAlert(WebView view, String url, String message, final android.webkit.JsResult result)
 		{
-			new AlertDialog.Builder(MainActivity.this)
+			new AlertDialog.Builder(MainActivity.this , AlertDialog.THEME_DEVICE_DEFAULT_DARK)
 			.setMessage(message)
 			.setPositiveButton(getString(android.R.string.ok),
 					new AlertDialog.OnClickListener()
@@ -419,7 +419,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		};
 		@Override  
 		public boolean onJsConfirm(WebView view, String url, String message, final android.webkit.JsResult result) {           	
-			new AlertDialog.Builder(view.getContext())  
+			new AlertDialog.Builder(view.getContext() , AlertDialog.THEME_DEVICE_DEFAULT_DARK)  
 			.setTitle(getString(R.string.app_name))  
 			.setMessage(message)  
 			.setPositiveButton(getString(android.R.string.ok),  

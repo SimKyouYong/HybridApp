@@ -1,6 +1,10 @@
 package co.kr.hybridapp;
 
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
+
 import com.google.android.gcm.GCMRegistrar;
 
 import android.app.Activity;
@@ -13,19 +17,30 @@ import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import co.kr.hybridapp.common.DEFINE;
+import co.kr.sky.AccumThread;
 
 public class SplashActivity extends Activity {
-	
+	Map<String, String> map = new HashMap<String, String>();
+	AccumThread mThread;
+
 	public static String reg_id = null;
 	public static Context context;
 	LocationManager myLocationManager;
 	Dialog dialog;
 	@Override
 	public void onResume() {
+		super.onResume();
+	}
+	@Override
+	public void onCreate(Bundle savedInstanceState){
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.splash);
+		
 		if (myLocationManager == null) {
 			myLocationManager = (LocationManager)getSystemService(
 	        		Context.LOCATION_SERVICE);
@@ -36,20 +51,7 @@ public class SplashActivity extends Activity {
 		SharedPreferences prefs = getSharedPreferences("co.kr.hybrid", MODE_PRIVATE);
 		reg_id = prefs.getString("device_id","");
 		
-		start();
-//		if(reg_id.equals("")){
-//			GCMRegistration_id();
-//		}else{
-//			start();
-//		}
-		super.onResume();
-	}
-	@Override
-	public void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.splash);
-		
-		
+		GCMRegistration_id();
 	}
 	private void start(){
 		
@@ -71,9 +73,7 @@ public class SplashActivity extends Activity {
     	
 	}
 	private void alertCheckGPS() {
-		
-		
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this , AlertDialog.THEME_DEVICE_DEFAULT_DARK);
         builder.setMessage("원활한 서비스를 위해\nGPS를 활성화를 부탁 드립니다.")
                .setCancelable(false)
                .setPositiveButton("확인",
@@ -121,13 +121,13 @@ public class SplashActivity extends Activity {
 		GCMRegistrar.checkManifest(context);
 
 		final String regId = GCMRegistrar.getRegistrationId(context);
-		//Log.i("GCM", "registration id ===== "+regId);
+		Log.e("SKY", "registration id ===== "+regId);
 
 		if (regId.equals("") || regId == null) {
 			GCMRegistrar.register(context, DEFINE.GCM_ID);
 		} else {
 			reg_id = regId;
-			//Log.i("Already Registered",""+regId);
+			Log.e("Already Registered",""+regId);
 			start();
 		}
 	}
@@ -140,15 +140,29 @@ public class SplashActivity extends Activity {
 	        editor.putString("device_id", reg_id);
 	        editor.commit();
 		}
-		
- 		Intent i = new Intent(context, MainActivity.class);
-		i.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-		i.putExtra("openurl", "");
-		startActivity(i);  
-		
-		SplashActivity.this.finish();		
+		//Server 전송 
+		map.put("url", "http://snap40.cafe24.com/Test/hannam_register.php");
+		map.put("reg_id", reg_id);
 
+		//스레드 생성 
+		mThread = new AccumThread(this , mAfterAccum , map , 0 , 0 , null);
+		mThread.start();		//스레드 시작!!
 	}
+	Handler mAfterAccum = new Handler()
+	{
+		@Override
+		public void handleMessage(Message msg)
+		{
+			if (msg.arg1  == 0 ) {
+				Intent i = new Intent(context, MainActivity.class);
+				i.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+				i.putExtra("openurl", "");
+				startActivity(i);  
+				
+				SplashActivity.this.finish();	
+			}
+		}
+	};
 	@Override
  	protected void onStop() {
 		// TODO Auto-generated method stub

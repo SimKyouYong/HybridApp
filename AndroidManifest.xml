@@ -81,7 +81,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name="co.kr.hybridapp.common.GCMIntentService" >
+        <service android:name="co.kr.hybridapp.GCMIntentService" >
         </service>
     </application>
 

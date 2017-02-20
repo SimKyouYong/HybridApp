@@ -143,6 +143,7 @@ public class SplashActivity extends Activity {
 		//Server 전송 
 		map.put("url", "http://snap40.cafe24.com/Test/hannam_register.php");
 		map.put("reg_id", reg_id);
+		map.put("type", "android");
 
 		//스레드 생성 
 		mThread = new AccumThread(this , mAfterAccum , map , 0 , 0 , null);

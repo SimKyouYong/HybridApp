@@ -73,7 +73,7 @@ public class SplashActivity extends Activity {
     	
 	}
 	private void alertCheckGPS() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this , AlertDialog.THEME_DEVICE_DEFAULT_DARK);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this , AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
         builder.setMessage("원활한 서비스를 위해\nGPS를 활성화를 부탁 드립니다.")
                .setCancelable(false)
                .setPositiveButton("확인",
@@ -112,7 +112,7 @@ public class SplashActivity extends Activity {
 	}	
 	public void GCMRegistration_id()
 	{
-		dialog = new Dialog(SplashActivity.this,R.style.NewDialog);
+		dialog = new Dialog(SplashActivity.this,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
 		View v = LayoutInflater.from(SplashActivity.this).inflate(R.layout.progress_circle, null);       
 		dialog.setContentView(v);
 		dialog.show();
@@ -141,7 +141,7 @@ public class SplashActivity extends Activity {
 	        editor.commit();
 		}
 		//Server 전송 
-		map.put("url", "http://snap40.cafe24.com/Test/hannam_register.php");
+		map.put("url", "http://snap40.cafe24.com/Hybrid/hybrid_register.php");
 		map.put("reg_id", reg_id);
 		map.put("type", "android");
 

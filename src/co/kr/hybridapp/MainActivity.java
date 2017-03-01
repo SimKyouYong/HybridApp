@@ -223,38 +223,143 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			dialog.show();
 		}
 		@Override //Tel,MailTo �±��϶� �׼Ǻ� ����Ʈ
-		public boolean shouldOverrideUrlLoading(WebView view, String url) {
-			if( url.startsWith("http:") || url.startsWith("https:") ) {
-				return false;
+		public boolean shouldOverrideUrlLoading(WebView view, String overrideUrl) {
+			if(overrideUrl.contains(".mp4")){
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				Uri uri = Uri.parse(overrideUrl);
+				i.setDataAndType(uri, "video/mp4");
+				startActivity(i);
+				return super.shouldOverrideUrlLoading(view, overrideUrl);
+			}else if(overrideUrl.startsWith("about:")){
+				return true;    		   
+			}else if(overrideUrl.startsWith("http://")||overrideUrl.startsWith("https://")){
+				view.loadUrl(overrideUrl);
+				return true;
 			}
+			else if(overrideUrl.startsWith("intent")||overrideUrl.startsWith("Intent"))
+			{
+				Intent intent = null;
+				try{
+					intent = Intent.parseUri(overrideUrl,  Intent.URI_INTENT_SCHEME);
+				}
+				catch(URISyntaxException ex){
+					Log.e("Browser", "Bad URI " +overrideUrl + ":" + ex.getMessage());
+				}
+				try{
+					view.getContext().startActivity(intent.parseUri(overrideUrl,0));
+				}catch(URISyntaxException e){
+					e.printStackTrace();
+				}catch(ActivityNotFoundException e){
+					e.printStackTrace();
+				}
+				return true;
+			} else if (overrideUrl.startsWith("ispmobile://")) {
+				boolean isatallFlag = isPackageInstalled("kvp.jjy.MispAndroid320");
+				if (isatallFlag) {
+					boolean override = false;
+					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(overrideUrl));
+					intent.addCategory(Intent.CATEGORY_BROWSABLE);
+					intent.putExtra(Browser.EXTRA_APPLICATION_ID, getPackageName());
+					try {
+						startActivity(intent);
+						override = true;
+					} catch (ActivityNotFoundException ex) {
+					}
+					return override; 
+				}else{
+					show_msg("ISP ��ġ�� �ʿ��մϴ�.");
+					return true;
+				}
+			} else if (overrideUrl.startsWith("paypin://")) {
+				boolean isatallFlag = isPackageInstalled("com.skp.android.paypin");
+				if (isatallFlag) {
+					boolean override = false;
+					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(overrideUrl));
+					intent.addCategory(Intent.CATEGORY_BROWSABLE);
+					intent.putExtra(Browser.EXTRA_APPLICATION_ID, getPackageName());
+					try {
+						startActivity(intent);
+						override = true;
+					} catch (ActivityNotFoundException ex) {
+					}
+					return override; 
+				}else{
+					show_msg("PAYPIN ��ġ�� �ʿ��մϴ�.");
+					return true;
+				}		
+			}else if(overrideUrl.startsWith("hybridapi://getDeviceId")){
+				final String kw[] = overrideUrl.split("\\?");
+				if(!kw[1].equals("")){
+					getDeviceId(kw[1]);
+				}
+				return true;  	
+			}else if(overrideUrl.startsWith("hybridapi://pushAgree")){
+				final String kw[] = overrideUrl.split("\\?");
+				if(!kw[1].equals("")){
+					boolean tf = (kw[1].equals("true")) ? true:false;
+					SharedPreferences prefs = getSharedPreferences("co.kr.hybrid", MODE_PRIVATE);
+					SharedPreferences.Editor editor = prefs.edit();
+					editor.putBoolean("pushEnable", tf);
+					editor.commit();
+
+					if(tf){
+						Toast.makeText(mContext, getString(R.string.toast_push_agree), Toast.LENGTH_SHORT).show();
+					}else{
+						Toast.makeText(mContext, getString(R.string.toast_push_disagree), Toast.LENGTH_SHORT).show();
+					}    				
+				}
+				return true;      			
+			}else if(overrideUrl.startsWith("hybridapi://shareUrl")){
+				shareUrl();
+				return true;     			      
+			}else if(overrideUrl.startsWith("hybridapi://makeShortCut")){
+				addShortcut();
+				return true;      			
+			}else if(overrideUrl.startsWith("hybridapi://hideBottomMenu")){
+				bottomMenu.setVisibility(View.GONE);
+				return true;       			
+			}else if(overrideUrl.startsWith("hybridapi://showBottomMenu")){
+				bottomMenu.setVisibility(View.VISIBLE);
+				return true;       			
+			}else if(overrideUrl.startsWith("hybridapi://setBottomMenuStyle")){
+				final String kw[] = overrideUrl.split("\\?");
+				if(!kw[1].equals("")){
+					setBottomMenuStyle(kw[1]);
+				}
+				return true;       			
+			} 		
 			else {
 				boolean override = false;
-				Intent intent = new Intent( Intent.ACTION_VIEW, Uri.parse(url));
-				intent.addCategory(Intent.CATEGORY_BROWSABLE);
-				intent.putExtra(Browser.EXTRA_APPLICATION_ID, getPackageName());
-				if( url.startsWith("sms:")){
-					Intent i = new Intent( Intent.ACTION_SENDTO, Uri.parse(url));
-					startActivity(i);
-					return true;
-				} else if( url.startsWith("tel:")){
-					Intent i = new Intent( Intent.ACTION_CALL, Uri.parse(url));
-					startActivity(i);
-					return true;
-				} else if( url.startsWith("mailto:")){
-					Intent i = new Intent( Intent.ACTION_SENDTO, Uri.parse(url));
+				if (overrideUrl.startsWith("sms:")) {
+					Intent i = new Intent(Intent.ACTION_SENDTO, Uri.parse(overrideUrl));
 					startActivity(i);
 					return true;
 				}
-				try {
+				if (overrideUrl.startsWith("tel:")) {
+					Intent i = new Intent(Intent.ACTION_DIAL, Uri.parse(overrideUrl));
+					startActivity(i);
+					return true;
+				}
+				if (overrideUrl.startsWith("mailto:")) {
+					Intent i = new Intent(Intent.ACTION_SENDTO, Uri.parse(overrideUrl));
+					startActivity(i);
+					return true;
+				}
+				if (overrideUrl.startsWith("geo:")) {
+					Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(overrideUrl));
+					startActivity(i);
+					return true;
+				}else if(overrideUrl.startsWith("about:")){
+					return true;
+				}
+				try{
+					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(overrideUrl));
 					startActivity(intent);
 					override = true;
 				}
-				catch (ActivityNotFoundException e) {
-					return override;
-				}
-			}
-			view.loadUrl(url);
-			return super.shouldOverrideUrlLoading(view, url);
+				catch(ActivityNotFoundException ex) {}
+				return override;
+			}  
 		}
 
 		@Override
@@ -285,7 +390,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			
 			//프로그레스바 띄우기
 			if (DEFINE.PROGRESSBAR) {
-				dialog = new ProgressDialog(mContext);
+				dialog = new ProgressDialog(mContext ,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
 				dialog.setMessage(getString(R.string.loading));
 				dialog.show();
 			}
@@ -548,6 +653,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 	}	
 	@SuppressLint("NewApi")
 	private void getDeviceId(final String callback){
+		Log.e("SKY" , "-- getDeviceId --");
 		SharedPreferences prefs = getSharedPreferences("co.kr.hybrid", MODE_PRIVATE);
 		final String device_id = prefs.getString("device_id","");
 		final boolean pushEnable = prefs.getBoolean("pushEnable",false);

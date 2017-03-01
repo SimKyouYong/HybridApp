@@ -79,6 +79,12 @@ public class GCMIntentService extends GCMBaseIntentService{
 			String link_url = intent.getStringExtra("link_url");
 			String push_color = intent.getStringExtra("push_color");
 			
+			Log.e("SKY" , "title :: " + title);
+			Log.e("SKY" , "msg :: " + msg);
+			Log.e("SKY" , "popup :: " + popup);
+			Log.e("SKY" , "image_url :: " + image_url);
+			Log.e("SKY" , "link_url :: " + link_url);
+			Log.e("SKY" , "push_color :: " + push_color);
 			if(title==null){
 				title=getString(R.string.app_name);
 			}

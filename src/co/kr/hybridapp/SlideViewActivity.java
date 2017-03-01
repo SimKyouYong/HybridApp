@@ -53,11 +53,13 @@ public class SlideViewActivity extends FragmentActivity{
 		BUTTON_URL = getIntent().getStringExtra("BUTTON_URL");
 
 		/*Test sample*/
+		/*
 		SUB_URL = "http://www.11st.co.kr/html/bestSellerMain.html";
 		TITLE = "11번가";
 		NEW = "1";
 		BUTTON = "로그인";
 		BUTTON_URL = "http://snap40.cafe24.com";
+		*/
 		flContainer = (FrameLayout)findViewById(R.id.fl_activity_main_container);
 		drawerView = (View) findViewById(R.id.drawer);
 

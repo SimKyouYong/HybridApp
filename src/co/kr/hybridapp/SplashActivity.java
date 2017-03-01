@@ -35,12 +35,6 @@ public class SplashActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-	}
-	@Override
-	public void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.splash);
-		
 		if (myLocationManager == null) {
 			myLocationManager = (LocationManager)getSystemService(
 	        		Context.LOCATION_SERVICE);
@@ -52,6 +46,13 @@ public class SplashActivity extends Activity {
 		reg_id = prefs.getString("device_id","");
 		
 		GCMRegistration_id();
+	}
+	@Override
+	public void onCreate(Bundle savedInstanceState){
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.splash);
+		
+		
 	}
 	private void start(){
 		

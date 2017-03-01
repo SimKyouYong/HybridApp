@@ -36,8 +36,15 @@ public class FunNative  {
 		for (int i = 0; i < val.length; i++) {
 			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
 		}
+
 		//인텐트 태우기
 		Intent it = new Intent(ac, SlideViewActivity.class);
+		it.putExtra("SUB_URL", val[0]);
+		it.putExtra("TITLE", val[1]);
+		//it.putExtra("NEW", val[2]);
+		it.putExtra("NEW", val[3]);
+		it.putExtra("BUTTON", val[4]);
+		it.putExtra("BUTTON_URL", return_fun);
 		ac.startActivity(it);
 		if (val[2] . equals("top")) {
 			ac.overridePendingTransition(R.drawable.anim_slide_in_top, R.drawable.anim_slide_out_bottom);  // 위에서 -> 아래

@@ -15,6 +15,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import co.kr.hybridapp.adapter.SectionsPagerAdapter;
@@ -38,12 +39,20 @@ public class SlideViewActivity extends FragmentActivity{
 	public static String BUTTON_URL;
 	private Typeface ttf;
 
+	ImageView rednew1 , rednew2 , rednew3 , rednew4, rednew5;
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_slideview);
 		ttf = Typeface.createFromAsset(getAssets(), "HANYGO230.TTF");
+
+		rednew1 = (ImageView) findViewById(R.id.rednew1);
+		rednew2 = (ImageView) findViewById(R.id.rednew2);
+		rednew3 = (ImageView) findViewById(R.id.rednew3);
+		rednew4 = (ImageView) findViewById(R.id.rednew4);
+		rednew5 = (ImageView) findViewById(R.id.rednew5);
+
 
 
 		SUB_URL = getIntent().getStringExtra("SUB_URL");
@@ -52,6 +61,27 @@ public class SlideViewActivity extends FragmentActivity{
 		BUTTON = getIntent().getStringExtra("BUTTON");
 		BUTTON_URL = getIntent().getStringExtra("BUTTON_URL");
 
+
+		switch (Integer.parseInt(NEW)) {
+		case 1:
+			rednew1.setVisibility(View.VISIBLE);
+			break;
+		case 2:
+			rednew2.setVisibility(View.VISIBLE);
+			break;
+		case 3:
+			rednew3.setVisibility(View.VISIBLE);
+			break;
+		case 4:
+			rednew4.setVisibility(View.VISIBLE);
+			break;
+		case 5:
+			rednew5.setVisibility(View.VISIBLE);
+			break;
+
+		default:
+			break;
+		}
 		/*Test sample*/
 		/*
 		SUB_URL = "http://www.11st.co.kr/html/bestSellerMain.html";
@@ -59,7 +89,7 @@ public class SlideViewActivity extends FragmentActivity{
 		NEW = "1";
 		BUTTON = "로그인";
 		BUTTON_URL = "http://snap40.cafe24.com";
-		*/
+		 */
 		flContainer = (FrameLayout)findViewById(R.id.fl_activity_main_container);
 		drawerView = (View) findViewById(R.id.drawer);
 
@@ -129,19 +159,19 @@ public class SlideViewActivity extends FragmentActivity{
 		tt.setText("" + TITLE);
 		tt.setTypeface(ttf);
 
-		
-		TextView txt1 = (TextView)findViewById(R.id.txt1);
-		txt1.setTypeface(ttf);
-		TextView txt2 = (TextView)findViewById(R.id.txt2);
-		txt2.setTypeface(ttf);
-		TextView txt3 = (TextView)findViewById(R.id.txt3);
-		txt3.setTypeface(ttf);
-		TextView txt4 = (TextView)findViewById(R.id.txt4);
-		txt4.setTypeface(ttf);
-		TextView txt5 = (TextView)findViewById(R.id.txt5);
-		txt5.setTypeface(ttf);
-		
-		
+
+		//		TextView txt1 = (TextView)findViewById(R.id.txt1);
+		//		txt1.setTypeface(ttf);
+		//		TextView txt2 = (TextView)findViewById(R.id.txt2);
+		//		txt2.setTypeface(ttf);
+		//		TextView txt3 = (TextView)findViewById(R.id.txt3);
+		//		txt3.setTypeface(ttf);
+		//		TextView txt4 = (TextView)findViewById(R.id.txt4);
+		//		txt4.setTypeface(ttf);
+		//		TextView txt5 = (TextView)findViewById(R.id.txt5);
+		//		txt5.setTypeface(ttf);
+
+
 		findViewById(R.id.slide).setOnClickListener(btnListener);
 		findViewById(R.id.btn_list).setOnClickListener(btnListener);
 		findViewById(R.id.btn1).setOnClickListener(btnListener);

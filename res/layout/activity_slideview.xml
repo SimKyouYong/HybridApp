@@ -48,147 +48,137 @@
         <ScrollView
             android:layout_width="300dp"
             android:layout_height="fill_parent"
-            android:background="#F05353" >
+            android:background="#313131" >
 
             <LinearLayout
                 android:id="@+id/View02"
                 android:layout_width="300dp"
                 android:layout_height="fill_parent"
+                android:background="#313131"
                 android:orientation="vertical" >
 
                 <LinearLayout
                     android:id="@+id/btn1"
                     android:layout_width="fill_parent"
-                    android:layout_height="95dp"
+                    android:layout_height="50dp"
                     android:background="#313131"
                     android:orientation="horizontal" >
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/btn_01"
-                        android:visibility="gone" />
-
-                    <TextView
-                        android:id="@+id/txt1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="홈화면 가기"
-                        android:typeface="sans" />
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/btn_01" />
 
                     <ImageView
                         android:id="@+id/rednew1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/btn_06" />
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/btn_06"
+                        android:visibility="gone" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/btn2"
                     android:layout_width="fill_parent"
-                    android:layout_height="95dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_vertical"
                     android:background="#313131"
                     android:orientation="horizontal" >
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/btn_02"
-                        android:visibility="gone" />
-
-                    <TextView
-                        android:id="@+id/txt2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="진행중인 이벤트"
-                        android:typeface="sans" />
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/btn_02" />
 
                     <ImageView
                         android:id="@+id/rednew2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/btn_06" />
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/btn_06"
+                        android:visibility="gone" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/btn3"
                     android:layout_width="fill_parent"
-                    android:layout_height="95dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_vertical"
                     android:background="#313131"
                     android:orientation="horizontal" >
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/btn_03"
-                        android:visibility="gone" />
-
-                    <TextView
-                        android:id="@+id/txt3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="할인쿠폰 보기"
-                        android:typeface="sans" />
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/btn_03" />
 
                     <ImageView
                         android:id="@+id/rednew3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/btn_06" />
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/btn_06"
+                        android:visibility="gone" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/btn4"
                     android:layout_width="fill_parent"
-                    android:layout_height="95dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_vertical"
                     android:background="#313131"
                     android:orientation="horizontal" >
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/btn_04"
-                        android:visibility="gone" />
-
-                    <TextView
-                        android:id="@+id/txt4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="오시는 길"
-                        android:typeface="sans" />
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/btn_04" />
 
                     <ImageView
                         android:id="@+id/rednew4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/btn_06" />
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/btn_06"
+                        android:visibility="gone" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/btn5"
                     android:layout_width="fill_parent"
-                    android:layout_height="95dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_vertical"
                     android:background="#313131"
                     android:orientation="horizontal" >
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/btn_05"
-                        android:visibility="gone" />
-
-                    <TextView
-                        android:id="@+id/txt5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="공지사항"
-                        android:typeface="sans" />
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/btn_05" />
 
                     <ImageView
                         android:id="@+id/rednew5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/btn_06" />
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/btn_06"
+                        android:visibility="gone" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

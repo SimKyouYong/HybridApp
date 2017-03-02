@@ -215,6 +215,9 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 					}    				
 				}
 				return true;      			
+			}else if(overrideUrl.startsWith("hybridapi://settingtitle")){
+				//타이틀 바 변경 : ex)로그인 & 저장 & 로그아웃 기능 
+				
 			} else {
 				boolean override = false;
 				if (overrideUrl.startsWith("sms:")) {

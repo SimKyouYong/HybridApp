@@ -278,6 +278,7 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 			if (DEFINE.PROGRESSBAR) {
 				dialog = new ProgressDialog(getActivity() ,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
 				dialog.setMessage(getString(R.string.loading));
+				dialog.setCancelable(false);
 				dialog.show();
 			}
 			//Loading 뷰 가리기

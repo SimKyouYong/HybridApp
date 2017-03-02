@@ -392,6 +392,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			if (DEFINE.PROGRESSBAR) {
 				dialog = new ProgressDialog(mContext ,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
 				dialog.setMessage(getString(R.string.loading));
+				dialog.setCancelable(false);
 				dialog.show();
 			}
 			//Loading 뷰 가리기

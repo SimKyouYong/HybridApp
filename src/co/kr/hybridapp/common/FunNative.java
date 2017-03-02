@@ -19,7 +19,42 @@ public class FunNative  {
 	
 	private WebView Webview_copy;
 
-	
+	/*
+	 * param 
+	 * url :: 이동 url 주소 
+	 * title :: 타이틀명 
+	 * action :: 애니메이션 (예 : 시작점이 왼쪽 : 왼쪽에서 -> 오른쪽 , 오른쪽 : 오른쪽-> 왼쪽)
+	 * new    :: 1 : N 이미지 활성화 , 0 : 비활성화
+	 * button :: 버튼 텍스트값
+	 * button_url :: 버튼 url 주소
+	 * window.location.href = "js2ios://SubNotActivity?url=urladdress&title=타이틀명&action=left&new=1&button=로그인&button_url=http://snap40.cafe24.com";
+	 * */
+	public void SubNotActivity(String url , Activity ac , WebView vc , String return_fun){
+		Log.e("SKY" , "--SubNotActivity-- :: ");
+		String val[] = url.split(",");
+		for (int i = 0; i < val.length; i++) {
+			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
+		}
+
+		//인텐트 태우기
+		Intent it = new Intent(ac, SlideViewActivity.class);
+		it.putExtra("SUB_URL", val[0]);
+		it.putExtra("TITLE", val[1]);
+		//it.putExtra("NEW", val[2]);
+		it.putExtra("NEW", val[3]);
+		it.putExtra("BUTTON", val[4]);
+		it.putExtra("BUTTON_URL", return_fun);
+		ac.startActivity(it);
+		if (val[2] . equals("top")) {
+			ac.overridePendingTransition(R.drawable.anim_slide_in_top, R.drawable.anim_slide_out_bottom);  // 위에서 -> 아래
+		}else if(val[2] . equals("right")){
+			ac.overridePendingTransition(R.drawable.anim_slide_in_left, R.drawable.anim_slide_out_right);  // ->
+		}else if(val[2] . equals("bottom")){
+			ac.overridePendingTransition(R.drawable.anim_slide_in_bottom, R.drawable.anim_slide_out_top);  // 아래 -> 위로
+		}else{
+			ac.overridePendingTransition(R.drawable.anim_slide_in_right, R.drawable.anim_slide_out_left);  // <-
+		}
+	}
 	/*
 	 * param 
 	 * url :: 이동 url 주소 

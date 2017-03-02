@@ -1,9 +1,17 @@
 package co.kr.hybridapp;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
@@ -11,7 +19,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.ValueCallback;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -19,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import co.kr.hybridapp.adapter.SectionsPagerAdapter;
+import co.kr.hybridapp.common.CustomDialog;
 
 public class SlideViewActivity extends FragmentActivity{
 	private FrameLayout flContainer;
@@ -28,6 +39,13 @@ public class SlideViewActivity extends FragmentActivity{
 	SectionsPagerAdapter mSectionsPagerAdapter;
 	ViewPager mViewPager;
 	int slie_menu_f = 0;
+	private ValueCallback<Uri> mUploadMessage;
+	private final static int FILECHOOSER_RESULTCODE = 1;
+	private CustomDialog mCustomDialog,mCustomDialog2;
+	public static Context mContext;
+	private boolean clearHistory = false;
+	public View vi;
+	
 
 	public static WebView wc;
 	//	window.location.href = "js2ios://SubActivity?url=&title=11번가&action=left&new=1&button=로그인&button_url=http://snap40.cafe24.com";
@@ -38,6 +56,7 @@ public class SlideViewActivity extends FragmentActivity{
 	public static String BUTTON;
 	public static String BUTTON_URL;
 	private Typeface ttf;
+	ProgressDialog dialog;
 
 	ImageView rednew1 , rednew2 , rednew3 , rednew4, rednew5;
 	@SuppressWarnings("deprecation")
@@ -46,6 +65,7 @@ public class SlideViewActivity extends FragmentActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_slideview);
 		ttf = Typeface.createFromAsset(getAssets(), "HANYGO230.TTF");
+		mContext = this;
 
 		rednew1 = (ImageView) findViewById(R.id.rednew1);
 		rednew2 = (ImageView) findViewById(R.id.rednew2);
@@ -170,8 +190,8 @@ public class SlideViewActivity extends FragmentActivity{
 		//		txt4.setTypeface(ttf);
 		//		TextView txt5 = (TextView)findViewById(R.id.txt5);
 		//		txt5.setTypeface(ttf);
-
-
+		//WebSetting();
+		
 		findViewById(R.id.slide).setOnClickListener(btnListener);
 		findViewById(R.id.btn_list).setOnClickListener(btnListener);
 		findViewById(R.id.btn1).setOnClickListener(btnListener);
@@ -180,6 +200,7 @@ public class SlideViewActivity extends FragmentActivity{
 		findViewById(R.id.btn4).setOnClickListener(btnListener);
 		findViewById(R.id.btn5).setOnClickListener(btnListener);
 	}
+	
 	//버튼 리스너 구현 부분 
 	View.OnClickListener btnListener = new View.OnClickListener() {
 		@SuppressWarnings("deprecation")
@@ -225,5 +246,49 @@ public class SlideViewActivity extends FragmentActivity{
 			}
 		}
 	};
+	@Override
+	@SuppressLint("NewApi")
+	public boolean onKeyDown(int keyCode, KeyEvent event){
+		if(keyCode == KeyEvent.KEYCODE_BACK&&wc.canGoBack()){
+			wc.goBack();
+			return true;
+		}else{
+			finish();
+		}
 
+		return super.onKeyDown(keyCode, event);
+	}
+	public static boolean isPackageInstalled(String pkgName) {
+		try {
+			mContext.getPackageManager().getPackageInfo(pkgName, PackageManager.GET_ACTIVITIES);
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	@SuppressLint("NewApi")
+	private void getDeviceId(final String callback){
+		Log.e("SKY" , "-- getDeviceId --");
+		SharedPreferences prefs = getSharedPreferences("co.kr.hybrid", MODE_PRIVATE);
+		final String device_id = prefs.getString("device_id","");
+		final boolean pushEnable = prefs.getBoolean("pushEnable",false);
+
+		if( Build.VERSION.SDK_INT < 19 ){
+			wc.loadUrl("javascript:"+callback+"('"+device_id+"',"+pushEnable+");");
+		}else{
+			runOnUiThread(new Runnable()
+			{
+				public void run()
+				{
+					ValueCallback<String> resultCallback = null;
+					wc.evaluateJavascript(callback+"('"+device_id+"',"+pushEnable+");",resultCallback);
+				}
+			});    			
+		}		
+	}
+	
+	
+	
 }

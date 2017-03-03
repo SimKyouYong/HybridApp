@@ -249,7 +249,8 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 				}
 				catch(ActivityNotFoundException ex) {}
 				return override;
-			}  
+			}
+			return false;  
 		}
 
 		@Override

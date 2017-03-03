@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -28,6 +29,7 @@ import android.provider.Browser;
 import android.support.v4.app.Fragment.InstantiationException;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.webkit.GeolocationPermissions;
@@ -39,8 +41,9 @@ import android.webkit.WebSettings.PluginState;
 import android.webkit.WebStorage;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import co.kr.hybridapp.common.CustomDialog;
 import co.kr.hybridapp.common.DEFINE;
@@ -48,7 +51,7 @@ import co.kr.hybridapp.common.DEFINE;
 public class SubNotActivity extends Activity {
 	WebView wc;
 	public View vi;
-	public static  RelativeLayout mainBody;
+	public static  LinearLayout mainBody;
 	public static String SUB_URL;
 	public static String TITLE;
 	public static String NEW;
@@ -61,6 +64,7 @@ public class SubNotActivity extends Activity {
 	private final static int FILECHOOSER_RESULTCODE = 1;
 	private CustomDialog mCustomDialog,mCustomDialog2;
 	private static Context mContext;
+	private Typeface ttf;
 
 	
 	@Override
@@ -68,18 +72,30 @@ public class SubNotActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_subnot);
 		mContext = this;
-		
+		ttf = Typeface.createFromAsset(getAssets(), "HANYGO230.TTF");
+
 		SUB_URL = getIntent().getStringExtra("SUB_URL");
 		TITLE = getIntent().getStringExtra("TITLE");
 		NEW = getIntent().getStringExtra("NEW");
 		BUTTON = getIntent().getStringExtra("BUTTON");
 		BUTTON_URL = getIntent().getStringExtra("BUTTON_URL");
 		
+		Log.e("SKY" , "SUB_URL :: " + SUB_URL);
+		Log.e("SKY" , "TITLE :: " + TITLE);
+		Log.e("SKY" , "NEW :: " + NEW);
+		Log.e("SKY" , "BUTTON :: " + BUTTON);
+		Log.e("SKY" , "BUTTON_URL :: " + BUTTON_URL);
 		
 		wc = (WebView)findViewById(R.id.webview);
 		vi = (View)findViewById(R.id.loadingview);
-		mainBody = (RelativeLayout)findViewById(R.id.mainBody);
-		
+		mainBody = (LinearLayout)findViewById(R.id.mainBody);
+		Button bt = (Button)findViewById(R.id.btn_right);
+		bt.setText("" + BUTTON);
+		bt.setTypeface(ttf);
+
+		TextView tt = (TextView)findViewById(R.id.title);
+		tt.setText("" + TITLE);
+		tt.setTypeface(ttf);
 		
 		
 		
@@ -108,7 +124,28 @@ public class SubNotActivity extends Activity {
 		
 		wc.loadUrl(SUB_URL);
 		
+		findViewById(R.id.btn_back).setOnClickListener(btnListener);
+		findViewById(R.id.btn_right).setOnClickListener(btnListener);
+
+		
 	}
+	//버튼 리스너 구현 부분 
+		View.OnClickListener btnListener = new View.OnClickListener() {
+			@SuppressWarnings("deprecation")
+			public void onClick(View v) {
+
+				switch (v.getId()) {
+				case R.id.btn_back:	
+					Log.e("SKY" , "btn_back");
+					finish();
+					break;
+				case R.id.btn_right:	
+					Log.e("SKY" , "btn_right");
+					wc.loadUrl(BUTTON_URL);
+					break;
+				}
+			}
+		};
 	class ITGOWebChromeClient extends WebViewClient {
 		@Override
 		public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
@@ -691,5 +728,17 @@ public class SubNotActivity extends Activity {
 				return override;
 			}    		
 		}
+	}
+	@Override
+	@SuppressLint("NewApi")
+	public boolean onKeyDown(int keyCode, KeyEvent event){
+		if(keyCode == KeyEvent.KEYCODE_BACK&&wc.canGoBack()){
+			wc.goBack();
+			return true;
+		}else{
+			finish();
+		}
+
+		return super.onKeyDown(keyCode, event);
 	}
 }

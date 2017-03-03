@@ -69,4 +69,5 @@ public class ShowMSGActivity extends Activity {
 			ShowMSGActivity.this.finish();
 		}
 	};
+	
 }

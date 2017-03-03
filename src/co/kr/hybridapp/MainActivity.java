@@ -26,6 +26,7 @@ import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Browser;
 import android.util.Log;
 import android.view.Gravity;
@@ -48,6 +49,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+import co.kr.hybridapp.SplashActivity.splashhandler;
 import co.kr.hybridapp.common.ActivityEx;
 import co.kr.hybridapp.common.CustomDialog;
 import co.kr.hybridapp.common.DEFINE;
@@ -73,7 +75,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 	LocationListener locationListener;
 	public static double latitude = 0;
 	public static double longitude=0;
-	
+
 	boolean popup = false;
 	private boolean pan = false;
 	private boolean clearHistory = false;
@@ -86,6 +88,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 	public View vi;
 
 	private CustomDialog mCustomDialog,mCustomDialog2;
+	LocationManager myLocationManager;
 
 	@SuppressLint({"SetJavaScriptEnabled","NewApi"})
 	@SuppressWarnings("deprecation")
@@ -94,22 +97,40 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
+
+		if (myLocationManager == null) {
+			myLocationManager = (LocationManager)getSystemService(
+					Context.LOCATION_SERVICE);
+		}
+
+		//GPS 확인
+		if (DEFINE.GPS_SWICH) {
+			//체크해서 알럿 띄우기
+			// 시스템 > 설정 > 위치 및 보안 > GPS 위성 사용 여부 체크.
+			Boolean isGpsEnabled = myLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+			Log.e("SKY" , "isGpsEnabled :: " + isGpsEnabled);
+			if (!isGpsEnabled) {
+				alertCheckGPS();
+			}
+		}
+
+
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 		CookieSyncManager.createInstance(this);
 		CookieSyncManager.getInstance().startSync();
 		mContext = this;
-		
+
 		SharedPreferences prefs = getSharedPreferences("co.kr.hybrid", MODE_PRIVATE);
 		boolean isShortcut = prefs.getBoolean("isShortcut",false);
 		boolean isAddShortcut = prefs.getBoolean("isAddShortcut",DEFINE.SHORT_CUT);
 		boolean pushAgreeCheck = prefs.getBoolean("pushAgreeCheck", false);
 		String tabstyle = prefs.getString("tabstyle",DEFINE.BOTTOM_MENU_TABSTYLE);  
 
-		
+
 		WebSetting();
 		inint();
-		
-		
+
+
 		Intent i = getIntent();
 		openURL = i.getStringExtra("openurl");      
 		String homeURL = DEFINE.DEFAULT_URL;
@@ -127,11 +148,34 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		}
 		mWebView.loadUrl(homeURL);
 	}
+	// GPS 설정화면으로 이동
+	private void moveConfigGPS() {
+		Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+		startActivity(gpsOptionsIntent);
+	}
+	private void alertCheckGPS() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this , AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+		builder.setMessage("원활한 서비스를 위해\nGPS를 활성화를 부탁 드립니다.")
+		.setCancelable(false)
+		.setPositiveButton("확인",
+				new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				moveConfigGPS();
+			}
+		})
+		.setNegativeButton("취소",
+				new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+			}
+		});
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
 	private void inint(){
 		mainBody = (RelativeLayout)findViewById(R.id.mainBody);
 		bottomMenu = (LinearLayout)findViewById(R.id.bottomMenu);
 		vi = (View)findViewById(R.id.loadingview);
-		
+
 		mProgressHorizontal = (ProgressBar) findViewById(R.id.progress_horizontal);
 		mProgressHorizontal.setProgress(R.drawable.progress_bar);
 
@@ -375,19 +419,19 @@ public class MainActivity extends ActivityEx implements LocationListener {
 					Log.e("SKY", "e :: " + e.toString());
 
 				} 
-				
+
 				return;
 			}
-			
+
 			//mProgressHorizontal.setVisibility(View.VISIBLE);
-			
+
 			//인터넷 확인후 시작
 			if (!checkNetwordState()) {
 				Toast.makeText(getApplicationContext(), "인터넷 끊김! url노출 안됨.", 0).show();
 				return ;
 			}
-			
-			
+
+
 			//프로그레스바 띄우기
 			if (DEFINE.PROGRESSBAR) {
 				dialog = new ProgressDialog(mContext ,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
@@ -438,7 +482,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 				btn2.setClickable(false);            		
 			}
 
-			
+
 			//CookieSyncManager.getInstance().sync();
 		}
 
@@ -922,6 +966,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 	@Override
 	protected void onResume(){
 		super.onResume();
+		GPS_Start();
 		CookieSyncManager.getInstance().startSync();
 	}
 	@Override
@@ -1024,21 +1069,21 @@ public class MainActivity extends ActivityEx implements LocationListener {
 	@Override
 	public void onLocationChanged(Location location) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onProviderEnabled(String provider) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onProviderDisabled(String provider) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

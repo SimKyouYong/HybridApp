@@ -9,6 +9,7 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="50dp"
+        android:background="#F16261"
         android:orientation="horizontal" >
 
         <Button
@@ -16,20 +17,37 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:text="뒤로가기" />
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:background="#708090"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:text="Back"
+            android:textColor="#ffffff" />
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
+            android:layout_centerInParent="true"
+            android:textColor="#ffffff" />
 
         <Button
             android:id="@+id/btn_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="로그인" />
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="#708090"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:text="로그인"
+            android:textColor="#ffffff" />
     </RelativeLayout>
 
     <RelativeLayout

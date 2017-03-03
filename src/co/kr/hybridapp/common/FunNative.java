@@ -2,7 +2,6 @@ package co.kr.hybridapp.common;
 
 import java.io.UnsupportedEncodingException;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -13,6 +12,7 @@ import android.widget.Toast;
 import co.kr.hybridapp.MainActivity;
 import co.kr.hybridapp.R;
 import co.kr.hybridapp.SlideViewActivity;
+import co.kr.hybridapp.SubNotActivity;
 
 public class FunNative  {
 
@@ -37,7 +37,7 @@ public class FunNative  {
 		}
 
 		//인텐트 태우기
-		Intent it = new Intent(ac, SlideViewActivity.class);
+		Intent it = new Intent(ac, SubNotActivity.class);
 		it.putExtra("SUB_URL", val[0]);
 		it.putExtra("TITLE", val[1]);
 		//it.putExtra("NEW", val[2]);

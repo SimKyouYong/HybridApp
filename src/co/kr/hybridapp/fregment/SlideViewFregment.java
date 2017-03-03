@@ -326,7 +326,7 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 
 			if(popup) mainBody.removeView(pWebView);
 
-			dialog = new ProgressDialog(mContext,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+			dialog = new ProgressDialog(getContext(),AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
 			dialog.setMessage(getString(R.string.loading));
 			dialog.setOnCancelListener(new OnCancelListener() {
 				@Override

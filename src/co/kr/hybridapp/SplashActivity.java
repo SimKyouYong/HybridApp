@@ -30,22 +30,13 @@ public class SplashActivity extends Activity {
 
 	public static String reg_id = null;
 	public static Context context;
-	LocationManager myLocationManager;
 	Dialog dialog;
-	@Override
-	public void onResume() {
-		super.onResume();
-		
-	}
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.splash);
 		
-		if (myLocationManager == null) {
-			myLocationManager = (LocationManager)getSystemService(
-	        		Context.LOCATION_SERVICE);
-		}
 
 		context = this;
 		
@@ -56,51 +47,13 @@ public class SplashActivity extends Activity {
 		
 	}
 	private void start(){
-		
-		//GPS 확인
-		if (DEFINE.GPS_SWICH) {
-			//체크해서 알럿 띄우기
-			// 시스템 > 설정 > 위치 및 보안 > GPS 위성 사용 여부 체크.
-			Boolean isGpsEnabled = myLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-			Log.e("SKY" , "isGpsEnabled :: " + isGpsEnabled);
-			if (!isGpsEnabled) {
-				alertCheckGPS();
-			}else{
-				Handler h = new Handler ();
-		    	h.postDelayed(new splashhandler(), DEFINE.SPLASH_TIME);
-			}
-		}else{
-			
-		}
+		Handler h = new Handler ();
+    	h.postDelayed(new splashhandler(), DEFINE.SPLASH_TIME);
     	
 	}
-	private void alertCheckGPS() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this , AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
-        builder.setMessage("원활한 서비스를 위해\nGPS를 활성화를 부탁 드립니다.")
-               .setCancelable(false)
-               .setPositiveButton("확인",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                moveConfigGPS();
-                            }
-                    })
-               .setNegativeButton("취소",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                            	Handler h = new Handler ();
-                            	h.postDelayed(new splashhandler(), DEFINE.SPLASH_TIME);
-                                dialog.cancel();
-                            }
-                    });
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
+	
 
-    // GPS 설정화면으로 이동
-    private void moveConfigGPS() {
-        Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-        startActivity(gpsOptionsIntent);
-    }
+    
 	public class splashhandler implements Runnable{
 		public void run(){
 			
@@ -117,7 +70,7 @@ public class SplashActivity extends Activity {
 		dialog = new Dialog(SplashActivity.this,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
 		View v = LayoutInflater.from(SplashActivity.this).inflate(R.layout.progress_circle, null);       
 		dialog.setContentView(v);
-		dialog.show();
+		//dialog.show();
 		
 		GCMRegistrar.checkDevice(context);
 		GCMRegistrar.checkManifest(context);

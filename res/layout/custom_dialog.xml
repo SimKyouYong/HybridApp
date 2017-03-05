@@ -11,9 +11,9 @@
 
         <LinearLayout
             android:layout_width="300dp"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
             android:background="@drawable/dialog_bg"
             android:orientation="vertical" >
 
@@ -87,15 +87,16 @@
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
-        
-        <Button 
+
+        <Button
             android:id="@+id/btn_close"
-            android:layout_height="40dp"
-            android:layout_marginLeft="20dp"
             android:layout_width="40dp"
-            android:layout_marginTop="20dp"
+            android:layout_height="40dp"
             android:layout_gravity="right"
-            android:text="X"/>
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/xbtn"
+            android:visibility="gone" />
     </FrameLayout>
 
 </LinearLayout>

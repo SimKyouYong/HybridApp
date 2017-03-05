@@ -16,9 +16,26 @@ import co.kr.hybridapp.SubNotActivity;
 
 public class FunNative  {
 
-	
+	CommonUtil dataSet = CommonUtil.getInstance();
+
 	private WebView Webview_copy;
 
+	public void GetPhoneNumber(String url , final Activity ac , WebView vc , String return_fun){
+		Log.e("SKY" , "-GetPhoneNumber-- :: ");
+		String val[] = url.split(",");
+		for (int i = 0; i < val.length; i++) {
+			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
+		}
+		vc.loadUrl("javascript:"+"setPhoneNumber" + "('" + dataSet.PHONE + "')");
+	}
+	public void GetPhoneId(String url , final Activity ac , WebView vc , String return_fun){
+		Log.e("SKY" , "-GetPhoneId-- :: ");
+		String val[] = url.split(",");
+		for (int i = 0; i < val.length; i++) {
+			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
+		}
+		vc.loadUrl("javascript:"+"setDeviceidNumber" + "('" + dataSet.PHONE_ID + "')");
+	}
 	/*
 	 * param 
 	 * url :: 이동 url 주소 
@@ -51,8 +68,13 @@ public class FunNative  {
 			ac.overridePendingTransition(R.drawable.anim_slide_in_left, R.drawable.anim_slide_out_right);  // ->
 		}else if(val[2] . equals("bottom")){
 			ac.overridePendingTransition(R.drawable.anim_slide_in_bottom, R.drawable.anim_slide_out_top);  // 아래 -> 위로
-		}else{
+		}else if(val[2] . equals("left")){
 			ac.overridePendingTransition(R.drawable.anim_slide_in_right, R.drawable.anim_slide_out_left);  // <-
+		}else if(val[2] . equals("new")){
+			ac.overridePendingTransition(R.drawable.anim_slide_in_new, R.drawable.anim_slide_out_new);  // <-
+		}else{
+			ac.overridePendingTransition(0, 0);  // <-
+
 		}
 	}
 	/*
@@ -87,8 +109,13 @@ public class FunNative  {
 			ac.overridePendingTransition(R.drawable.anim_slide_in_left, R.drawable.anim_slide_out_right);  // ->
 		}else if(val[2] . equals("bottom")){
 			ac.overridePendingTransition(R.drawable.anim_slide_in_bottom, R.drawable.anim_slide_out_top);  // 아래 -> 위로
-		}else{
+		}else if(val[2] . equals("left")){
 			ac.overridePendingTransition(R.drawable.anim_slide_in_right, R.drawable.anim_slide_out_left);  // <-
+		}else if(val[2] . equals("new")){
+			ac.overridePendingTransition(R.drawable.anim_slide_in_new, R.drawable.anim_slide_out_new);  // <-
+		}else{
+			ac.overridePendingTransition(0, 0);  // <-
+
 		}
 	}
 	/*

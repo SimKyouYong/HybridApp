@@ -274,6 +274,7 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 			//인터넷 확인후 시작
 			if (!checkNetwordState()) {
 				Toast.makeText(av_, "인터넷 끊김! url노출 안됨.", 0).show();
+				SlideViewActivity.wc.stopLoading();
 				return ;
 			}
 			

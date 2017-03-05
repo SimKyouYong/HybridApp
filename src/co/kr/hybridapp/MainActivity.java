@@ -1,6 +1,5 @@
 package co.kr.hybridapp;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
@@ -26,8 +25,8 @@ import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Browser;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -49,8 +48,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-import co.kr.hybridapp.SplashActivity.splashhandler;
 import co.kr.hybridapp.common.ActivityEx;
+import co.kr.hybridapp.common.CommonUtil;
 import co.kr.hybridapp.common.CustomDialog;
 import co.kr.hybridapp.common.DEFINE;
 
@@ -62,15 +61,16 @@ public class MainActivity extends ActivityEx implements LocationListener {
 	WebView mWebView,pWebView;
 	ProgressBar mProgressHorizontal;
 	ProgressDialog dialog;
-
+	CommonUtil dataSet = CommonUtil.getInstance();
+	Boolean FirstLoadUrl = true;
 	ImageButton btn1,btn2,btn3,btn4,btn5,btn6;
-
+	String FirstUrl = "";
 	String openURL="";
 	String getMsg="";
 	boolean getMsgPop = false;
 	int progress_count=0;
 	float set_progress = 0;
-
+	String homeURL;
 	LocationManager locationManager;
 	LocationListener locationListener;
 	public static double latitude = 0;
@@ -88,31 +88,24 @@ public class MainActivity extends ActivityEx implements LocationListener {
 	public View vi;
 
 	private CustomDialog mCustomDialog,mCustomDialog2;
-	LocationManager myLocationManager;
 
 	@SuppressLint({"SetJavaScriptEnabled","NewApi"})
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.e("SKY" , "onCreate");
 
 		setContentView(R.layout.activity_main);
-
-		if (myLocationManager == null) {
-			myLocationManager = (LocationManager)getSystemService(
-					Context.LOCATION_SERVICE);
+		TelephonyManager telManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);// 사용자 전화번호로 ID값 가져옴
+		try {
+			dataSet.PHONE = telManager.getLine1Number().toString().trim().replace("+82", "0").replace("82", "0"); //폰번호를 가져옴
+			Log.e("SKY" , "폰번호 :: " + dataSet.PHONE);
+			dataSet.PHONE_ID = telManager.getDeviceId();
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
-
-		//GPS 확인
-		if (DEFINE.GPS_SWICH) {
-			//체크해서 알럿 띄우기
-			// 시스템 > 설정 > 위치 및 보안 > GPS 위성 사용 여부 체크.
-			Boolean isGpsEnabled = myLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-			Log.e("SKY" , "isGpsEnabled :: " + isGpsEnabled);
-			if (!isGpsEnabled) {
-				alertCheckGPS();
-			}
-		}
+		
 
 
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -133,7 +126,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 
 		Intent i = getIntent();
 		openURL = i.getStringExtra("openurl");      
-		String homeURL = DEFINE.DEFAULT_URL;
+		homeURL = DEFINE.DEFAULT_URL;
 		if(isAddShortcut&&!isShortcut){
 			SharedPreferences.Editor editor = prefs.edit();
 			editor.putBoolean("isShortcut", true);
@@ -146,31 +139,10 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		if(!pushAgreeCheck){
 			askPushAgree();
 		}
-		mWebView.loadUrl(homeURL);
+		Log.e("SKY" , "homeURL :: " + homeURL);
+//		mWebView.loadUrl(homeURL);
 	}
-	// GPS 설정화면으로 이동
-	private void moveConfigGPS() {
-		Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-		startActivity(gpsOptionsIntent);
-	}
-	private void alertCheckGPS() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this , AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
-		builder.setMessage("원활한 서비스를 위해\nGPS를 활성화를 부탁 드립니다.")
-		.setCancelable(false)
-		.setPositiveButton("확인",
-				new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				moveConfigGPS();
-			}
-		})
-		.setNegativeButton("취소",
-				new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-			}
-		});
-		AlertDialog alert = builder.create();
-		alert.show();
-	}
+	
 	private void inint(){
 		mainBody = (RelativeLayout)findViewById(R.id.mainBody);
 		bottomMenu = (LinearLayout)findViewById(R.id.bottomMenu);
@@ -233,7 +205,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 				String homeURL = DEFINE.DEFAULT_URL;
 				if(!openURL.equals("")) homeURL=openURL;
 				clearHistory=true;
-				mWebView.loadUrl(homeURL);
+				mWebView.loadUrl(FirstUrl);
 				break;
 			case R.id.reloadBtn:
 				clearApplicationCache(null);
@@ -268,6 +240,24 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		}
 		@Override //Tel,MailTo �±��϶� �׼Ǻ� ����Ʈ
 		public boolean shouldOverrideUrlLoading(WebView view, String overrideUrl) {
+			//인터넷 확인후 시작
+			if (!checkNetwordState()) {
+				Toast.makeText(getApplicationContext(), "인터넷 끊김! url노출 안됨.", 0).show();
+				return true;
+			}
+			if (overrideUrl.startsWith("js2ios://")) {
+				mWebView.stopLoading();
+				try{
+					overrideUrl = URLDecoder.decode(overrideUrl, "UTF-8"); 
+					SplitFun(overrideUrl);
+					Log.e("SKY", "함수 시작");
+				}catch(Exception e){
+					Log.e("SKY", "e :: " + e.toString());
+
+				} 
+
+				return true;
+			}
 			if(overrideUrl.contains(".mp4")){
 				Intent i = new Intent(Intent.ACTION_VIEW);
 				Uri uri = Uri.parse(overrideUrl);
@@ -409,27 +399,11 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		@Override
 		public void onPageStarted(WebView view, String url, android.graphics.Bitmap favicon){
 			super.onPageStarted(view, url, favicon);
-			if (url.indexOf("js2ios://") != -1) {
-				mWebView.stopLoading();
-				try{
-					url = URLDecoder.decode(url, "UTF-8"); 
-					SplitFun(url);
-					Log.e("SKY", "함수 시작");
-				}catch(Exception e){
-					Log.e("SKY", "e :: " + e.toString());
-
-				} 
-
-				return;
-			}
+			
 
 			//mProgressHorizontal.setVisibility(View.VISIBLE);
 
-			//인터넷 확인후 시작
-			if (!checkNetwordState()) {
-				Toast.makeText(getApplicationContext(), "인터넷 끊김! url노출 안됨.", 0).show();
-				return ;
-			}
+			
 
 
 			//프로그레스바 띄우기
@@ -778,9 +752,24 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			mWebView.goBack();
 			return true;
 		}else if(!pan&&openURL.equals("")&&(keyCode == KeyEvent.KEYCODE_BACK)){
-			finish_popup();
+			final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this , AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+			builder.setMessage("종료 하시겠습니까?");
+			builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					finish();
+				}
+			});
+			builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+				}
+			});
+			final AlertDialog dialog = builder.create();
+			dialog.show();
+//			finish_popup();
 
-			pan = true;
+//			pan = true;
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
@@ -1054,14 +1043,29 @@ public class MainActivity extends ActivityEx implements LocationListener {
 					latitude = location.getLatitude();
 					longitude = location.getLongitude();
 					Log.e("SKY" , "GPS :: latitude :: " + latitude + "//longitude :: " + longitude);
+					//최초 한번만
+					if (FirstLoadUrl) {
+						FirstLoadUrl = false;
+						FirstUrl = homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + getAddress(mContext , latitude , longitude) + "&d=" + dataSet.PHONE_ID;
+						mWebView.loadUrl(homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + getAddress(mContext , latitude , longitude) + "&d=" + dataSet.PHONE_ID);
+					}
+					
 				}
 				locationManager.removeUpdates(locationListener);
 			}
 			public void onStatusChanged(String provider, int status, Bundle extras) {
+				Log.e("SKY" , "onStatusChanged");
 			}
 			public void onProviderEnabled(String provider) {
+				Log.e("SKY" , "onProviderEnabled");
 			}
 			public void onProviderDisabled(String provider) {
+				Log.e("SKY" , "onProviderDisabled");
+				latitude = 0;
+				longitude = 0;
+				FirstUrl = homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + "" + "&d=" + dataSet.PHONE_ID;
+				mWebView.loadUrl(homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + "" + "&d=" + dataSet.PHONE_ID);
+
 			}
 		};
 		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, locationListener);

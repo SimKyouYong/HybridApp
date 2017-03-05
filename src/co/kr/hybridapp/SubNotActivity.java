@@ -312,6 +312,7 @@ public class SubNotActivity extends Activity {
 			//인터넷 확인후 시작
 			if (!checkNetwordState()) {
 				Toast.makeText(SubNotActivity.this, "인터넷 끊김! url노출 안됨.", 0).show();
+				SlideViewActivity.wc.stopLoading();
 				return ;
 			}
 			
@@ -364,7 +365,7 @@ public class SubNotActivity extends Activity {
 
 			if(popup) mainBody.removeView(pWebView);
 
-			dialog = new ProgressDialog(SubNotActivity.this,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+			dialog = new ProgressDialog(getApplicationContext(),AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
 			dialog.setMessage(getString(R.string.loading));
 			dialog.setOnCancelListener(new OnCancelListener() {
 				@Override
@@ -383,12 +384,12 @@ public class SubNotActivity extends Activity {
 				@Override
 				public void onPageStarted(WebView view, String url, android.graphics.Bitmap favicon){
 					super.onPageStarted(view, url, favicon);
-					dialog.show();
+					//dialog.show();
 				}
 				@Override
 				public void onPageFinished(WebView view, String url){
 					super.onPageFinished(view, url);
-					dialog.dismiss();
+					//dialog.dismiss();
 				}    
 			});   	        
 			pWebView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));

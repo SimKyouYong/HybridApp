@@ -2,8 +2,10 @@ package co.kr.hybridapp;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -64,7 +66,7 @@ public class SlideViewActivity extends FragmentActivity{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_slideview);
-		ttf = Typeface.createFromAsset(getAssets(), "HANYGO230.TTF");
+		ttf = Typeface.createFromAsset(getAssets(), "RixB.ttf");
 		mContext = this;
 
 		rednew1 = (ImageView) findViewById(R.id.rednew1);
@@ -253,7 +255,21 @@ public class SlideViewActivity extends FragmentActivity{
 			wc.goBack();
 			return true;
 		}else{
-			finish();
+			final AlertDialog.Builder builder = new AlertDialog.Builder(SlideViewActivity.this , AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+			builder.setMessage("종료 하시겠습니까?");
+			builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					finish();
+				}
+			});
+			builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+				}
+			});
+			final AlertDialog dialog = builder.create();
+			dialog.show();
 		}
 
 		return super.onKeyDown(keyCode, event);

@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -42,6 +43,7 @@ import android.webkit.WebStorage;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,8 +67,12 @@ public class SubNotActivity extends Activity {
 	private CustomDialog mCustomDialog,mCustomDialog2;
 	private static Context mContext;
 	private Typeface ttf;
+	ImageButton btn1,btn2,btn3,btn4,btn5,btn6;
+	public LinearLayout bottomMenu;
+	private boolean clearHistory = false;
+	String openURL="";
 
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -79,15 +85,34 @@ public class SubNotActivity extends Activity {
 		NEW = getIntent().getStringExtra("NEW");
 		BUTTON = getIntent().getStringExtra("BUTTON");
 		BUTTON_URL = getIntent().getStringExtra("BUTTON_URL");
-		
+
 		Log.e("SKY" , "SUB_URL :: " + SUB_URL);
 		Log.e("SKY" , "TITLE :: " + TITLE);
 		Log.e("SKY" , "NEW :: " + NEW);
 		Log.e("SKY" , "BUTTON :: " + BUTTON);
 		Log.e("SKY" , "BUTTON_URL :: " + BUTTON_URL);
-		
+
 		wc = (WebView)findViewById(R.id.webview);
 		vi = (View)findViewById(R.id.loadingview);
+		bottomMenu = (LinearLayout)findViewById(R.id.bottomMenu);
+
+		btn1 = (ImageButton)findViewById(R.id.prevBtn);
+		btn2 = (ImageButton)findViewById(R.id.nextBtn);
+		btn3 = (ImageButton)findViewById(R.id.homeBtn);
+		btn4 = (ImageButton)findViewById(R.id.reloadBtn);
+		btn5 = (ImageButton)findViewById(R.id.shareBtn);
+
+		findViewById(R.id.prevBtn).setOnClickListener(btnListener); 
+		findViewById(R.id.nextBtn).setOnClickListener(btnListener); 
+		findViewById(R.id.homeBtn).setOnClickListener(btnListener); 
+		findViewById(R.id.reloadBtn).setOnClickListener(btnListener); 
+		findViewById(R.id.shareBtn).setOnClickListener(btnListener); 
+
+		btn1.getBackground().setAlpha(90);
+		btn1.setClickable(false);  
+		btn2.getBackground().setAlpha(90);
+		btn2.setClickable(false);
+
 		mainBody = (LinearLayout)findViewById(R.id.mainBody);
 		Button bt = (Button)findViewById(R.id.btn_right);
 		bt.setText("" + BUTTON);
@@ -96,10 +121,10 @@ public class SubNotActivity extends Activity {
 		TextView tt = (TextView)findViewById(R.id.title);
 		tt.setText("" + TITLE);
 		tt.setTypeface(ttf);
-		
-		
-		
-		
+
+
+
+
 		wc.getSettings().setJavaScriptEnabled(true);
 		wc.setVerticalScrollbarOverlay(true);
 		wc.setHorizontalScrollbarOverlay(true);
@@ -120,32 +145,103 @@ public class SubNotActivity extends Activity {
 		wc.getSettings().setUserAgentString(wc.getSettings().getUserAgentString()+" Hybrid 2.0");
 		wc.setWebChromeClient(new SMOWebChromeClient(this));
 		wc.setWebViewClient(new ITGOWebChromeClient());
-		
-		
+
+
 		wc.loadUrl(SUB_URL);
-		
+
 		findViewById(R.id.btn_back).setOnClickListener(btnListener);
 		findViewById(R.id.btn_right).setOnClickListener(btnListener);
 
-		
+
 	}
 	//버튼 리스너 구현 부분 
-		View.OnClickListener btnListener = new View.OnClickListener() {
-			@SuppressWarnings("deprecation")
-			public void onClick(View v) {
+	View.OnClickListener btnListener = new View.OnClickListener() {
+		@SuppressWarnings("deprecation")
+		public void onClick(View v) {
 
-				switch (v.getId()) {
-				case R.id.btn_back:	
-					Log.e("SKY" , "btn_back");
-					finish();
-					break;
-				case R.id.btn_right:	
-					Log.e("SKY" , "btn_right");
-					wc.loadUrl(BUTTON_URL);
-					break;
-				}
+			switch (v.getId()) {
+			case R.id.btn_back:	
+				Log.e("SKY" , "btn_back");
+				finish();
+				break;
+			case R.id.btn_right:	
+				Log.e("SKY" , "btn_right");
+				wc.loadUrl(BUTTON_URL);
+				break;
+			case R.id.prevBtn:
+				wc.goBack();
+				break;
+			case R.id.nextBtn:
+				wc.goForward();
+				break;
+			case R.id.homeBtn:
+				String homeURL = SUB_URL;
+				if(!openURL.equals("")) homeURL=openURL;
+				clearHistory=true;
+				wc.loadUrl(homeURL);
+				break;
+			case R.id.reloadBtn:
+				clearApplicationCache(null);
+				wc.clearCache(true);
+				wc.reload();
+				break;
+			case R.id.shareBtn:
+				shareUrl();
+				break;
 			}
-		};
+		}
+	};
+	private void setBottomMenuStyle(String style){
+		if(style.equals("default")){
+			setBottomMenuStyleDefault();
+		}else{
+			setBottomMenuStyleColor(style);
+		}
+		SharedPreferences prefs = getSharedPreferences("co.kr.hybrid", MODE_PRIVATE);
+		final SharedPreferences.Editor editor = prefs.edit();	
+		editor.putString("tabstyle", style);
+		editor.commit();		
+	}
+	private void setBottomMenuStyleDefault(){
+		bottomMenu.setBackgroundResource(R.drawable.tab_bg);
+		btn1.setBackgroundResource(R.drawable.tab_prev_click);
+		btn2.setBackgroundResource(R.drawable.tab_next_click);
+		btn3.setBackgroundResource(R.drawable.tab_home_click);
+		btn4.setBackgroundResource(R.drawable.tab_reload_click);
+		btn5.setBackgroundResource(R.drawable.tab_share_click);		
+	}	
+	private void setBottomMenuStyleColor(String tabstyle){
+		bottomMenu.setBackgroundColor(Color.parseColor(tabstyle));
+		btn1.setBackgroundResource(R.drawable.tab_prev_w_click);
+		btn2.setBackgroundResource(R.drawable.tab_next_w_click);
+		btn3.setBackgroundResource(R.drawable.tab_home_w_click);
+		btn4.setBackgroundResource(R.drawable.tab_reload_w_click);
+		btn5.setBackgroundResource(R.drawable.tab_share_w_click);		
+	}
+	private void shareUrl(){
+		Intent i = new Intent(android.content.Intent.ACTION_SEND);
+		i.setType("text/plain");
+		i.putExtra(Intent.EXTRA_SUBJECT,getString(R.string.app_name));
+		i.putExtra(Intent.EXTRA_TEXT,wc.getUrl());
+		startActivity(Intent.createChooser(i, wc.getTitle()+" "+getString(R.string.share_page)));		
+	}
+	private void clearApplicationCache(java.io.File dir){
+		if(dir==null)
+			dir = getCacheDir();
+		else;
+		if(dir==null)
+			return;
+		else;
+		java.io.File[] children = dir.listFiles();
+		try{
+			for(int i=0;i<children.length;i++)
+				if(children[i].isDirectory())
+					clearApplicationCache(children[i]);
+				else
+					children[i].delete();
+		}
+		catch(Exception e){}
+	}
 	class ITGOWebChromeClient extends WebViewClient {
 		@Override
 		public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
@@ -253,9 +349,27 @@ public class SubNotActivity extends Activity {
 					}    				
 				}
 				return true;      			
-			}else if(overrideUrl.startsWith("hybridapi://settingtitle")){
+			}else if(overrideUrl.startsWith("hybridapi://shareUrl")){
+				shareUrl();
+				return true;     			      
+			}else if(overrideUrl.startsWith("hybridapi://makeShortCut")){
+				addShortcut();
+				return true;      			
+			}else if(overrideUrl.startsWith("hybridapi://hideBottomMenu")){
+				bottomMenu.setVisibility(View.GONE);
+				return true;       			
+			}else if(overrideUrl.startsWith("hybridapi://showBottomMenu")){
+				bottomMenu.setVisibility(View.VISIBLE);
+				return true;       			
+			}else if(overrideUrl.startsWith("hybridapi://setBottomMenuStyle")){
+				final String kw[] = overrideUrl.split("\\?");
+				if(!kw[1].equals("")){
+					setBottomMenuStyle(kw[1]);
+				}
+				return true;       			
+			} else if(overrideUrl.startsWith("hybridapi://settingtitle")){
 				//타이틀 바 변경 : ex)로그인 & 저장 & 로그아웃 기능 
-				
+
 			} else {
 				boolean override = false;
 				if (overrideUrl.startsWith("sms:")) {
@@ -304,19 +418,19 @@ public class SubNotActivity extends Activity {
 					Log.e("SKY", "e :: " + e.toString());
 
 				} 
-				
+
 				return;
 			}
-			
-			
+
+
 			//인터넷 확인후 시작
 			if (!checkNetwordState()) {
 				Toast.makeText(SubNotActivity.this, "인터넷 끊김! url노출 안됨.", 0).show();
 				SlideViewActivity.wc.stopLoading();
 				return ;
 			}
-			
-			
+
+
 			//프로그레스바 띄우기
 			if (DEFINE.PROGRESSBAR) {
 				dialog = new ProgressDialog(SubNotActivity.this ,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
@@ -342,6 +456,28 @@ public class SubNotActivity extends Activity {
 			if (DEFINE.LOADINGVIEW) {
 				vi.setVisibility(View.GONE);
 			}
+			if(clearHistory){
+				wc.clearHistory();
+				btn1.getBackground().setAlpha(90);
+				btn1.setClickable(false);
+				btn2.getBackground().setAlpha(90);
+				btn2.setClickable(false);
+				clearHistory=false;
+			}
+			if(wc.canGoBack()){
+				btn1.getBackground().setAlpha(255);
+				btn1.setClickable(true);
+			}else{
+				btn1.getBackground().setAlpha(90);
+				btn1.setClickable(false);            		
+			}
+			if(wc.canGoForward()){
+				btn2.getBackground().setAlpha(255);
+				btn2.setClickable(true);
+			}else{
+				btn2.getBackground().setAlpha(90);
+				btn2.setClickable(false);            		
+			}
 			//CookieSyncManager.getInstance().sync();
 		}
 
@@ -351,7 +487,7 @@ public class SubNotActivity extends Activity {
 			//Toast.makeText(getApplicationContext(), "Error: "+description, Toast.LENGTH_SHORT).show();
 		}  
 	}
-	
+
 	class SMOWebChromeClient extends WebChromeClient{
 		private View mCustomView;
 		private Activity mActivity;
@@ -492,7 +628,7 @@ public class SubNotActivity extends Activity {
 		}  
 
 	}
-	
+
 	public static boolean isPackageInstalled(String pkgName) {
 		try {
 			mContext.getPackageManager().getPackageInfo(pkgName, PackageManager.GET_ACTIVITIES);
@@ -730,6 +866,23 @@ public class SubNotActivity extends Activity {
 			}    		
 		}
 	}
+	private void addShortcut() {
+		String packagename=mContext.getPackageName();
+		Intent shortcutIntent = new Intent(Intent.ACTION_MAIN);
+		shortcutIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+		shortcutIntent.setClassName(mContext, packagename+".SplashActivity");
+		shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+
+		Intent intent = new Intent();
+		intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+		intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.app_name));
+		intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+				Intent.ShortcutIconResource.fromContext(mContext, R.drawable.ic_launcher));
+		intent.putExtra("duplicate", false);
+		intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+
+		sendBroadcast(intent);
+	}	
 	@Override
 	@SuppressLint("NewApi")
 	public boolean onKeyDown(int keyCode, KeyEvent event){

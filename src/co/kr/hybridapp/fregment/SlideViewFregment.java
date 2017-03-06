@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -41,6 +42,7 @@ import android.webkit.WebSettings.PluginState;
 import android.webkit.WebStorage;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -53,7 +55,7 @@ import co.kr.hybridapp.common.FragmentEx;
 public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 	private static Context mContext;
 	Activity av_;    //  액티비티 av_로 지정
-	
+
 	boolean popup = false;
 	public static  RelativeLayout mainBody;
 	WebView pWebView;
@@ -62,8 +64,13 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 	private ValueCallback<Uri> mUploadMessage;
 	private final static int FILECHOOSER_RESULTCODE = 1;
 	public View vi;
+	String openURL="";
 
-	
+	ImageButton btn1,btn2,btn3,btn4,btn5,btn6;
+	public LinearLayout bottomMenu;
+	private boolean clearHistory = false;
+
+
 	public SlideViewFregment(Context context , Activity av , int tag) {  //  액티비티 지정, 프래그먼트
 		mContext = context;  
 		av_ = av;
@@ -78,8 +85,25 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 		SlideViewActivity.wc = (WebView)view.findViewById(R.id.webview);
 		vi = (View)view.findViewById(R.id.loadingview);
 		mainBody = (RelativeLayout)view.findViewById(R.id.mainBody);
+		bottomMenu = (LinearLayout)view.findViewById(R.id.bottomMenu);
+		btn1 = (ImageButton)view.findViewById(R.id.prevBtn);
+		btn2 = (ImageButton)view.findViewById(R.id.nextBtn);
+		btn3 = (ImageButton)view.findViewById(R.id.homeBtn);
+		btn4 = (ImageButton)view.findViewById(R.id.reloadBtn);
+		btn5 = (ImageButton)view.findViewById(R.id.shareBtn);
 
-		
+		view.findViewById(R.id.prevBtn).setOnClickListener(btnListener); 
+		view.findViewById(R.id.nextBtn).setOnClickListener(btnListener); 
+		view.findViewById(R.id.homeBtn).setOnClickListener(btnListener); 
+		view.findViewById(R.id.reloadBtn).setOnClickListener(btnListener); 
+		view.findViewById(R.id.shareBtn).setOnClickListener(btnListener); 
+
+		btn1.getBackground().setAlpha(90);
+		btn1.setClickable(false);  
+		btn2.getBackground().setAlpha(90);
+		btn2.setClickable(false);
+
+
 		SlideViewActivity.wc.getSettings().setJavaScriptEnabled(true);
 		SlideViewActivity.wc.setVerticalScrollbarOverlay(true);
 		SlideViewActivity.wc.setHorizontalScrollbarOverlay(true);
@@ -100,13 +124,93 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 		SlideViewActivity.wc.getSettings().setUserAgentString(SlideViewActivity.wc.getSettings().getUserAgentString()+" Hybrid 2.0");
 		SlideViewActivity.wc.setWebChromeClient(new SMOWebChromeClient(av_));
 		SlideViewActivity.wc.setWebViewClient(new ITGOWebChromeClient());
-		
-		
+
+
 		SlideViewActivity.wc.loadUrl(SlideViewActivity.SUB_URL);
-		
-		
+
+
 		return view;
 
+	}
+	//버튼 리스너 구현 부분 
+	View.OnClickListener btnListener = new View.OnClickListener() {
+		@SuppressWarnings("deprecation")
+		public void onClick(View v) {
+
+			switch (v.getId()) {
+			case R.id.prevBtn:
+				SlideViewActivity.wc.goBack();
+				break;
+			case R.id.nextBtn:
+				SlideViewActivity.wc.goForward();
+				break;
+			case R.id.homeBtn:
+				String homeURL = SlideViewActivity.SUB_URL;
+				if(!openURL.equals("")) homeURL=openURL;
+				clearHistory=true;
+				SlideViewActivity.wc.loadUrl(homeURL);
+				break;
+			case R.id.reloadBtn:
+				clearApplicationCache(null);
+				SlideViewActivity.wc.clearCache(true);
+				SlideViewActivity.wc.reload();
+				break;
+			case R.id.shareBtn:
+				shareUrl();
+				break;
+			}
+		}
+	};
+	private void setBottomMenuStyle(String style){
+		if(style.equals("default")){
+			setBottomMenuStyleDefault();
+		}else{
+			setBottomMenuStyleColor(style);
+		}
+		SharedPreferences prefs = mContext.getSharedPreferences("co.kr.hybrid", mContext.MODE_PRIVATE);
+		final SharedPreferences.Editor editor = prefs.edit();	
+		editor.putString("tabstyle", style);
+		editor.commit();		
+	}
+	private void setBottomMenuStyleDefault(){
+		bottomMenu.setBackgroundResource(R.drawable.tab_bg);
+		btn1.setBackgroundResource(R.drawable.tab_prev_click);
+		btn2.setBackgroundResource(R.drawable.tab_next_click);
+		btn3.setBackgroundResource(R.drawable.tab_home_click);
+		btn4.setBackgroundResource(R.drawable.tab_reload_click);
+		btn5.setBackgroundResource(R.drawable.tab_share_click);		
+	}	
+	private void setBottomMenuStyleColor(String tabstyle){
+		bottomMenu.setBackgroundColor(Color.parseColor(tabstyle));
+		btn1.setBackgroundResource(R.drawable.tab_prev_w_click);
+		btn2.setBackgroundResource(R.drawable.tab_next_w_click);
+		btn3.setBackgroundResource(R.drawable.tab_home_w_click);
+		btn4.setBackgroundResource(R.drawable.tab_reload_w_click);
+		btn5.setBackgroundResource(R.drawable.tab_share_w_click);		
+	}
+	private void shareUrl(){
+		Intent i = new Intent(android.content.Intent.ACTION_SEND);
+		i.setType("text/plain");
+		i.putExtra(Intent.EXTRA_SUBJECT,getString(R.string.app_name));
+		i.putExtra(Intent.EXTRA_TEXT,SlideViewActivity.wc.getUrl());
+		startActivity(Intent.createChooser(i, SlideViewActivity.wc.getTitle()+" "+getString(R.string.share_page)));		
+	}
+	private void clearApplicationCache(java.io.File dir){
+		if(dir==null)
+			dir = mContext.getCacheDir();
+		else;
+		if(dir==null)
+			return;
+		else;
+		java.io.File[] children = dir.listFiles();
+		try{
+			for(int i=0;i<children.length;i++)
+				if(children[i].isDirectory())
+					clearApplicationCache(children[i]);
+				else
+					children[i].delete();
+		}
+		catch(Exception e){}
 	}
 	class ITGOWebChromeClient extends WebViewClient {
 		@Override
@@ -217,7 +321,7 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 				return true;      			
 			}else if(overrideUrl.startsWith("hybridapi://settingtitle")){
 				//타이틀 바 변경 : ex)로그인 & 저장 & 로그아웃 기능 
-				
+
 			} else {
 				boolean override = false;
 				if (overrideUrl.startsWith("sms:")) {
@@ -266,19 +370,19 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 					Log.e("SKY", "e :: " + e.toString());
 
 				} 
-				
+
 				return;
 			}
-			
-			
+
+
 			//인터넷 확인후 시작
 			if (!checkNetwordState()) {
 				Toast.makeText(av_, "인터넷 끊김! url노출 안됨.", 0).show();
 				SlideViewActivity.wc.stopLoading();
 				return ;
 			}
-			
-			
+
+
 			//프로그레스바 띄우기
 			if (DEFINE.PROGRESSBAR) {
 				dialog = new ProgressDialog(getActivity() ,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
@@ -304,6 +408,28 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 			if (DEFINE.LOADINGVIEW) {
 				vi.setVisibility(View.GONE);
 			}
+			if(clearHistory){
+				SlideViewActivity.wc.clearHistory();
+				btn1.getBackground().setAlpha(90);
+				btn1.setClickable(false);
+				btn2.getBackground().setAlpha(90);
+				btn2.setClickable(false);
+				clearHistory=false;
+			}
+			if(SlideViewActivity.wc.canGoBack()){
+				btn1.getBackground().setAlpha(255);
+				btn1.setClickable(true);
+			}else{
+				btn1.getBackground().setAlpha(90);
+				btn1.setClickable(false);            		
+			}
+			if(SlideViewActivity.wc.canGoForward()){
+				btn2.getBackground().setAlpha(255);
+				btn2.setClickable(true);
+			}else{
+				btn2.getBackground().setAlpha(90);
+				btn2.setClickable(false);            		
+			}
 			//CookieSyncManager.getInstance().sync();
 		}
 
@@ -313,7 +439,7 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 			//Toast.makeText(getApplicationContext(), "Error: "+description, Toast.LENGTH_SHORT).show();
 		}  
 	}
-	
+
 	class SMOWebChromeClient extends WebChromeClient{
 		private View mCustomView;
 		private Activity mActivity;
@@ -454,7 +580,7 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 		}  
 
 	}
-	
+
 	public static boolean isPackageInstalled(String pkgName) {
 		try {
 			mContext.getPackageManager().getPackageInfo(pkgName, PackageManager.GET_ACTIVITIES);
@@ -692,16 +818,16 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 			}    		
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		// TODO Auto-generated method stub

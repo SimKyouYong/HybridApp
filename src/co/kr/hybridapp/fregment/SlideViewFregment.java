@@ -48,6 +48,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 import co.kr.hybridapp.R;
 import co.kr.hybridapp.SlideViewActivity;
+import co.kr.hybridapp.common.Check_Preferences;
 import co.kr.hybridapp.common.CustomDialog;
 import co.kr.hybridapp.common.DEFINE;
 import co.kr.hybridapp.common.FragmentEx;
@@ -98,6 +99,13 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 		view.findViewById(R.id.reloadBtn).setOnClickListener(btnListener); 
 		view.findViewById(R.id.shareBtn).setOnClickListener(btnListener); 
 
+		if (Check_Preferences.getAppPreferences(mContext, "bottomMenu").equals("GONE")) {
+			bottomMenu.setVisibility(View.GONE);
+		}else{
+			bottomMenu.setVisibility(View.VISIBLE);
+			setBottomMenuStyle(Check_Preferences.getAppPreferences(mContext, "setBottomMenuStyle"));
+		}
+		
 		btn1.getBackground().setAlpha(90);
 		btn1.setClickable(false);  
 		btn2.getBackground().setAlpha(90);
@@ -167,6 +175,7 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 		}else{
 			setBottomMenuStyleColor(style);
 		}
+		Check_Preferences.setAppPreferences(mContext, "setBottomMenuStyle", style );
 		SharedPreferences prefs = mContext.getSharedPreferences("co.kr.hybrid", mContext.MODE_PRIVATE);
 		final SharedPreferences.Editor editor = prefs.edit();	
 		editor.putString("tabstyle", style);

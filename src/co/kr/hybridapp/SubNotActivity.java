@@ -47,6 +47,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import co.kr.hybridapp.common.Check_Preferences;
 import co.kr.hybridapp.common.CustomDialog;
 import co.kr.hybridapp.common.DEFINE;
 
@@ -95,13 +96,21 @@ public class SubNotActivity extends Activity {
 		wc = (WebView)findViewById(R.id.webview);
 		vi = (View)findViewById(R.id.loadingview);
 		bottomMenu = (LinearLayout)findViewById(R.id.bottomMenu);
-
+		
+		
 		btn1 = (ImageButton)findViewById(R.id.prevBtn);
 		btn2 = (ImageButton)findViewById(R.id.nextBtn);
 		btn3 = (ImageButton)findViewById(R.id.homeBtn);
 		btn4 = (ImageButton)findViewById(R.id.reloadBtn);
 		btn5 = (ImageButton)findViewById(R.id.shareBtn);
 
+		if (Check_Preferences.getAppPreferences(this, "bottomMenu").equals("GONE")) {
+			bottomMenu.setVisibility(View.GONE);
+		}else{
+			bottomMenu.setVisibility(View.VISIBLE);
+			setBottomMenuStyle(Check_Preferences.getAppPreferences(this, "setBottomMenuStyle"));
+		}
+		
 		findViewById(R.id.prevBtn).setOnClickListener(btnListener); 
 		findViewById(R.id.nextBtn).setOnClickListener(btnListener); 
 		findViewById(R.id.homeBtn).setOnClickListener(btnListener); 
@@ -197,6 +206,7 @@ public class SubNotActivity extends Activity {
 		}else{
 			setBottomMenuStyleColor(style);
 		}
+		Check_Preferences.setAppPreferences(this, "setBottomMenuStyle", style );
 		SharedPreferences prefs = getSharedPreferences("co.kr.hybrid", MODE_PRIVATE);
 		final SharedPreferences.Editor editor = prefs.edit();	
 		editor.putString("tabstyle", style);

@@ -49,6 +49,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import co.kr.hybridapp.common.ActivityEx;
+import co.kr.hybridapp.common.Check_Preferences;
 import co.kr.hybridapp.common.CommonUtil;
 import co.kr.hybridapp.common.CustomDialog;
 import co.kr.hybridapp.common.DEFINE;
@@ -350,9 +351,11 @@ public class MainActivity extends ActivityEx implements LocationListener {
 				addShortcut();
 				return true;      			
 			}else if(overrideUrl.startsWith("hybridapi://hideBottomMenu")){
+				Check_Preferences.setAppPreferences(MainActivity.this, "bottomMenu" , "GONE");
 				bottomMenu.setVisibility(View.GONE);
 				return true;       			
 			}else if(overrideUrl.startsWith("hybridapi://showBottomMenu")){
+				Check_Preferences.setAppPreferences(MainActivity.this, "bottomMenu" , "VISIBLE");
 				bottomMenu.setVisibility(View.VISIBLE);
 				return true;       			
 			}else if(overrideUrl.startsWith("hybridapi://setBottomMenuStyle")){
@@ -696,6 +699,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		}else{
 			setBottomMenuStyleColor(style);
 		}
+		Check_Preferences.setAppPreferences(MainActivity.this, "setBottomMenuStyle", style );
 		SharedPreferences prefs = getSharedPreferences("co.kr.hybrid", MODE_PRIVATE);
 		final SharedPreferences.Editor editor = prefs.edit();	
 		editor.putString("tabstyle", style);

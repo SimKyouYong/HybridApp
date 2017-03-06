@@ -77,13 +77,14 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ShowMSGActivity"
-            android:theme="@android:style/Theme.Translucent" >
-        </activity>
+            android:theme="@android:style/Theme.Translucent" />
+        <activity
+            android:name=".ShowIMGActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".SubNotActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
-        </activity>
+            android:theme="@android:style/Theme.NoTitleBar" />
         <!-- GCM -->
         <receiver
             android:name="com.google.android.gcm.GCMBroadcastReceiver"

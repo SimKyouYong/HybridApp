@@ -2,6 +2,8 @@ package co.kr.hybridapp;
 
 import java.util.regex.Pattern;
 
+import com.google.android.gcm.GCMBaseIntentService;
+
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -16,11 +18,8 @@ import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 import android.util.Log;
 import android.widget.RemoteViews;
-import co.kr.hybridapp.R;
 import co.kr.hybridapp.common.DEFINE;
 import co.kr.hybridapp.common.LoadImageFromWeb;
-
-import com.google.android.gcm.GCMBaseIntentService;
 
 public class GCMIntentService extends GCMBaseIntentService{
 
@@ -150,17 +149,29 @@ public class GCMIntentService extends GCMBaseIntentService{
 				notiBuilder.setStyle(style);						
 			}
 			
-			Notification noti = notiBuilder.build();
-			noti.defaults |=Notification.DEFAULT_SOUND;
-			notificationManager.notify(0, noti);		
+				
 
 			if(popup.equals("Y")){
 				Intent i = new Intent(context, ShowMSGActivity.class);
 				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 				i.setComponent(new ComponentName(context, ShowMSGActivity.class));
+				i.putExtra("flag", false);
 				i.putExtra("msg", msg);
 				i.putExtra("openurl",link_url);
 				i.putExtra("imgurl",image_url);
+				startActivity(i);			
+				
+				Notification noti = notiBuilder.build();
+				noti.defaults |=Notification.DEFAULT_SOUND;
+				notificationManager.notify(0, noti);	
+			}else if(popup.equals("IMG")){
+				//이미지만 나오는 푸시 팝업
+				Intent i = new Intent(context, ShowIMGActivity.class);
+				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+				i.setComponent(new ComponentName(context, ShowIMGActivity.class));
+				i.putExtra("flag", true);
+				i.putExtra("imgurl",image_url);
+				i.putExtra("openurl",link_url);
 				startActivity(i);				
 			}
 		}

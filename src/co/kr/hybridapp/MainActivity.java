@@ -58,6 +58,7 @@ import co.kr.hybridapp.common.DEFINE;
 @SuppressLint("JavascriptInterface")
 public class MainActivity extends ActivityEx implements LocationListener {
 
+	Boolean First_Flag = false;
 	public static Context mContext;
 	WebView mWebView,pWebView;
 	ProgressBar mProgressHorizontal;
@@ -1067,9 +1068,11 @@ public class MainActivity extends ActivityEx implements LocationListener {
 				Log.e("SKY" , "onProviderDisabled");
 				latitude = 0;
 				longitude = 0;
-				FirstUrl = homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + "" + "&d=" + dataSet.PHONE_ID;
-				mWebView.loadUrl(homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + "" + "&d=" + dataSet.PHONE_ID);
-
+				if (!First_Flag) {
+					First_Flag = true;
+					FirstUrl = homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + "" + "&d=" + dataSet.PHONE_ID;
+					mWebView.loadUrl(homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + "" + "&d=" + dataSet.PHONE_ID);
+				}
 			}
 		};
 		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, locationListener);

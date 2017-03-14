@@ -19,7 +19,48 @@ public class FunNative  {
 	CommonUtil dataSet = CommonUtil.getInstance();
 
 	private WebView Webview_copy;
-
+	/*
+	 * param 
+	 * url :: 안씀 
+	 * name :: 띄울 메시지
+	 * return :: 안씀
+	 * window.location.href = "js2ios://SETEXIT_TYPE?url=null&name=true&return=weblocation";
+	 * */
+	public void SETEXIT_TYPE1(String url , final Activity ac , WebView vc , String return_fun){
+		Log.e("SKY" , "-SETEXIT_TYPE1-- :: ");
+		String val[] = url.split(",");
+		for (int i = 0; i < val.length; i++) {
+			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
+		}
+		Log.e("SKY", "VAL[1] :: " + val[1] );
+		if (val[1].equals("true")) {
+			Check_Preferences.setAppPreferences(ac, "SETEXIT_TYPE" , "true");
+		}else{
+			Check_Preferences.setAppPreferences(ac, "SETEXIT_TYPE" , "false");
+		}
+		Log.e("SKY", "RETURN :: " + "javascript:"+return_fun + "('" + Check_Preferences.getAppPreferences(ac, "SETEXIT_TYPE") + "')" );
+		vc.loadUrl("javascript:"+return_fun + "('" + Check_Preferences.getAppPreferences(ac, "SETEXIT_TYPE") + "')");
+		
+		
+	}
+	public void SETEXIT_TYPE2(String url , final Activity ac , WebView vc , String return_fun){
+		Log.e("SKY" , "-SETEXIT_TYPE2-- :: ");
+		String val[] = url.split(",");
+		for (int i = 0; i < val.length; i++) {
+			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
+		}
+		Log.e("SKY", "VAL[1] :: " + val[1] );
+		if (val[1].equals("true")) {
+			Check_Preferences.setAppPreferences(ac, "SETEXIT_TYPE" , "true");
+		}else{
+			Check_Preferences.setAppPreferences(ac, "SETEXIT_TYPE" , "false");
+		}
+		Log.e("SKY", "RETURN :: " + "javascript:"+return_fun + "('" + Check_Preferences.getAppPreferences(ac, "SETEXIT_TYPE") + "')" );
+		vc.loadUrl("javascript:"+return_fun + "('" + Check_Preferences.getAppPreferences(ac, "SETEXIT_TYPE") + "')");
+		
+		
+	}
+	
 	public void GetPhoneNumber(String url , final Activity ac , WebView vc , String return_fun){
 		Log.e("SKY" , "-GetPhoneNumber-- :: ");
 		String val[] = url.split(",");

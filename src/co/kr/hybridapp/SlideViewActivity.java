@@ -31,7 +31,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import co.kr.hybridapp.adapter.SectionsPagerAdapter;
+import co.kr.hybridapp.common.Check_Preferences;
 import co.kr.hybridapp.common.CustomDialog;
+import co.kr.hybridapp.common.DEFINE;
 
 public class SlideViewActivity extends FragmentActivity{
 	private FrameLayout flContainer;
@@ -47,7 +49,7 @@ public class SlideViewActivity extends FragmentActivity{
 	public static Context mContext;
 	private boolean clearHistory = false;
 	public View vi;
-	
+
 
 	public static WebView wc;
 	//	window.location.href = "js2ios://SubActivity?url=&title=11번가&action=left&new=1&button=로그인&button_url=http://snap40.cafe24.com";
@@ -193,7 +195,7 @@ public class SlideViewActivity extends FragmentActivity{
 		//		TextView txt5 = (TextView)findViewById(R.id.txt5);
 		//		txt5.setTypeface(ttf);
 		//WebSetting();
-		
+
 		findViewById(R.id.slide).setOnClickListener(btnListener);
 		findViewById(R.id.btn_list).setOnClickListener(btnListener);
 		findViewById(R.id.btn1).setOnClickListener(btnListener);
@@ -202,7 +204,7 @@ public class SlideViewActivity extends FragmentActivity{
 		findViewById(R.id.btn4).setOnClickListener(btnListener);
 		findViewById(R.id.btn5).setOnClickListener(btnListener);
 	}
-	
+
 	//버튼 리스너 구현 부분 
 	View.OnClickListener btnListener = new View.OnClickListener() {
 		@SuppressWarnings("deprecation")
@@ -260,12 +262,14 @@ public class SlideViewActivity extends FragmentActivity{
 			builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
+					Log.e("SKY","AAA:: " + Check_Preferences.getAppPreferences(SlideViewActivity.this , "SETEXIT_TYPE"));
 					finish();
 				}
 			});
 			builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
+
 				}
 			});
 			final AlertDialog dialog = builder.create();
@@ -283,7 +287,7 @@ public class SlideViewActivity extends FragmentActivity{
 		}
 		return true;
 	}
-	
+
 	@SuppressLint("NewApi")
 	private void getDeviceId(final String callback){
 		Log.e("SKY" , "-- getDeviceId --");
@@ -304,7 +308,7 @@ public class SlideViewActivity extends FragmentActivity{
 			});    			
 		}		
 	}
-	
-	
-	
+
+
+
 }

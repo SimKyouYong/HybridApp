@@ -58,6 +58,7 @@ import co.kr.hybridapp.common.DEFINE;
 @SuppressLint("JavascriptInterface")
 public class MainActivity extends ActivityEx implements LocationListener {
 
+	private boolean exit_type = false;
 	Boolean First_Flag = false;
 	public static Context mContext;
 	WebView mWebView,pWebView;
@@ -97,7 +98,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.e("SKY" , "onCreate");
-
+		exit_type = true;
 		setContentView(R.layout.activity_main);
 		TelephonyManager telManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);// 사용자 전화번호로 ID값 가져옴
 		try {
@@ -960,6 +961,13 @@ public class MainActivity extends ActivityEx implements LocationListener {
 	@Override
 	protected void onResume(){
 		super.onResume();
+		Log.e("SKY", "exit_type :: " + exit_type);
+		if (exit_type) {
+			if (Check_Preferences.getAppPreferences(MainActivity.this , "SETEXIT_TYPE").equals("true") ) {
+				finish();
+			}
+		}
+		
 		GPS_Start();
 		CookieSyncManager.getInstance().startSync();
 	}

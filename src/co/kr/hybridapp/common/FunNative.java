@@ -19,6 +19,45 @@ public class FunNative  {
 	CommonUtil dataSet = CommonUtil.getInstance();
 
 	private WebView Webview_copy;
+	
+	/*
+	 * param 
+	 * url :: 안씀 
+	 * name :: 띄울 메시지
+	 * return :: 안씀
+	 * window.location.href = "js2ios://SETPopExit_TYPE1?url=null&name=true&return=GETPopExit_TYPE1";
+	 * */
+	public void SETPOPEXIT_TYPE1(String url , final Activity ac , WebView vc , String return_fun){
+		Log.e("SKY" , "-SETPOPEXIT_TYPE1-- :: ");
+		String val[] = url.split(",");
+		for (int i = 0; i < val.length; i++) {
+			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
+		}
+		Log.e("SKY", "VAL[1] :: " + val[1] );
+		if (val[1].equals("true")) {
+			Check_Preferences.setAppPreferences(ac, "SETPOPEXIT_TYPE1" , "true");
+		}else{
+			Check_Preferences.setAppPreferences(ac, "SETPOPEXIT_TYPE1" , "false");
+		}
+		Log.e("SKY", "RETURN :: " + "javascript:"+return_fun + "('" + Check_Preferences.getAppPreferences(ac, "SETPOPEXIT_TYPE1") + "')" );
+		vc.loadUrl("javascript:"+return_fun + "('" + Check_Preferences.getAppPreferences(ac, "SETPOPEXIT_TYPE1") + "')");
+	}
+	public void SETPOPEXIT_TYPE2(String url , final Activity ac , WebView vc , String return_fun){
+		Log.e("SKY" , "-SETPOPEXIT_TYPE2-- :: ");
+		String val[] = url.split(",");
+		for (int i = 0; i < val.length; i++) {
+			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
+		}
+		Log.e("SKY", "VAL[1] :: " + val[1] );
+		if (val[1].equals("true")) {
+			Check_Preferences.setAppPreferences(ac, "SETPOPEXIT_TYPE2" , "true");
+		}else{
+			Check_Preferences.setAppPreferences(ac, "SETPOPEXIT_TYPE2" , "false");
+		}
+		Log.e("SKY", "RETURN :: " + "javascript:"+return_fun + "('" + Check_Preferences.getAppPreferences(ac, "SETPOPEXIT_TYPE2") + "')" );
+		vc.loadUrl("javascript:"+return_fun + "('" + Check_Preferences.getAppPreferences(ac, "SETPOPEXIT_TYPE2") + "')");
+	}
+	
 	/*
 	 * param 
 	 * url :: 안씀 
@@ -40,8 +79,6 @@ public class FunNative  {
 		}
 		Log.e("SKY", "RETURN :: " + "javascript:"+return_fun + "('" + Check_Preferences.getAppPreferences(ac, "SETEXIT_TYPE") + "')" );
 		vc.loadUrl("javascript:"+return_fun + "('" + Check_Preferences.getAppPreferences(ac, "SETEXIT_TYPE") + "')");
-		
-		
 	}
 	public void SETEXIT_TYPE2(String url , final Activity ac , WebView vc , String return_fun){
 		Log.e("SKY" , "-SETEXIT_TYPE2-- :: ");
@@ -57,8 +94,6 @@ public class FunNative  {
 		}
 		Log.e("SKY", "RETURN :: " + "javascript:"+return_fun + "('" + Check_Preferences.getAppPreferences(ac, "SETEXIT_TYPE") + "')" );
 		vc.loadUrl("javascript:"+return_fun + "('" + Check_Preferences.getAppPreferences(ac, "SETEXIT_TYPE") + "')");
-		
-		
 	}
 	
 	public void GetPhoneNumber(String url , final Activity ac , WebView vc , String return_fun){
@@ -117,6 +152,12 @@ public class FunNative  {
 			ac.overridePendingTransition(0, 0);  // <-
 
 		}
+		Check_Preferences.setAppPreferences(ac, "SUB_URL" , val[0]);
+		Check_Preferences.setAppPreferences(ac, "TITLE" ,  	val[1]);
+		Check_Preferences.setAppPreferences(ac, "NEW" ,  	val[3]);
+		Check_Preferences.setAppPreferences(ac, "BUTTON" ,  val[4]);
+		Check_Preferences.setAppPreferences(ac, "BUTTON_URL" , return_fun);
+
 	}
 	/*
 	 * param 
@@ -158,6 +199,12 @@ public class FunNative  {
 			ac.overridePendingTransition(0, 0);  // <-
 
 		}
+		Check_Preferences.setAppPreferences(ac, "SUB_URL" , val[0]);
+		Check_Preferences.setAppPreferences(ac, "TITLE" ,  	val[1]);
+		Check_Preferences.setAppPreferences(ac, "NEW" ,  	val[3]);
+		Check_Preferences.setAppPreferences(ac, "BUTTON" ,  val[4]);
+		Check_Preferences.setAppPreferences(ac, "BUTTON_URL" , return_fun);
+
 	}
 	/*
 	 * param 

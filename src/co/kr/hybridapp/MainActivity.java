@@ -102,8 +102,21 @@ public class MainActivity extends ActivityEx implements LocationListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.e("SKY" , "onCreate");
-		exit_type = true;
 		setContentView(R.layout.activity_main);
+		
+		if (Check_Preferences.getAppPreferences(this, "SETEXIT_TYPE").equals("true")) {
+			//인텐트
+			Intent it = new Intent(this, SlideViewActivity.class);
+			it.putExtra("SUB_URL", 		Check_Preferences.getAppPreferences(this, "SUB_URL"));
+			it.putExtra("TITLE", 		Check_Preferences.getAppPreferences(this, "TITLE"));
+			it.putExtra("NEW", 			Check_Preferences.getAppPreferences(this, "NEW"));
+			it.putExtra("BUTTON", 		Check_Preferences.getAppPreferences(this, "BUTTON"));
+			it.putExtra("BUTTON_URL", 	Check_Preferences.getAppPreferences(this, "BUTTON_URL"));
+			startActivity(it);
+			overridePendingTransition(0, 0); 
+			finish();
+			return;
+		}
 		TelephonyManager telManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);// 사용자 전화번호로 ID값 가져옴
 		try {
 			dataSet.PHONE = telManager.getLine1Number().toString().trim().replace("+82", "0").replace("82", "0"); //폰번호를 가져옴
@@ -124,7 +137,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		boolean isShortcut = prefs.getBoolean("isShortcut",false);
 		boolean isAddShortcut = prefs.getBoolean("isAddShortcut",DEFINE.SHORT_CUT);
 		boolean pushAgreeCheck = prefs.getBoolean("pushAgreeCheck", false);
-		String tabstyle = prefs.getString("tabstyle",DEFINE.BOTTOM_MENU_TABSTYLE);  
+		String tabstyle = prefs.getString("setBottomMenuStyle",DEFINE.BOTTOM_MENU_TABSTYLE);  
 
 
 		WebSetting();
@@ -431,6 +444,8 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		public void onPageFinished(WebView view, String url){
 			super.onPageFinished(view, url);
 			Log.e("SKY", "onPageFinished = = = = = = = "+url);
+			exit_type = true;
+
 			//프로그레스바 끔.
 			if (DEFINE.PROGRESSBAR) {
 				dialog.dismiss();
@@ -1055,6 +1070,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 					//최초 한번만
 					if (FirstLoadUrl) {
 						FirstLoadUrl = false;
+						First_Flag = true;
 						FirstUrl = homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + getAddress(mContext , latitude , longitude) + "&d=" + dataSet.PHONE_ID;
 						mWebView.loadUrl(homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + getAddress(mContext , latitude , longitude) + "&d=" + dataSet.PHONE_ID);
 					}
@@ -1074,6 +1090,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 				longitude = 0;
 				if (!First_Flag) {
 					First_Flag = true;
+					FirstLoadUrl = false;
 					FirstUrl = homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + "" + "&d=" + dataSet.PHONE_ID;
 					mWebView.loadUrl(homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + "" + "&d=" + dataSet.PHONE_ID);
 				}

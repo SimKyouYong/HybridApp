@@ -91,7 +91,11 @@ public class MainActivity extends ActivityEx implements LocationListener {
 	public View vi;
 
 	private CustomDialog mCustomDialog,mCustomDialog2;
-
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		clearApplicationCache(null);
+	}
 	@SuppressLint({"SetJavaScriptEnabled","NewApi"})
 	@SuppressWarnings("deprecation")
 	@Override
@@ -108,7 +112,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		
+
 
 
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -249,7 +253,6 @@ public class MainActivity extends ActivityEx implements LocationListener {
 				return true;
 			}
 			if (overrideUrl.startsWith("js2ios://")) {
-				mWebView.stopLoading();
 				try{
 					overrideUrl = URLDecoder.decode(overrideUrl, "UTF-8"); 
 					SplitFun(overrideUrl);
@@ -404,11 +407,11 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		@Override
 		public void onPageStarted(WebView view, String url, android.graphics.Bitmap favicon){
 			super.onPageStarted(view, url, favicon);
-			
+
 
 			//mProgressHorizontal.setVisibility(View.VISIBLE);
 
-			
+
 
 
 			//프로그레스바 띄우기
@@ -658,9 +661,6 @@ public class MainActivity extends ActivityEx implements LocationListener {
 
 		sendBroadcast(intent);
 	}	
-	private void finish_popup(){
-		Toast.makeText(mContext, getString(R.string.back_finish), Toast.LENGTH_LONG).show();
-	}
 	private void show_msg(String msg){
 		mCustomDialog = new CustomDialog(mContext, 
 				getString(R.string.app_name),
@@ -696,7 +696,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		}		
 	}
 	private void setBottomMenuStyle(String style){
-		if(style.equals("default")){
+		if(style.equals("default") || style.equals("")){
 			setBottomMenuStyleDefault();
 		}else{
 			setBottomMenuStyleColor(style);
@@ -773,19 +773,15 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			});
 			final AlertDialog dialog = builder.create();
 			dialog.show();
-//			finish_popup();
+			//			finish_popup();
 
-//			pan = true;
+			//			pan = true;
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
 	}
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		clearApplicationCache(null);
-	}
+
 	private void clearApplicationCache(java.io.File dir){
 		if(dir==null)
 			dir = getCacheDir();
@@ -1062,7 +1058,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 						FirstUrl = homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + getAddress(mContext , latitude , longitude) + "&d=" + dataSet.PHONE_ID;
 						mWebView.loadUrl(homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + getAddress(mContext , latitude , longitude) + "&d=" + dataSet.PHONE_ID);
 					}
-					
+
 				}
 				locationManager.removeUpdates(locationListener);
 			}

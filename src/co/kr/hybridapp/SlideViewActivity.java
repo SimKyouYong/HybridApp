@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -21,6 +22,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.ValueCallback;
@@ -33,7 +35,7 @@ import android.widget.Toast;
 import co.kr.hybridapp.adapter.SectionsPagerAdapter;
 import co.kr.hybridapp.common.Check_Preferences;
 import co.kr.hybridapp.common.CustomDialog;
-import co.kr.hybridapp.common.DEFINE;
+import co.kr.hybridapp.common.ExitCustomDialog;
 
 public class SlideViewActivity extends FragmentActivity{
 	private FrameLayout flContainer;
@@ -45,11 +47,11 @@ public class SlideViewActivity extends FragmentActivity{
 	int slie_menu_f = 0;
 	private ValueCallback<Uri> mUploadMessage;
 	private final static int FILECHOOSER_RESULTCODE = 1;
-	private CustomDialog mCustomDialog,mCustomDialog2;
+	private CustomDialog mCustomDialog;
 	public static Context mContext;
 	private boolean clearHistory = false;
 	public View vi;
-
+	private ExitCustomDialog mexitCustomDialog;
 
 	public static WebView wc;
 	//	window.location.href = "js2ios://SubActivity?url=&title=11번가&action=left&new=1&button=로그인&button_url=http://snap40.cafe24.com";
@@ -257,27 +259,54 @@ public class SlideViewActivity extends FragmentActivity{
 			wc.goBack();
 			return true;
 		}else{
-			final AlertDialog.Builder builder = new AlertDialog.Builder(SlideViewActivity.this , AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
-			builder.setMessage("종료 하시겠습니까?");
-			builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					Log.e("SKY","AAA:: " + Check_Preferences.getAppPreferences(SlideViewActivity.this , "SETEXIT_TYPE"));
-					finish();
-				}
-			});
-			builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-
-				}
-			});
-			final AlertDialog dialog = builder.create();
-			dialog.show();
+			//종료 타입 1, 2
+			if (Check_Preferences.getAppPreferences(SlideViewActivity.this , "SETPOPEXIT_TYPE1" ).equals("true")) {
+				//디폴트 종료하기
+				final AlertDialog.Builder builder = new AlertDialog.Builder(SlideViewActivity.this , AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+				builder.setMessage("종료 하시겠습니까?");
+				builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						Log.e("SKY","AAA:: " + Check_Preferences.getAppPreferences(SlideViewActivity.this , "SETEXIT_TYPE"));
+						finish();
+					}
+				});
+				builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+					}
+				});
+				final AlertDialog dialog = builder.create();
+				dialog.show();
+			}else{
+				//이미지 팝업 종료
+				mexitCustomDialog = new ExitCustomDialog(SlideViewActivity.this, 
+						"https://byunsooblog.files.wordpress.com/2014/06/find-in-path.png",
+						leftClickListener, 
+						rightClickListener);
+				mexitCustomDialog.show();
+			}
+			
 		}
 
 		return super.onKeyDown(keyCode, event);
 	}
+	private View.OnClickListener leftClickListener = new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+
+			finish();
+			mCustomDialog.dismiss();
+		}
+	};
+
+	private View.OnClickListener rightClickListener = new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+
+			mCustomDialog.dismiss();
+		}
+	};
 	public static boolean isPackageInstalled(String pkgName) {
 		try {
 			mContext.getPackageManager().getPackageInfo(pkgName, PackageManager.GET_ACTIVITIES);

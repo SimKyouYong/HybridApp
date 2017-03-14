@@ -50,12 +50,12 @@ public class FunNative  {
 		}
 		Log.e("SKY", "VAL[1] :: " + val[1] );
 		if (val[1].equals("true")) {
-			Check_Preferences.setAppPreferences(ac, "SETPOPEXIT_TYPE2" , "true");
+			Check_Preferences.setAppPreferences(ac, "SETPOPEXIT_TYPE1" , "true");
 		}else{
-			Check_Preferences.setAppPreferences(ac, "SETPOPEXIT_TYPE2" , "false");
+			Check_Preferences.setAppPreferences(ac, "SETPOPEXIT_TYPE1" , "false");
 		}
-		Log.e("SKY", "RETURN :: " + "javascript:"+return_fun + "('" + Check_Preferences.getAppPreferences(ac, "SETPOPEXIT_TYPE2") + "')" );
-		vc.loadUrl("javascript:"+return_fun + "('" + Check_Preferences.getAppPreferences(ac, "SETPOPEXIT_TYPE2") + "')");
+		Log.e("SKY", "RETURN :: " + "javascript:"+return_fun + "('" + Check_Preferences.getAppPreferences(ac, "SETPOPEXIT_TYPE1") + "')" );
+		vc.loadUrl("javascript:"+return_fun + "('" + Check_Preferences.getAppPreferences(ac, "SETPOPEXIT_TYPE1") + "')");
 	}
 	
 	/*

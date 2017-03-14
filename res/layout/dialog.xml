@@ -4,31 +4,58 @@
     android:layout_height="match_parent"
     android:background="#33000000" >
 
-    <FrameLayout
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/view00"
+        android:layout_width="260dp"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="50dp" >
+        android:layout_centerInParent="true" >
 
         <com.android.volley.toolbox.NetworkImageView
             android:id="@+id/img_exit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="20dp"
-            android:scaleType="centerCrop" />
+            android:layout_width="250dp"
+            android:layout_height="350dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:scaleType="fitXY" />
 
         <Button
             android:id="@+id/exit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="top|right"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
             android:background="@drawable/xbtn"
             android:gravity="top|right" />
-    </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/bottomview"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/img_exit"
+            android:layout_centerHorizontal="true"
+            android:background="#ffffff"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btn_ok"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="2dp"
+                android:text="확인" />
+
+            <Button
+                android:id="@+id/btn_x"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="2dp"
+                android:text="취소" />
+        </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

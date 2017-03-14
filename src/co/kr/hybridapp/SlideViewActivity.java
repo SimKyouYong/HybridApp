@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,6 +26,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.CookieSyncManager;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
 import android.widget.Button;
@@ -52,10 +54,11 @@ public class SlideViewActivity extends FragmentActivity{
 	private boolean clearHistory = false;
 	public View vi;
 	private ExitCustomDialog mexitCustomDialog;
-
+	public static Boolean exit_flag = false;
 	public static WebView wc;
 	//	window.location.href = "js2ios://SubActivity?url=&title=11번가&action=left&new=1&button=로그인&button_url=http://snap40.cafe24.com";
-
+	
+	public static String gourl = "";
 	public static String SUB_URL;
 	public static String TITLE;
 	public static String NEW;
@@ -65,6 +68,18 @@ public class SlideViewActivity extends FragmentActivity{
 	ProgressDialog dialog;
 
 	ImageView rednew1 , rednew2 , rednew3 , rednew4, rednew5;
+	@Override
+	protected void onResume(){
+		super.onResume();
+		if (gourl.length() > 1) {
+			wc.loadUrl(gourl);
+			gourl = "";
+		}
+		if (exit_flag) {
+			exit_flag  = false;
+			finish();
+		}
+	}
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -279,12 +294,22 @@ public class SlideViewActivity extends FragmentActivity{
 				final AlertDialog dialog = builder.create();
 				dialog.show();
 			}else{
-				//이미지 팝업 종료
-				mexitCustomDialog = new ExitCustomDialog(SlideViewActivity.this, 
-						"https://byunsooblog.files.wordpress.com/2014/06/find-in-path.png",
-						leftClickListener, 
-						rightClickListener);
-				mexitCustomDialog.show();
+				//이미지만 나오는 푸시 팝업
+				Intent i = new Intent(SlideViewActivity.this , ShowIMGActivity.class);
+				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+				i.setComponent(new ComponentName(SlideViewActivity.this, ShowIMGActivity.class));
+				i.putExtra("flag", true);
+				i.putExtra("imgurl","http://img1.tmon.kr/deals/2017/03/08/520859290/front_3325a.jpg");
+				i.putExtra("openurl","http://www.naver.com/");
+				i.putExtra("bottomview","true");
+				startActivity(i);
+				
+//				//이미지 팝업 종료
+//				mexitCustomDialog = new ExitCustomDialog(SlideViewActivity.this, 
+//						"https://byunsooblog.files.wordpress.com/2014/06/find-in-path.png",
+//						leftClickListener, 
+//						rightClickListener);
+//				mexitCustomDialog.show();
 			}
 			
 		}

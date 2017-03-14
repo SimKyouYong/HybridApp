@@ -286,6 +286,8 @@ public class GCMIntentService extends GCMBaseIntentService{
 				i.putExtra("flag", true);
 				i.putExtra("imgurl",image_url);
 				i.putExtra("openurl",link_url);
+				i.putExtra("bottomview","false");
+
 				startActivity(i);	
 			}else{
 				Log.e("SKY", "55555");

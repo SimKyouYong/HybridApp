@@ -146,7 +146,10 @@ public class GCMIntentService extends GCMBaseIntentService{
 				Log.e(TAG, "333!! ");
 				NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
 				style.setSummaryText(getString(R.string.app_name)).setBigContentTitle(title).bigText(msg);
-				notiBuilder.setStyle(style);						
+				notiBuilder.setStyle(style);	
+				Notification noti = notiBuilder.build();
+				noti.defaults |=Notification.DEFAULT_SOUND;
+				notificationManager.notify(0, noti);	
 			}
 			
 				

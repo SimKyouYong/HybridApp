@@ -170,7 +170,7 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 		}
 	};
 	private void setBottomMenuStyle(String style){
-		if(style.equals("default")){
+		if(style.equals("default") || style.equals("")){
 			setBottomMenuStyleDefault();
 		}else{
 			setBottomMenuStyleColor(style);

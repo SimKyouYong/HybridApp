@@ -1,22 +1,17 @@
 package co.kr.hybridapp;
 
-import com.android.volley.toolbox.NetworkImageView;
-
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.PaintDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageView;
 import co.kr.hybridapp.common.CustomDialog;
-import co.kr.hybridapp.net.H5ImageLoader;
 
 public class ShowMSGActivity extends Activity {
 
@@ -42,6 +37,7 @@ public class ShowMSGActivity extends Activity {
 		openurl=i.getStringExtra("openurl");
 		String imgurl=i.getStringExtra("imgurl");
 
+		Log.e("SKY" , "msg :: " + msg);
 		mCustomDialog = new CustomDialog(context, 
 				getString(R.string.app_name),
 				msg,

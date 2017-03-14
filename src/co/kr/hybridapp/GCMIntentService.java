@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 import android.util.Log;
@@ -77,6 +78,7 @@ public class GCMIntentService extends GCMBaseIntentService{
 			String image_url = intent.getStringExtra("image_url");
 			String link_url = intent.getStringExtra("link_url");
 			String push_color = intent.getStringExtra("push_color");
+			String tag = intent.getStringExtra("tag");
 			
 			Log.e("SKY" , "title :: " + title);
 			Log.e("SKY" , "msg :: " + msg);
@@ -84,6 +86,7 @@ public class GCMIntentService extends GCMBaseIntentService{
 			Log.e("SKY" , "image_url :: " + image_url);
 			Log.e("SKY" , "link_url :: " + link_url);
 			Log.e("SKY" , "push_color :: " + push_color);
+			Log.e("SKY" , "tag :: " + tag);
 			if(title==null){
 				title=getString(R.string.app_name);
 			}
@@ -119,42 +122,91 @@ public class GCMIntentService extends GCMBaseIntentService{
 				.setVibrate(new long[] { 500, 100, 500, 100 })
 				.setContentIntent(pendingIntent)
 				.setContent(remoteViews);
-				
-			if(message_bitmap!=null){
-				Log.e(TAG, "111!! ");
-				NotificationCompat.BigPictureStyle style = new NotificationCompat.BigPictureStyle();
-				if(!push_color.equals("")){
-					style
-					.setBigContentTitle(Html.fromHtml("<font color='#"+txtcolor[0]+"'>"+title+"</font>"))
-					.setSummaryText(Html.fromHtml("<font color='#"+txtcolor[0]+"'>"+msg+"</font>")).
-					bigPicture(message_bitmap);
+			if (tag.equals("1")) {
+				//일반 푸시
+				if(message_bitmap!=null){
+					Log.e("SKY", "111!! ");
+					NotificationCompat.BigPictureStyle style = new NotificationCompat.BigPictureStyle();
+					if(!push_color.equals("")){
+						style
+						.setBigContentTitle(Html.fromHtml("<font color='#"+txtcolor[0]+"'>"+title+"</font>"))
+						.setSummaryText(Html.fromHtml("<font color='#"+txtcolor[0]+"'>"+msg+"</font>")).
+						bigPicture(message_bitmap);
+					}else{
+						style.setBigContentTitle(title).setSummaryText(msg).bigPicture(message_bitmap);
+					}
+					notiBuilder.setStyle(style);		
+					
+					Notification noti = notiBuilder.build();
+					noti.defaults |=Notification.DEFAULT_SOUND;
+					notificationManager.notify(0, noti);
+				}else if(!push_color.equals("")){	
+					Log.e("SKY", "222!! ");
+
+					int tcolor = Integer.parseInt(txtcolor[0],16)+0xFF000000;
+					int bcolor = Integer.parseInt(txtcolor[1],16)+0xFF000000;
+					remoteViews.setTextColor(R.id.push_title, tcolor);
+					remoteViews.setTextColor(R.id.push_message, tcolor);
+					remoteViews.setInt(R.id.push_pannel, "setBackgroundColor", bcolor);
+					remoteViews.setTextViewText(R.id.push_title, title);
+					remoteViews.setTextViewText(R.id.push_message, msg+"\n\n");
+					
+					Notification noti = notiBuilder.build();
+					noti.defaults |=Notification.DEFAULT_SOUND;
+					notificationManager.notify(0, noti);
 				}else{
-					style.setBigContentTitle(title).setSummaryText(msg).bigPicture(message_bitmap);
+					NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
+					style.setSummaryText(getString(R.string.app_name)).setBigContentTitle(title).bigText(msg);
+					notiBuilder.setStyle(style);	
+					
+					Notification noti = notiBuilder.build();
+					noti.defaults |=Notification.DEFAULT_SOUND;
+					notificationManager.notify(0, noti);
 				}
-				notiBuilder.setStyle(style);				
-			}else if(!push_color.equals("")){	
-				Log.e(TAG, "222!! ");
+			} else if(tag.equals("2")){
+				Log.e("SKY", "3333");
 
-				int tcolor = Integer.parseInt(txtcolor[0],16)+0xFF000000;
-				int bcolor = Integer.parseInt(txtcolor[1],16)+0xFF000000;
-				remoteViews.setTextColor(R.id.push_title, tcolor);
-				remoteViews.setTextColor(R.id.push_message, tcolor);
-				remoteViews.setInt(R.id.push_pannel, "setBackgroundColor", bcolor);
-				remoteViews.setTextViewText(R.id.push_title, title);
-				remoteViews.setTextViewText(R.id.push_message, msg+"\n\n");
-			}else{
-				Log.e(TAG, "333!! ");
-				NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
-				style.setSummaryText(getString(R.string.app_name)).setBigContentTitle(title).bigText(msg);
-				notiBuilder.setStyle(style);	
-				Notification noti = notiBuilder.build();
-				noti.defaults |=Notification.DEFAULT_SOUND;
-				notificationManager.notify(0, noti);	
-			}
-			
+				if(message_bitmap!=null){
+					Log.e("SKY", "111!! ");
+					NotificationCompat.BigPictureStyle style = new NotificationCompat.BigPictureStyle();
+					if(!push_color.equals("")){
+						style
+						.setBigContentTitle(Html.fromHtml("<font color='#"+txtcolor[0]+"'>"+title+"</font>"))
+						.setSummaryText(Html.fromHtml("<font color='#"+txtcolor[0]+"'>"+msg+"</font>")).
+						bigPicture(message_bitmap);
+					}else{
+						style.setBigContentTitle(title).setSummaryText(msg).bigPicture(message_bitmap);
+					}
+					notiBuilder.setStyle(style);		
+					
+					Notification noti = notiBuilder.build();
+					noti.defaults |=Notification.DEFAULT_SOUND;
+					notificationManager.notify(0, noti);
+				}else if(!push_color.equals("")){	
+					Log.e("SKY", "222!! ");
+
+					int tcolor = Integer.parseInt(txtcolor[0],16)+0xFF000000;
+					int bcolor = Integer.parseInt(txtcolor[1],16)+0xFF000000;
+					remoteViews.setTextColor(R.id.push_title, tcolor);
+					remoteViews.setTextColor(R.id.push_message, tcolor);
+					remoteViews.setInt(R.id.push_pannel, "setBackgroundColor", bcolor);
+					remoteViews.setTextViewText(R.id.push_title, title);
+					remoteViews.setTextViewText(R.id.push_message, msg+"\n\n");
+					
+					Notification noti = notiBuilder.build();
+					noti.defaults |=Notification.DEFAULT_SOUND;
+					notificationManager.notify(0, noti);
+				}else{
+					NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
+					style.setSummaryText(getString(R.string.app_name)).setBigContentTitle(title).bigText(msg);
+					notiBuilder.setStyle(style);	
+					
+					Notification noti = notiBuilder.build();
+					noti.defaults |=Notification.DEFAULT_SOUND;
+					notificationManager.notify(0, noti);
+				}
 				
-
-			if(popup.equals("Y")){
+				
 				Intent i = new Intent(context, ShowMSGActivity.class);
 				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 				i.setComponent(new ComponentName(context, ShowMSGActivity.class));
@@ -164,10 +216,69 @@ public class GCMIntentService extends GCMBaseIntentService{
 				i.putExtra("imgurl",image_url);
 				startActivity(i);			
 				
-				Notification noti = notiBuilder.build();
-				noti.defaults |=Notification.DEFAULT_SOUND;
-				notificationManager.notify(0, noti);	
-			}else if(popup.equals("IMG")){
+			}else if(tag.equals("3")){
+				Log.e("SKY", "4444");
+
+				
+				if(message_bitmap!=null){
+					Log.e("SKY", "111!! ");
+					NotificationCompat.BigPictureStyle style = new NotificationCompat.BigPictureStyle();
+					if(!push_color.equals("")){
+						style
+						.setBigContentTitle(Html.fromHtml("<font color='#"+txtcolor[0]+"'>"+title+"</font>"))
+						.setSummaryText(Html.fromHtml("<font color='#"+txtcolor[0]+"'>"+msg+"</font>")).
+						bigPicture(message_bitmap);
+					}else{
+						style.setBigContentTitle(title).setSummaryText(msg).bigPicture(message_bitmap);
+					}
+					notiBuilder.setStyle(style);		
+					
+					Notification noti = notiBuilder.build();
+					noti.defaults |=Notification.DEFAULT_SOUND;
+					notificationManager.notify(0, noti);
+				}else if(!push_color.equals("")){	
+					Log.e("SKY", "222!! ");
+
+					int tcolor = Integer.parseInt(txtcolor[0],16)+0xFF000000;
+					int bcolor = Integer.parseInt(txtcolor[1],16)+0xFF000000;
+					remoteViews.setTextColor(R.id.push_title, tcolor);
+					remoteViews.setTextColor(R.id.push_message, tcolor);
+					remoteViews.setInt(R.id.push_pannel, "setBackgroundColor", bcolor);
+					remoteViews.setTextViewText(R.id.push_title, title);
+					remoteViews.setTextViewText(R.id.push_message, msg+"\n\n");
+					
+					Notification noti = notiBuilder.build();
+					noti.defaults |=Notification.DEFAULT_SOUND;
+					notificationManager.notify(0, noti);
+				}else{
+					NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
+					style.setSummaryText(getString(R.string.app_name)).setBigContentTitle(title).bigText(msg);
+					notiBuilder.setStyle(style);	
+					
+					Notification noti = notiBuilder.build();
+					noti.defaults |=Notification.DEFAULT_SOUND;
+					notificationManager.notify(0, noti);
+				}
+				
+				
+				Intent i = new Intent(context, ShowMSGActivity.class);
+				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+				i.setComponent(new ComponentName(context, ShowMSGActivity.class));
+				i.putExtra("flag", false);
+				i.putExtra("msg", msg);
+				i.putExtra("openurl",link_url);
+				i.putExtra("imgurl",image_url);
+				startActivity(i);
+				
+				
+							
+			}else if(tag.equals("4")){
+				//진동 
+				Vibrator vibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
+				long milliseconds = 1000;
+				vibrator.vibrate(milliseconds);
+				
+				
 				//이미지만 나오는 푸시 팝업
 				Intent i = new Intent(context, ShowIMGActivity.class);
 				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -175,8 +286,23 @@ public class GCMIntentService extends GCMBaseIntentService{
 				i.putExtra("flag", true);
 				i.putExtra("imgurl",image_url);
 				i.putExtra("openurl",link_url);
-				startActivity(i);				
+				startActivity(i);	
+			}else{
+				Log.e("SKY", "55555");
+
+				NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
+				style.setSummaryText(getString(R.string.app_name)).setBigContentTitle(title).bigText(msg);
+				notiBuilder.setStyle(style);	
+				
+				Notification noti = notiBuilder.build();
+				noti.defaults |=Notification.DEFAULT_SOUND;
+				notificationManager.notify(0, noti);
+					
 			}
+			
+			
+
+			
 		}
 		
 	}

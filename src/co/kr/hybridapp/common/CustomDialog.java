@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -24,7 +25,7 @@ public class CustomDialog extends Dialog{
 		getWindow().setAttributes(lpWindow);
 
 		setContentView(R.layout.custom_dialog);
-
+		Log.e("SKY" , "mTitle :: " + mTitle);
 		setLayout();
 		setTitle(mTitle);
 		setContent(mContent);

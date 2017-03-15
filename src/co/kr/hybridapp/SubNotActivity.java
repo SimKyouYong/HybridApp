@@ -732,7 +732,7 @@ public class SubNotActivity extends Activity {
 			}
 			//call the printIt method
 			Method method = cls.getDeclaredMethod(Fun, paramString);
-			method.invoke(obj, new String(par) , mContext , SlideViewActivity.wc , new String(return_fun));
+			method.invoke(obj, new String(par) , SubNotActivity.this , SlideViewActivity.wc , new String(return_fun));
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

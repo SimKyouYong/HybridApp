@@ -679,7 +679,7 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 			}
 			//call the printIt method
 			Method method = cls.getDeclaredMethod(Fun, paramString);
-			method.invoke(obj, new String(par) , mContext , SlideViewActivity.wc , new String(return_fun));
+			method.invoke(obj, new String(par) , av_ , SlideViewActivity.wc , new String(return_fun));
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

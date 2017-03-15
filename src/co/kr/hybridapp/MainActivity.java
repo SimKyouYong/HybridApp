@@ -421,12 +421,6 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		public void onPageStarted(WebView view, String url, android.graphics.Bitmap favicon){
 			super.onPageStarted(view, url, favicon);
 
-
-			//mProgressHorizontal.setVisibility(View.VISIBLE);
-
-
-
-
 			//프로그레스바 띄우기
 			if (DEFINE.PROGRESSBAR) {
 				dialog = new ProgressDialog(mContext ,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);

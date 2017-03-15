@@ -243,6 +243,23 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 		}
 		@Override //Tel,MailTo �±��϶� �׼Ǻ� ����Ʈ
 		public boolean shouldOverrideUrlLoading(WebView view, String overrideUrl) {
+			//인터넷 확인후 시작
+			if (!checkNetwordState()) {
+				Toast.makeText(mContext, "인터넷 끊김! url노출 안됨.", 0).show();
+				return true;
+			}
+			if (overrideUrl.startsWith("js2ios://")) {
+				try{
+					overrideUrl = URLDecoder.decode(overrideUrl, "UTF-8"); 
+					SplitFun(overrideUrl);
+					Log.e("SKY", "함수 시작");
+				}catch(Exception e){
+					Log.e("SKY", "e :: " + e.toString());
+
+				} 
+
+				return true;
+			}
 			if(overrideUrl.contains(".mp4")){
 				Intent i = new Intent(Intent.ACTION_VIEW);
 				Uri uri = Uri.parse(overrideUrl);
@@ -369,27 +386,6 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 		@Override
 		public void onPageStarted(WebView view, String url, android.graphics.Bitmap favicon){
 			super.onPageStarted(view, url, favicon);
-			if (url.indexOf("js2ios://") != -1) {
-				SlideViewActivity.wc.stopLoading();
-				try{
-					url = URLDecoder.decode(url, "UTF-8"); 
-					SplitFun(url);
-					Log.e("SKY", "함수 시작");
-				}catch(Exception e){
-					Log.e("SKY", "e :: " + e.toString());
-
-				} 
-
-				return;
-			}
-
-
-			//인터넷 확인후 시작
-			if (!checkNetwordState()) {
-				Toast.makeText(av_, "인터넷 끊김! url노출 안됨.", 0).show();
-				SlideViewActivity.wc.stopLoading();
-				return ;
-			}
 
 
 			//프로그레스바 띄우기

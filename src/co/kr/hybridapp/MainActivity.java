@@ -87,7 +87,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 	private final static int FILECHOOSER_RESULTCODE = 1;
 
 	public RelativeLayout mainBody;
-	public LinearLayout bottomMenu;
+	public LinearLayout bottomMenu , bottomMenu2;
 	public View vi;
 
 	private CustomDialog mCustomDialog,mCustomDialog2;
@@ -138,6 +138,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		boolean isAddShortcut = prefs.getBoolean("isAddShortcut",DEFINE.SHORT_CUT);
 		boolean pushAgreeCheck = prefs.getBoolean("pushAgreeCheck", false);
 		String tabstyle = prefs.getString("setBottomMenuStyle",DEFINE.BOTTOM_MENU_TABSTYLE);  
+		String tabstyle2 = prefs.getString("setBottomMenuStyle2",DEFINE.BOTTOM_MENU_TABSTYLE2);  
 
 
 		WebSetting();
@@ -156,6 +157,9 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		if(!tabstyle.equals("default")){
 			setBottomMenuStyleColor(tabstyle);
 		}
+		if(!tabstyle2.equals("default")){
+			setBottomMenuStyleColor2(tabstyle2);
+		}
 		if(!pushAgreeCheck){
 			askPushAgree();
 		}
@@ -166,6 +170,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 	private void inint(){
 		mainBody = (RelativeLayout)findViewById(R.id.mainBody);
 		bottomMenu = (LinearLayout)findViewById(R.id.bottomMenu);
+		bottomMenu2 = (LinearLayout)findViewById(R.id.bottomMenu2);
 		vi = (View)findViewById(R.id.loadingview);
 
 		mProgressHorizontal = (ProgressBar) findViewById(R.id.progress_horizontal);
@@ -182,6 +187,12 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		findViewById(R.id.homeBtn).setOnClickListener(btnListener); 
 		findViewById(R.id.reloadBtn).setOnClickListener(btnListener); 
 		findViewById(R.id.shareBtn).setOnClickListener(btnListener); 
+
+		findViewById(R.id.txt1).setOnClickListener(btnListener); 
+		findViewById(R.id.txt2).setOnClickListener(btnListener); 
+		findViewById(R.id.txt3).setOnClickListener(btnListener); 
+		findViewById(R.id.txt4).setOnClickListener(btnListener); 
+		findViewById(R.id.txt5).setOnClickListener(btnListener); 
 
 		btn1.getBackground().setAlpha(90);
 		btn1.setClickable(false);  
@@ -235,6 +246,21 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			case R.id.shareBtn:
 				shareUrl();
 				break;
+			case R.id.txt1:
+				mWebView.loadUrl(DEFINE.TXT1);
+				break;
+			case R.id.txt2:
+				mWebView.loadUrl(DEFINE.TXT2);
+				break;
+			case R.id.txt3:
+				mWebView.loadUrl(DEFINE.TXT3);
+				break;
+			case R.id.txt4:
+				mWebView.loadUrl(DEFINE.TXT4);
+				break;
+			case R.id.txt5:
+				mWebView.loadUrl(DEFINE.TXT5);
+				break;
 			}
 		}
 	};
@@ -260,6 +286,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		}
 		@Override //Tel,MailTo �±��϶� �׼Ǻ� ����Ʈ
 		public boolean shouldOverrideUrlLoading(WebView view, String overrideUrl) {
+			Log.e("SKY", "overrideUrl :: " + overrideUrl);
 			//인터넷 확인후 시작
 			if (!checkNetwordState()) {
 				Toast.makeText(getApplicationContext(), "인터넷 끊김! url노출 안됨.", 0).show();
@@ -372,9 +399,17 @@ public class MainActivity extends ActivityEx implements LocationListener {
 				Check_Preferences.setAppPreferences(MainActivity.this, "bottomMenu" , "GONE");
 				bottomMenu.setVisibility(View.GONE);
 				return true;       			
+			}else if(overrideUrl.startsWith("hybridapi://new_hideBottomMenu")){
+				Check_Preferences.setAppPreferences(MainActivity.this, "bottomMenu2" , "GONE");
+				bottomMenu2.setVisibility(View.GONE);
+				return true;       			
 			}else if(overrideUrl.startsWith("hybridapi://showBottomMenu")){
 				Check_Preferences.setAppPreferences(MainActivity.this, "bottomMenu" , "VISIBLE");
 				bottomMenu.setVisibility(View.VISIBLE);
+				return true;       			
+			}else if(overrideUrl.startsWith("hybridapi://new_showBottomMenu")){
+				Check_Preferences.setAppPreferences(MainActivity.this, "bottomMenu2" , "VISIBLE");
+				bottomMenu2.setVisibility(View.VISIBLE);
 				return true;       			
 			}else if(overrideUrl.startsWith("hybridapi://setBottomMenuStyle")){
 				final String kw[] = overrideUrl.split("\\?");
@@ -382,7 +417,13 @@ public class MainActivity extends ActivityEx implements LocationListener {
 					setBottomMenuStyle(kw[1]);
 				}
 				return true;       			
-			} 		
+			} else if(overrideUrl.startsWith("hybridapi://new_setBottomMenuStyle")){
+				final String kw[] = overrideUrl.split("\\?");
+				if(!kw[1].equals("")){
+					setBottomMenuStyle2(kw[1]);
+				}
+				return true;       			
+			}		
 			else {
 				boolean override = false;
 				if (overrideUrl.startsWith("sms:")) {
@@ -422,11 +463,13 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			super.onPageStarted(view, url, favicon);
 
 			//프로그레스바 띄우기
-			if (DEFINE.PROGRESSBAR) {
-				dialog = new ProgressDialog(mContext ,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
-				dialog.setMessage(getString(R.string.loading));
-				dialog.setCancelable(false);
-				dialog.show();
+			if (Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR")) {
+				if (dialog == null) {
+					dialog = new ProgressDialog(mContext ,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+					dialog.setMessage(getString(R.string.loading));
+					dialog.setCancelable(false);
+					dialog.show();
+				}
 			}
 			//Loading 뷰 가리기
 			if (DEFINE.LOADINGVIEW) {
@@ -438,11 +481,16 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		public void onPageFinished(WebView view, String url){
 			super.onPageFinished(view, url);
 			Log.e("SKY", "onPageFinished = = = = = = = "+url);
+
 			exit_type = true;
 
 			//프로그레스바 끔.
-			if (DEFINE.PROGRESSBAR) {
-				dialog.dismiss();
+			if (Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR")) {
+				if (dialog != null) {
+					dialog.dismiss();
+					dialog = null;
+				}
+				
 			}
 			//Loading 뷰 가리기
 			if (DEFINE.LOADINGVIEW) {
@@ -716,6 +764,18 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		editor.putString("tabstyle", style);
 		editor.commit();		
 	}
+	private void setBottomMenuStyle2(String style){
+		if(style.equals("default") || style.equals("")){
+			setBottomMenuStyleDefault2();
+		}else{
+			setBottomMenuStyleColor2(style);
+		}
+		Check_Preferences.setAppPreferences(MainActivity.this, "setBottomMenuStyle2", style );
+		SharedPreferences prefs = getSharedPreferences("co.kr.hybrid", MODE_PRIVATE);
+		final SharedPreferences.Editor editor = prefs.edit();	
+		editor.putString("tabstyle2", style);
+		editor.commit();		
+	}
 	private void setBottomMenuStyleDefault(){
 		bottomMenu.setBackgroundResource(R.drawable.tab_bg);
 		btn1.setBackgroundResource(R.drawable.tab_prev_click);
@@ -724,6 +784,9 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		btn4.setBackgroundResource(R.drawable.tab_reload_click);
 		btn5.setBackgroundResource(R.drawable.tab_share_click);		
 	}	
+	private void setBottomMenuStyleDefault2(){
+		bottomMenu2.setBackgroundResource(R.drawable.tab_bg);
+	}	
 	private void setBottomMenuStyleColor(String tabstyle){
 		bottomMenu.setBackgroundColor(Color.parseColor(tabstyle));
 		btn1.setBackgroundResource(R.drawable.tab_prev_w_click);
@@ -731,6 +794,9 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		btn3.setBackgroundResource(R.drawable.tab_home_w_click);
 		btn4.setBackgroundResource(R.drawable.tab_reload_w_click);
 		btn5.setBackgroundResource(R.drawable.tab_share_w_click);		
+	}
+	private void setBottomMenuStyleColor2(String tabstyle){
+		bottomMenu2.setBackgroundColor(Color.parseColor(tabstyle));
 	}
 	private void shareUrl(){
 		Intent i = new Intent(android.content.Intent.ACTION_SEND);
@@ -906,13 +972,25 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			}else if(overrideUrl.startsWith("hybridapi://hideBottomMenu")){
 				bottomMenu.setVisibility(View.GONE);
 				return true;       			
+			}else if(overrideUrl.startsWith("hybridapi://hideBottomMenu2")){
+				bottomMenu2.setVisibility(View.GONE);
+				return true;       			
 			}else if(overrideUrl.startsWith("hybridapi://showBottomMenu")){
 				bottomMenu.setVisibility(View.VISIBLE);
+				return true;       			
+			}else if(overrideUrl.startsWith("hybridapi://showBottomMenu2")){
+				bottomMenu2.setVisibility(View.VISIBLE);
 				return true;       			
 			}else if(overrideUrl.startsWith("hybridapi://setBottomMenuStyle")){
 				final String kw[] = overrideUrl.split("\\?");
 				if(!kw[1].equals("")){
 					setBottomMenuStyle(kw[1]);
+				}
+				return true;       			
+			} else if(overrideUrl.startsWith("hybridapi://setBottomMenuStyle2")){
+				final String kw[] = overrideUrl.split("\\?");
+				if(!kw[1].equals("")){
+					setBottomMenuStyle2(kw[1]);
 				}
 				return true;       			
 			} 		

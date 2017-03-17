@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <drawable name="translucent_background">#00000000</drawable>
+    <color name="pressed">#343434</color>
+    <color name="nonpressed">#00000000</color>
 </resources>

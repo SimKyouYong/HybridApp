@@ -442,7 +442,7 @@ public class SubNotActivity extends Activity {
 
 
 			//프로그레스바 띄우기
-			if (DEFINE.PROGRESSBAR) {
+			if (Check_Preferences.getAppPreferencesboolean(SubNotActivity.this, "PROGRESSBAR")) {
 				dialog = new ProgressDialog(SubNotActivity.this ,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
 				dialog.setMessage(getString(R.string.loading));
 				dialog.setCancelable(false);
@@ -459,7 +459,7 @@ public class SubNotActivity extends Activity {
 			super.onPageFinished(view, url);
 			Log.e("SKY", "onPageFinished = = = = = = = "+url);
 			//프로그레스바 끔.
-			if (DEFINE.PROGRESSBAR) {
+			if (Check_Preferences.getAppPreferencesboolean(SubNotActivity.this, "PROGRESSBAR")) {
 				dialog.dismiss();
 			}
 			//Loading 뷰 가리기

@@ -46,6 +46,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+import co.kr.hybridapp.MainActivity;
 import co.kr.hybridapp.R;
 import co.kr.hybridapp.SlideViewActivity;
 import co.kr.hybridapp.common.Check_Preferences;
@@ -389,7 +390,7 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 
 
 			//프로그레스바 띄우기
-			if (DEFINE.PROGRESSBAR) {
+			if (Check_Preferences.getAppPreferencesboolean(av_, "PROGRESSBAR")) {
 				dialog = new ProgressDialog(getActivity() ,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
 				dialog.setMessage(getString(R.string.loading));
 				dialog.setCancelable(false);
@@ -406,7 +407,7 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 			super.onPageFinished(view, url);
 			Log.e("SKY", "onPageFinished = = = = = = = "+url);
 			//프로그레스바 끔.
-			if (DEFINE.PROGRESSBAR) {
+			if (Check_Preferences.getAppPreferencesboolean(av_, "PROGRESSBAR")) {
 				dialog.dismiss();
 			}
 			//Loading 뷰 가리기

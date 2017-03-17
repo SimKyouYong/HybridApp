@@ -20,6 +20,23 @@ public class FunNative  {
 
 	private WebView Webview_copy;
 	
+	
+	public void ProgressBar(String url , Activity ac , WebView vc , String return_fun){
+		Log.e("SKY" , "--showToast-- :: ");
+		String val[] = url.split(",");
+		for (int i = 0; i < val.length; i++) {
+			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
+		}
+		if (val[1].equals("true")) {
+			Check_Preferences.setAppPreferences(ac, "PROGRESSBAR", true);
+		}else{
+			Check_Preferences.setAppPreferences(ac, "PROGRESSBAR", false);
+		}
+		Log.e("SKY", "RETURN :: " + "javascript:"+return_fun + "('" + Check_Preferences.getAppPreferencesboolean(ac, "PROGRESSBAR") + "')" );
+		vc.loadUrl("javascript:"+return_fun + "('" + Check_Preferences.getAppPreferencesboolean(ac, "PROGRESSBAR") + "')");
+	}
+	
+	
 	/*
 	 * param 
 	 * url :: 안씀 

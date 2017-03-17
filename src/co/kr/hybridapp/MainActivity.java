@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Browser;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -469,6 +470,17 @@ public class MainActivity extends ActivityEx implements LocationListener {
 					dialog.setMessage(getString(R.string.loading));
 					dialog.setCancelable(false);
 					dialog.show();
+					if (Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR_3")) {
+						new Handler().postDelayed(new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								dialog.dismiss();
+								dialog = null;
+							}
+						}, 3000);// 0.5초 정도 딜레이를 준 후 시작
+					}
 				}
 			}
 			//Loading 뷰 가리기

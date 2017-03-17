@@ -87,6 +87,15 @@ public class GCMIntentService extends GCMBaseIntentService{
 			Log.e("SKY" , "link_url :: " + link_url);
 			Log.e("SKY" , "push_color :: " + push_color);
 			Log.e("SKY" , "tag :: " + tag);
+			//진동 
+			Vibrator vibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
+			long milliseconds = 1000;
+			vibrator.vibrate(milliseconds);
+			
+			int icon = R.drawable.ic_launcher;
+			long when = System.currentTimeMillis();
+			
+			
 			if(title==null){
 				title=getString(R.string.app_name);
 			}
@@ -112,27 +121,30 @@ public class GCMIntentService extends GCMBaseIntentService{
 			RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.noti_style);
 			
 			NotificationCompat.Builder notiBuilder = new NotificationCompat.Builder(context);
-			notiBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
-			notiBuilder.setSmallIcon(R.drawable.ic_launcher)
-				.setLargeIcon(largeIcon)
-				.setTicker(title)
-				.setContentTitle(title)
-				.setContentText(msg)
-				.setAutoCancel(true)
-				.setVibrate(new long[] { 500, 100, 500, 100 })
-				.setContentIntent(pendingIntent)
-				.setContent(remoteViews);
+			
 			if (tag.equals("1")) {
 				//일반 푸시
 				if(message_bitmap!=null){
 					Log.e("SKY", "111!! ");
 					NotificationCompat.BigPictureStyle style = new NotificationCompat.BigPictureStyle();
 					if(!push_color.equals("")){
+						Log.e("SKY", "푸시 칼라 안씀!");
+
 						style
 						.setBigContentTitle(Html.fromHtml("<font color='#"+txtcolor[0]+"'>"+title+"</font>"))
 						.setSummaryText(Html.fromHtml("<font color='#"+txtcolor[0]+"'>"+msg+"</font>")).
 						bigPicture(message_bitmap);
 					}else{
+						Log.e("SKY", "bbbb!! ");
+						notiBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
+						notiBuilder.setSmallIcon(R.drawable.ic_launcher)
+							.setLargeIcon(largeIcon)
+							.setTicker(title)
+							.setContentTitle(title)
+							.setContentText(msg)
+							.setAutoCancel(true)
+							.setContentIntent(pendingIntent);
+//							.setContent(remoteViews);
 						style.setBigContentTitle(title).setSummaryText(msg).bigPicture(message_bitmap);
 					}
 					notiBuilder.setStyle(style);		
@@ -155,13 +167,15 @@ public class GCMIntentService extends GCMBaseIntentService{
 					noti.defaults |=Notification.DEFAULT_SOUND;
 					notificationManager.notify(0, noti);
 				}else{
-					NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
-					style.setSummaryText(getString(R.string.app_name)).setBigContentTitle(title).bigText(msg);
-					notiBuilder.setStyle(style);	
+					Notification notification = new Notification(icon, msg, when);
+					Intent notificationIntent = new Intent(context,MainActivity.class);
+
+					PendingIntent Pintent = PendingIntent.getActivity(context, 0,notificationIntent, 0);
+
+					notification.setLatestEventInfo(context, title, msg, Pintent);
+					notification.flags |= Notification.FLAG_AUTO_CANCEL;
+					notificationManager.notify(0, notification);
 					
-					Notification noti = notiBuilder.build();
-					noti.defaults |=Notification.DEFAULT_SOUND;
-					notificationManager.notify(0, noti);
 				}
 			} else if(tag.equals("2")){
 				Log.e("SKY", "3333");
@@ -273,10 +287,7 @@ public class GCMIntentService extends GCMBaseIntentService{
 				
 							
 			}else if(tag.equals("4")){
-				//진동 
-				Vibrator vibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
-				long milliseconds = 1000;
-				vibrator.vibrate(milliseconds);
+				
 				
 				
 				//이미지만 나오는 푸시 팝업

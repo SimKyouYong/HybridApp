@@ -93,7 +93,8 @@ public class SplashActivity extends ActivityEx {
 		    	h.postDelayed(new splashhandler(), DEFINE.SPLASH_TIME);
 			}
 		}else{
-			
+			Handler h = new Handler ();
+	    	h.postDelayed(new splashhandler(), DEFINE.SPLASH_TIME);
 		}
     	
 	}

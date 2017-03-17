@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    
+   <RelativeLayout 
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+       
+       <ImageView
+           android:id="@+id/background_img" 
+           android:src="@drawable/intro_img"
+           android:scaleType="centerCrop"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"/>
+       
+       <ImageView
+           android:layout_marginTop="10dp"
+           android:layout_marginRight="10dp"
+           android:layout_alignParentTop="true"
+           android:layout_alignParentRight="true"
+           android:id="@+id/btn_exit" 
+           android:src="@drawable/btn_exit"
+           android:scaleType="centerCrop"
+           android:layout_width="30dp"
+           android:layout_height="30dp"/>
+       
+       <LinearLayout 
+           android:padding="16dp"
+           android:layout_alignParentBottom="true"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical"
+           android:gravity="center">
+           
+           <LinearLayout
+                android:clickable="true"
+                android:id="@+id/btn_login_kakao"
+                android:background="@drawable/btn_kakao"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_marginLeft="10dp"
+                    android:padding="13dp"
+                    android:layout_marginRight="5dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/icon_kakao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
+                <View
+                    android:layout_gravity="center"
+                    android:layout_width="2dp"
+                    android:layout_height="16dp"
+                    android:background="#532d10" />
+                <TextView
+                    android:textColor="#532d10"
+                    android:layout_marginLeft="30dp"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    android:text="카카오계정으로 로그인"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+           
+           <LinearLayout
+               android:layout_marginTop="8dp"
+               android:id="@+id/btn_login_facebook"
+               android:background="@drawable/btn_facebook"
+               android:layout_width="match_parent"
+               android:layout_height="45dp"
+               android:orientation="horizontal">
+                
+               <ImageView
+                    android:layout_marginLeft="10dp"
+                    android:padding="10dp"
+                    android:layout_marginRight="7dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/logo_facebook"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
+                <View
+                    android:layout_gravity="center"
+                    android:layout_width="2dp"
+                    android:layout_height="16dp"
+                    android:background="#532d10" />
+                <TextView
+                    android:layout_marginLeft="30dp"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    android:textColor="#ffffff"
+                    android:text="페이스북으로 로그인"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+               
+           </LinearLayout>
+           
+           <LinearLayout
+               android:layout_marginTop="8dp"
+               android:background="@drawable/btn_naver"
+               android:id="@+id/btn_login_naver"
+               android:layout_width="match_parent"
+               android:layout_height="45dp"
+               android:orientation="horizontal">
+                
+               <ImageView
+                    android:layout_marginLeft="10dp"
+                    android:padding="12dp"
+                    android:layout_marginRight="5dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/logo_naver"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
+                <View
+                    android:layout_gravity="center"
+                    android:layout_width="2dp"
+                    android:layout_height="16dp"
+                    android:background="#532d10" />
+                <TextView
+                    android:layout_marginLeft="30dp"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    android:textColor="#ffffff"
+                    android:text="네이버 아이디로 로그인"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                
+           </LinearLayout>
+           
+           
+
+            <LinearLayout
+                android:clickable="true"
+                android:id="@+id/btn_login_email"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/btn_email"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_marginLeft="6dp"
+                    android:padding="15dp"
+                    android:layout_marginRight="2dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/icon_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
+                <View
+                    android:layout_gravity="center"
+                    android:layout_width="2dp"
+                    android:layout_height="16dp"
+                    android:background="#532d10" />
+                <TextView
+                    android:textStyle="bold"
+                    android:textColor="#ffffff"
+                    android:layout_marginLeft="30dp"
+                    android:textSize="15dp"
+                    android:text="이메일로 로그인"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+           
+       </LinearLayout>
+       
+   </RelativeLayout>
+    
+ </LinearLayout>

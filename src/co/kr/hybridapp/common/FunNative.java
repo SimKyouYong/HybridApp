@@ -33,6 +33,35 @@ public class FunNative  {
 		ac.startActivityForResult(it, 9000);
 
 	}
+	
+	
+	public void LoginActivity(String url , Activity ac , WebView vc , String return_fun){
+		Log.e("SKY" , "--LoginActivity-- :: ");
+		String val[] = url.split(",");
+		for (int i = 0; i < val.length; i++) {
+			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
+		}
+
+		//인텐트 태우기
+		Intent it = new Intent(ac, Login.class);
+		ac.startActivityForResult(it, 9000);
+
+	}
+	public void ProgressBar3(String url , Activity ac , WebView vc , String return_fun){
+		Log.e("SKY" , "--ProgressBar3-- :: ");
+		String val[] = url.split(",");
+		for (int i = 0; i < val.length; i++) {
+			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
+		}
+		if (val[1].equals("true")) {
+			Check_Preferences.setAppPreferences(ac, "PROGRESSBAR_3", true);
+		}else{
+			Check_Preferences.setAppPreferences(ac, "PROGRESSBAR_3", false);
+		}
+		Log.e("SKY", "RETURN :: " + "javascript:"+return_fun + "('" + Check_Preferences.getAppPreferencesboolean(ac, "PROGRESSBAR_3") + "')" );
+		vc.loadUrl("javascript:"+return_fun + "('" + Check_Preferences.getAppPreferencesboolean(ac, "PROGRESSBAR_3") + "')");
+	}
+	
 	public void ProgressBar(String url , Activity ac , WebView vc , String return_fun){
 		Log.e("SKY" , "--showToast-- :: ");
 		String val[] = url.split(",");

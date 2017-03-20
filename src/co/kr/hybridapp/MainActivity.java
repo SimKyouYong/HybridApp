@@ -470,8 +470,8 @@ public class MainActivity extends ActivityEx implements LocationListener {
 					dialog.setMessage(getString(R.string.loading));
 					dialog.setCancelable(false);
 					dialog.show();
-					//if (!Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR_3")) {
-					if (true) {
+					if (Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR_3")) {
+//					if (true) {
 						new Handler().postDelayed(new Runnable()
 						{
 							@Override

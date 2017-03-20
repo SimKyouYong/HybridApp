@@ -104,7 +104,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		super.onCreate(savedInstanceState);
 		Log.e("SKY" , "onCreate");
 		setContentView(R.layout.activity_main);
-		
+
 		if (Check_Preferences.getAppPreferences(this, "SETEXIT_TYPE").equals("true")) {
 			//인텐트
 			Intent it = new Intent(this, SlideViewActivity.class);
@@ -165,9 +165,9 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			askPushAgree();
 		}
 		Log.e("SKY" , "homeURL :: " + homeURL);
-//		mWebView.loadUrl(homeURL);
+		//		mWebView.loadUrl(homeURL);
 	}
-	
+
 	private void inint(){
 		mainBody = (RelativeLayout)findViewById(R.id.mainBody);
 		bottomMenu = (LinearLayout)findViewById(R.id.bottomMenu);
@@ -470,14 +470,18 @@ public class MainActivity extends ActivityEx implements LocationListener {
 					dialog.setMessage(getString(R.string.loading));
 					dialog.setCancelable(false);
 					dialog.show();
-					if (Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR_3")) {
+					//if (!Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR_3")) {
+					if (true) {
 						new Handler().postDelayed(new Runnable()
 						{
 							@Override
 							public void run()
 							{
-								dialog.dismiss();
-								dialog = null;
+								Log.e("SKY", "3초지나면 프로그레스바 종료!!!");
+								if (dialog != null) {
+									dialog.dismiss();
+									dialog = null;
+								}
 							}
 						}, 3000);// 0.5초 정도 딜레이를 준 후 시작
 					}
@@ -502,7 +506,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 					dialog.dismiss();
 					dialog = null;
 				}
-				
+
 			}
 			//Loading 뷰 가리기
 			if (DEFINE.LOADINGVIEW) {
@@ -1062,7 +1066,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 				finish();
 			}
 		}
-		
+
 		GPS_Start();
 		CookieSyncManager.getInstance().startSync();
 	}
@@ -1081,6 +1085,14 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
 			mUploadMessage.onReceiveValue(result);
 			mUploadMessage = null;
+		}else if(requestCode == 9000) {
+			if(intent == null) return;
+			Bundle bundle = intent.getExtras();
+			String type = bundle.getString("type");
+			String data = bundle.getString("data");
+			Log.e("SKY", "type :: " + type);
+			Log.e("SKY", "data :: " + data);
+			//webview.loadUrl("javascript:appLoginCallback('"+type+"', "+data+")");
 		}
 	}
 	private void SplitFun(String url){

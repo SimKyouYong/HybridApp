@@ -1,5 +1,6 @@
 package co.kr.hybridapp;
 
+import java.security.MessageDigest;
 import java.util.Arrays;
 
 import org.json.JSONException;
@@ -30,10 +31,14 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,7 +70,19 @@ public class Login extends Activity {
 		GlobalApplication.setCurrentActivity(this);
 		
 		setContentView(R.layout.login);
-		
+		/*
+		try {
+			PackageInfo info = getPackageManager().getPackageInfo("co.kr.hybridapp", PackageManager.GET_SIGNATURES);
+			for (Signature signature : info.signatures) {
+				MessageDigest md = MessageDigest.getInstance("SHA");
+				md.update(signature.toByteArray());
+				Log.e("SKY" , "HASH KEY :: " + Base64.encodeToString(md.digest(), Base64.DEFAULT));
+				
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		*/
 		mContext = this;
 		mActivity = this;
 		
@@ -312,7 +329,7 @@ public class Login extends Activity {
 	@Override
 	protected void onDestroy() {
 	    super.onDestroy();
-	    Session.getCurrentSession().removeCallback(callback);
+	    //Session.getCurrentSession().removeCallback(callback);
 	}
 	
 	private class SessionCallback implements ISessionCallback {

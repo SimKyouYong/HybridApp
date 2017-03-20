@@ -15,4 +15,8 @@
 	<string name="toast_push_disagree">알림설정이 해제되었습니다.</string>
 	<string name="open_drawer">Open drawer</string>
     <string name="close_drawer">Close drawer</string>
+    
+    <string name="facebook_app_id">1729754813942845</string>
+    <string name="kakao_app_key">dddbc41e030a9e2f379ea9f72da2fc79</string>
+    
 </resources>

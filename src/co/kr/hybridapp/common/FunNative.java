@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.webkit.WebView;
 import android.widget.Toast;
+import co.kr.hybridapp.Login;
 import co.kr.hybridapp.MainActivity;
 import co.kr.hybridapp.R;
 import co.kr.hybridapp.SlideViewActivity;
@@ -20,7 +21,18 @@ public class FunNative  {
 
 	private WebView Webview_copy;
 	
-	
+	public void LoginActivity(String url , Activity ac , WebView vc , String return_fun){
+		Log.e("SKY" , "--LoginActivity-- :: ");
+		String val[] = url.split(",");
+		for (int i = 0; i < val.length; i++) {
+			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
+		}
+
+		//인텐트 태우기
+		Intent it = new Intent(ac, Login.class);
+		ac.startActivityForResult(it, 9000);
+
+	}
 	public void ProgressBar(String url , Activity ac , WebView vc , String return_fun){
 		Log.e("SKY" , "--showToast-- :: ");
 		String val[] = url.split(",");

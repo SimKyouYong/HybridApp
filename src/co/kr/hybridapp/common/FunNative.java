@@ -12,6 +12,7 @@ import android.widget.Toast;
 import co.kr.hybridapp.Login;
 import co.kr.hybridapp.MainActivity;
 import co.kr.hybridapp.R;
+import co.kr.hybridapp.SKRoute;
 import co.kr.hybridapp.SlideViewActivity;
 import co.kr.hybridapp.SubNotActivity;
 
@@ -21,7 +22,22 @@ public class FunNative  {
 
 	private WebView Webview_copy;
 	
-	
+	public void startNavi(String url , Activity ac , WebView vc , String return_fun){
+		Log.e("SKY" , "--startNavi-- :: ");
+		String val[] = url.split(",");
+		for (int i = 0; i < val.length; i++) {
+			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
+		}
+		
+		//인텐트 태우기
+		Intent it = new Intent(ac, SKRoute.class);
+		it.putExtra("startX", Double.parseDouble(val[0]));
+		it.putExtra("startY", Double.parseDouble(val[1]));
+		it.putExtra("endX", Double.parseDouble(val[2]));
+		it.putExtra("endY", Double.parseDouble(val[3]));
+		ac.startActivity(it);
+
+	}
 	public void LoginActivity(String url , Activity ac , WebView vc , String return_fun){
 		Log.e("SKY" , "--LoginActivity-- :: ");
 		String val[] = url.split(",");

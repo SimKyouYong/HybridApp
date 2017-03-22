@@ -207,6 +207,7 @@ public class Login extends Activity {
             Log.d("로그", "checkAndImplicitOpen");
         } else {
             //AuthType을 지정하여 원하는 플랫폼(카카오톡, 링크 , 스토리) 계정으로 로그인이 가능하다.
+            Log.d("로그", "checkAndImplicitOpen22");
             Session.getCurrentSession().open(AuthType.KAKAO_TALK, mActivity);
         }
         

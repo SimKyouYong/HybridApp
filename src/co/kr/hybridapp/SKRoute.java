@@ -51,11 +51,10 @@ public class SKRoute extends Activity {
 		setContentView(R.layout.sk_route);
 		
 		Intent receiveIntent = getIntent();
-		Bundle data = receiveIntent.getExtras();
-		startX = data.getDouble("startX");
-		startY = data.getDouble("startY");
-		endX = data.getDouble("endX");
-		endY = data.getDouble("endY");
+		startX = receiveIntent.getDoubleExtra("startX", 0);
+		startY = receiveIntent.getDoubleExtra("startY", 0);
+		endX = receiveIntent.getDoubleExtra("endX", 0);
+		endY = receiveIntent.getDoubleExtra("endY", 0);
 		
 		img_exit=(ImageView) findViewById(R.id.setup_btn_exit);
 		img_exit.setOnClickListener(new OnClickListener() {
@@ -72,7 +71,7 @@ public class SKRoute extends Activity {
 	public String init(double startX, double startY, double endX, double endY) {
 		
 		// Input here.
-		APIRequest.setAppKey("62d4e380-bdc9-3257-8863-99309db3b41b");
+		APIRequest.setAppKey("830c2e62-9f4b-3c47-801c-3c4e7811dd8a");
         
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("version", "1");	
@@ -97,6 +96,7 @@ public class SKRoute extends Activity {
 		} catch (JSONException e) {
 			// TODO: handle exception
 			e.printStackTrace();
+			Log.e("SKY", "E :: " + e.toString());
 		}
 		//String payload = jobj.toString();
 		//String payload = "{\"endX\":"+endX+", \"endY\":"+endY+", \"startX\":"+startX+", \"startY\":"+startY+", \"reqCoordType\":\"WGS84GEO\", \"resCoordType\":\"WGS84GEO\"}";
@@ -137,6 +137,10 @@ public class SKRoute extends Activity {
         
         CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
         googleMap.animateCamera(zoom);
+        Log.e("SKY", "startY" + startY);
+        Log.e("SKY", "startX" + startX);
+        Log.e("SKY", "endY" + endY);
+        Log.e("SKY", "endX" + endX);
         
         MarkerOptions markerOptions = new MarkerOptions()
         .position(new LatLng(startY, startX))
@@ -180,6 +184,7 @@ public class SKRoute extends Activity {
 			super.onPostExecute(result);
 			
 			try {
+				Log.e("SKY", "res :: " + res);
 				JSONObject jobj = new JSONObject(res);
 				JSONArray jarr = jobj.getJSONArray("features");
 				

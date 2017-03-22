@@ -1092,7 +1092,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			String data = bundle.getString("data");
 			Log.e("SKY", "type :: " + type);
 			Log.e("SKY", "data :: " + data);
-			//webview.loadUrl("javascript:appLoginCallback('"+type+"', "+data+")");
+			mWebView.loadUrl("javascript:appLoginCallback('"+type+"', '"+data+"')");
 		}
 	}
 	private void SplitFun(String url){

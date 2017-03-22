@@ -93,6 +93,7 @@
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
             android:name=".SKRoute"
+            android:theme="@android:style/Theme.NoTitleBar"
             android:screenOrientation="portrait" >
         </activity>
         <meta-data

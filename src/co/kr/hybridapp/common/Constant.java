@@ -24,7 +24,7 @@ public class Constant {
 	
 	// API 관련 
 	public static final String DAUM_API_KEY = "eaac7c0b4b79a3712977e6e95ff684eb";
-	public static final String NAVER_CLIENT_ID = "lYVR15dCB94C3TX8GUut";
-	public static final String NAVER_CLIENT_SECRET = "pgKBhPYCYb";
-	public static final String NAVER_CLIENT_NAME = "모인다";
+	public static final String NAVER_CLIENT_ID = "Kz7V5AaS7qKNmo4F4nVT";
+	public static final String NAVER_CLIENT_SECRET = "7dIoDnCGbd";
+	public static final String NAVER_CLIENT_NAME = "하이브리드_테스트";
 }

@@ -26,6 +26,7 @@ import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Browser;
 import android.support.v4.app.Fragment.InstantiationException;
 import android.util.Log;
@@ -443,10 +444,27 @@ public class SubNotActivity extends Activity {
 
 			//프로그레스바 띄우기
 			if (Check_Preferences.getAppPreferencesboolean(SubNotActivity.this, "PROGRESSBAR")) {
-				dialog = new ProgressDialog(SubNotActivity.this ,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
-				dialog.setMessage(getString(R.string.loading));
-				dialog.setCancelable(false);
-				dialog.show();
+				if (dialog == null) {
+					dialog = new ProgressDialog(SubNotActivity.this ,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+					dialog.setMessage(getString(R.string.loading));
+					dialog.setCancelable(false);
+					dialog.show();
+					if (Check_Preferences.getAppPreferencesboolean(SubNotActivity.this, "PROGRESSBAR_3")) {
+//					if (true) {
+						new Handler().postDelayed(new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								Log.e("SKY", "3초지나면 프로그레스바 종료!!!");
+								if (dialog != null) {
+									dialog.dismiss();
+									dialog = null;
+								}
+							}
+						}, 3000);// 0.5초 정도 딜레이를 준 후 시작
+					}
+				}
 			}
 			//Loading 뷰 가리기
 			if (DEFINE.LOADINGVIEW) {

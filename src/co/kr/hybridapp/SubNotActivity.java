@@ -6,6 +6,9 @@ import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -29,11 +32,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Browser;
 import android.support.v4.app.Fragment.InstantiationException;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.webkit.CookieManager;
 import android.webkit.GeolocationPermissions;
 import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
@@ -73,6 +78,7 @@ public class SubNotActivity extends Activity {
 	public LinearLayout bottomMenu;
 	private boolean clearHistory = false;
 	String openURL="";
+	TelephonyManager tMgr;
 
 
 	@Override
@@ -80,6 +86,10 @@ public class SubNotActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_subnot);
 		mContext = this;
+		tMgr = (TelephonyManager) this
+				.getSystemService(Context.TELEPHONY_SERVICE);
+		
+		
 		ttf = Typeface.createFromAsset(getAssets(), "HANYGO230.TTF");
 
 		SUB_URL = getIntent().getStringExtra("SUB_URL");
@@ -922,5 +932,66 @@ public class SubNotActivity extends Activity {
 		}
 
 		return super.onKeyDown(keyCode, event);
+	}
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		super.onActivityResult(requestCode, resultCode, intent);
+		if(requestCode == FILECHOOSER_RESULTCODE){
+			if(null == mUploadMessage)
+				return;
+			Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
+			mUploadMessage.onReceiveValue(result);
+			mUploadMessage = null;
+		}else if(requestCode == 9000) {
+			if(intent == null) return;
+			Bundle bundle = intent.getExtras();
+			String type = bundle.getString("type");
+			String data = bundle.getString("data");
+			Log.e("SKY", "type :: " + type);
+			Log.e("SKY", "data :: " + data);
+			wc.loadUrl("javascript:appLoginCallback('"+type+"', '"+data+"')");
+		}else if(requestCode == 120){
+			if(resultCode==120){
+				wc.loadUrl(DEFINE.SETTING_120);
+			}
+			//로그인시
+			if(resultCode==121){
+				//spu.put("islogin", 0);
+				wc.loadUrl(DEFINE.SETTING_121);
+				CookieManager cookieManager = CookieManager.getInstance();
+				cookieManager.removeSessionCookie();
+			}
+			//로그아웃시
+			if(resultCode==130){
+				wc.loadUrl(DEFINE.SETTING_130);
+			}
+			//공지
+			if(resultCode==131){
+				wc.loadUrl(DEFINE.SETTING_131);
+			}
+			if(resultCode==132){
+				wc.loadUrl(DEFINE.SETTING_132);
+			}
+			if(resultCode==133){
+				wc.loadUrl(DEFINE.SETTING_133);
+			}
+		}else if(requestCode == DEFINE.REQ_LOCATION) {
+			if(intent == null) return;
+			Bundle bundle = intent.getExtras();
+			String data = bundle.getString("data");
+			try {
+				JSONObject jobj = new JSONObject(data);
+				String address = jobj.getString("address");
+				double lat = jobj.getDouble("lat");
+				double lng = jobj.getDouble("lng");
+				String url = wc.getUrl();
+				url = url.substring(0, url.indexOf("#"));
+				url = url.substring(0, url.indexOf("?"));
+				wc.loadUrl(url+"?address="+address+"&lat="+lat+"&lng="+lng+"&deviceid="+tMgr.getDeviceId());
+			} catch (JSONException e) {
+				e.printStackTrace();
+				// TODO: handle exception
+			}
+		}
 	}
 }

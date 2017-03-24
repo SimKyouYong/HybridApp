@@ -190,6 +190,7 @@
 	            android:layout_width="fill_parent"
 	            android:layout_height="38dp"
 	            android:layout_marginLeft="15dp"
+	            android:visibility="gone"
 	            android:layout_marginRight="15dp"
 	            android:background="@drawable/setup_border"
 	            android:orientation="horizontal" >

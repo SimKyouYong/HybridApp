@@ -3,6 +3,7 @@ package co.kr.hybridapp;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.R.integer;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.AlertDialog;
@@ -111,27 +112,30 @@ public class SlideViewActivity extends FragmentActivity{
 		BUTTON = getIntent().getStringExtra("BUTTON");
 		BUTTON_URL = getIntent().getStringExtra("BUTTON_URL");
 
+		String new_str[] = NEW.split("/");
+		for (int i = 0; i < new_str.length; i++) {
+			switch (Integer.parseInt(new_str[i])) {
+			case 1:
+				rednew1.setVisibility(View.VISIBLE);
+				break;
+			case 2:
+				rednew2.setVisibility(View.VISIBLE);
+				break;
+			case 3:
+				rednew3.setVisibility(View.VISIBLE);
+				break;
+			case 4:
+				rednew4.setVisibility(View.VISIBLE);
+				break;
+			case 5:
+				rednew5.setVisibility(View.VISIBLE);
+				break;
 
-		switch (Integer.parseInt(NEW)) {
-		case 1:
-			rednew1.setVisibility(View.VISIBLE);
-			break;
-		case 2:
-			rednew2.setVisibility(View.VISIBLE);
-			break;
-		case 3:
-			rednew3.setVisibility(View.VISIBLE);
-			break;
-		case 4:
-			rednew4.setVisibility(View.VISIBLE);
-			break;
-		case 5:
-			rednew5.setVisibility(View.VISIBLE);
-			break;
-
-		default:
-			break;
+			default:
+				break;
+			}
 		}
+		
 		/*Test sample*/
 		/*
 		SUB_URL = "http://www.11st.co.kr/html/bestSellerMain.html";

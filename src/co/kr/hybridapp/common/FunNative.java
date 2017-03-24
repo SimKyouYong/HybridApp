@@ -2,6 +2,12 @@ package co.kr.hybridapp.common;
 
 import java.io.UnsupportedEncodingException;
 
+import com.kakao.kakaolink.AppActionBuilder;
+import com.kakao.kakaolink.KakaoLink;
+import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder;
+import com.kakao.util.KakaoParameterException;
+import com.kakao.util.exception.KakaoException;
+
 import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -13,24 +19,53 @@ import co.kr.hybridapp.LocationSetting;
 import co.kr.hybridapp.Login;
 import co.kr.hybridapp.MainActivity;
 import co.kr.hybridapp.R;
+import co.kr.hybridapp.R.string;
 import co.kr.hybridapp.SKRoute;
 import co.kr.hybridapp.SettingActivity;
 import co.kr.hybridapp.SlideViewActivity;
 import co.kr.hybridapp.SubNotActivity;
 
+
+
 public class FunNative  {
 
 	CommonUtil dataSet = CommonUtil.getInstance();
-
 	private WebView Webview_copy;
-	
+
+
+	public void kakaoshare(String url , Activity ac , WebView vc , String return_fun) throws KakaoParameterException{
+		Log.e("SKY" , "--kakaoshare-- :: ");
+		String val[] = url.split(",");
+		for (int i = 0; i < val.length; i++) {
+			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
+		}
+		KakaoLinkData kakaoLinkData;
+		kakaoLinkData = KakaoLinkData.getInstanceForShareBibleVerse("");
+		try {
+			KakaoLink kakaoLink = KakaoLink.getKakaoLink(ac);
+			KakaoTalkLinkMessageBuilder kakaoTalkLinkMessageBuilder = kakaoLink.createKakaoTalkLinkMessageBuilder();
+			kakaoTalkLinkMessageBuilder.addText(kakaoLinkData.getText());
+			if (kakaoLinkData.hasImage()) {
+				kakaoTalkLinkMessageBuilder.addImage(kakaoLinkData.getImageSrc(), 100, 100);
+			}
+			if (kakaoLinkData.hasWebButton()) {
+				kakaoTalkLinkMessageBuilder.addWebButton(kakaoLinkData.getButtonText(), kakaoLinkData.getButtonUrl());
+			}
+			if (kakaoLinkData.hasWebLink()) {
+				kakaoTalkLinkMessageBuilder.addWebLink(kakaoLinkData.getLinkText(), kakaoLinkData.getLinkUrl());
+			}
+			kakaoLink.sendMessage(kakaoTalkLinkMessageBuilder, ac);
+		} catch (KakaoParameterException e) {
+		}
+
+	}
 	public void LocationSetting(String url , Activity ac , WebView vc , String return_fun){
 		Log.e("SKY" , "--LocationSetting-- :: ");
 		String val[] = url.split(",");
 		for (int i = 0; i < val.length; i++) {
 			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
 		}
-		
+
 		//인텐트 태우기
 		Intent it = new Intent(ac, LocationSetting.class);
 		ac.startActivityForResult(it , DEFINE.REQ_LOCATION);
@@ -42,7 +77,7 @@ public class FunNative  {
 		for (int i = 0; i < val.length; i++) {
 			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
 		}
-		
+
 		//인텐트 태우기
 		Intent it = new Intent(ac, SettingActivity.class);
 		ac.startActivityForResult(it , 120);
@@ -54,7 +89,7 @@ public class FunNative  {
 		for (int i = 0; i < val.length; i++) {
 			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
 		}
-		
+
 		//인텐트 태우기
 		Intent it = new Intent(ac, SKRoute.class);
 		it.putExtra("startX", Double.parseDouble(val[0]));
@@ -90,7 +125,7 @@ public class FunNative  {
 		Log.e("SKY", "RETURN :: " + "javascript:"+return_fun + "('" + Check_Preferences.getAppPreferencesboolean(ac, "PROGRESSBAR_3") + "')" );
 		vc.loadUrl("javascript:"+return_fun + "('" + Check_Preferences.getAppPreferencesboolean(ac, "PROGRESSBAR_3") + "')");
 	}
-	
+
 	public void ProgressBar(String url , Activity ac , WebView vc , String return_fun){
 		Log.e("SKY" , "--showToast-- :: ");
 		String val[] = url.split(",");
@@ -105,8 +140,8 @@ public class FunNative  {
 		Log.e("SKY", "RETURN :: " + "javascript:"+return_fun + "('" + Check_Preferences.getAppPreferencesboolean(ac, "PROGRESSBAR") + "')" );
 		vc.loadUrl("javascript:"+return_fun + "('" + Check_Preferences.getAppPreferencesboolean(ac, "PROGRESSBAR") + "')");
 	}
-	
-	
+
+
 	/*
 	 * param 
 	 * url :: 안씀 
@@ -144,7 +179,7 @@ public class FunNative  {
 		Log.e("SKY", "RETURN :: " + "javascript:"+return_fun + "('" + Check_Preferences.getAppPreferences(ac, "SETPOPEXIT_TYPE1") + "')" );
 		vc.loadUrl("javascript:"+return_fun + "('" + Check_Preferences.getAppPreferences(ac, "SETPOPEXIT_TYPE1") + "')");
 	}
-	
+
 	/*
 	 * param 
 	 * url :: 안씀 
@@ -182,7 +217,7 @@ public class FunNative  {
 		Log.e("SKY", "RETURN :: " + "javascript:"+return_fun + "('" + Check_Preferences.getAppPreferences(ac, "SETEXIT_TYPE") + "')" );
 		vc.loadUrl("javascript:"+return_fun + "('" + Check_Preferences.getAppPreferences(ac, "SETEXIT_TYPE") + "')");
 	}
-	
+
 	public void GetPhoneNumber(String url , final Activity ac , WebView vc , String return_fun){
 		Log.e("SKY" , "-GetPhoneNumber-- :: ");
 		String val[] = url.split(",");
@@ -286,7 +321,7 @@ public class FunNative  {
 		}else{
 			ac.overridePendingTransition(0, 0);  // <-
 		}
-		*/
+		 */
 		Check_Preferences.setAppPreferences(ac, "SUB_URL" , val[0]);
 		Check_Preferences.setAppPreferences(ac, "TITLE" ,  	val[1]);
 		Check_Preferences.setAppPreferences(ac, "NEW" ,  	val[3]);
@@ -324,11 +359,11 @@ public class FunNative  {
 		for (int i = 0; i < val.length; i++) {
 			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
 		}
-		
+
 		String word = val[val.length-1];
 		Toast.makeText(ac, word, 0).show();
 	}
-	
+
 	/*
 	 * param 
 	 * url :: 안씀 
@@ -347,8 +382,8 @@ public class FunNative  {
 		try {
 			word = new String(word.getBytes("x-windows-949"), "ksc5601");
 			clipboardManager.setText(word);
-//			MainActivity.myTTS.speak(word, TextToSpeech.QUEUE_FLUSH, null);
-//			MainActivity.myTTS.stop();
+			//			MainActivity.myTTS.speak(word, TextToSpeech.QUEUE_FLUSH, null);
+			//			MainActivity.myTTS.stop();
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

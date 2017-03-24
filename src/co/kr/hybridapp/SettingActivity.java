@@ -2,11 +2,6 @@ package co.kr.hybridapp;
 
 
 
-import java.util.ArrayList;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -18,7 +13,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import co.kr.hybridapp.common.Check_Preferences;
 import co.kr.hybridapp.common.SharedPreferencesUtil;
-import co.kr.hybridapp.net.NetWork;
 
 
 public class SettingActivity extends Activity {
@@ -39,9 +33,8 @@ public class SettingActivity extends Activity {
 		push_aa2=(ImageView) findViewById(R.id.push_aa2);
 		
 		
-		setup_version.setText(spu.getValue("version", "1"));
+		setup_version.setText("1");
 
-		Log.e("SKY" , "LOGINE VAL ::" + spu.getValue("islogin", 0));
 		tMgr = (TelephonyManager) this
 				.getSystemService(Context.TELEPHONY_SERVICE);
 		//deviceid.setText(tMgr.getDeviceId());
@@ -49,12 +42,12 @@ public class SettingActivity extends Activity {
 		Log.e("deviceid", tMgr.getDeviceId());
 		
 		
-		if (Check_Preferences.getAppPreferencesboolean(this, "pushEnable")) {
-			//on
+		if (!Check_Preferences.getAppPreferencesboolean(this, "pushEnable")) {
+			//oFF
 			push_aa1.setVisibility(View.INVISIBLE);
 			push_aa2.setVisibility(View.VISIBLE);
 		}else{
-			//off
+			//oN
 			push_aa2.setVisibility(View.INVISIBLE);
 			push_aa1.setVisibility(View.VISIBLE);
 		}
@@ -63,6 +56,8 @@ public class SettingActivity extends Activity {
 		findViewById(R.id.push_aa2).setOnClickListener(btnListener); 
 		findViewById(R.id.ss_gonji).setOnClickListener(btnListener); 
 		findViewById(R.id.ss_appinfo1).setOnClickListener(btnListener); 
+		findViewById(R.id.ss_appinfo2).setOnClickListener(btnListener); 
+		findViewById(R.id.ss_appinfo3).setOnClickListener(btnListener); 
 		findViewById(R.id.ss_appinfo4).setOnClickListener(btnListener); 
 
 	}
@@ -88,14 +83,17 @@ public class SettingActivity extends Activity {
 				finish();
 				break;
 			case R.id.ss_appinfo1:
+				Log.e("SKY", "ss_appinfo1");
 				setResult(131);
 				finish();
 				break;
 			case R.id.ss_appinfo2:
+				Log.e("SKY", "ss_appinfo2");
 				setResult(132);
 				finish();
 				break;
 			case R.id.ss_appinfo3:
+				Log.e("SKY", "ss_appinfo3");
 				setResult(133);
 				finish();
 				break;

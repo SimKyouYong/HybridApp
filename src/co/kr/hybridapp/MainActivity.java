@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -52,6 +53,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import co.kr.hybridapp.common.ActivityEx;
 import co.kr.hybridapp.common.Check_Preferences;
@@ -95,6 +97,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 	public LinearLayout bottomMenu , bottomMenu2;
 	public View vi;
 	TelephonyManager tMgr;
+	private Typeface ttf;
 
 	private CustomDialog mCustomDialog,mCustomDialog2;
 	@Override
@@ -108,6 +111,8 @@ public class MainActivity extends ActivityEx implements LocationListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.e("SKY" , "onCreate");
+		ttf = Typeface.createFromAsset(getAssets(), "HANYGO230.TTF");
+
 		setContentView(R.layout.activity_main);
 		tMgr = (TelephonyManager) this
 				.getSystemService(Context.TELEPHONY_SERVICE);
@@ -201,6 +206,12 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		findViewById(R.id.txt3).setOnClickListener(btnListener); 
 		findViewById(R.id.txt4).setOnClickListener(btnListener); 
 		findViewById(R.id.txt5).setOnClickListener(btnListener); 
+
+		((TextView)findViewById(R.id.txt1)).setTypeface(ttf);
+		((TextView)findViewById(R.id.txt2)).setTypeface(ttf);
+		((TextView)findViewById(R.id.txt3)).setTypeface(ttf);
+		((TextView)findViewById(R.id.txt4)).setTypeface(ttf);
+		((TextView)findViewById(R.id.txt5)).setTypeface(ttf);
 
 		btn1.getBackground().setAlpha(90);
 		btn1.setClickable(false);  
@@ -1134,10 +1145,11 @@ public class MainActivity extends ActivityEx implements LocationListener {
 				String address = jobj.getString("address");
 				double lat = jobj.getDouble("lat");
 				double lng = jobj.getDouble("lng");
-				String url = mWebView.getUrl();
-				url = url.substring(0, url.indexOf("#"));
-				url = url.substring(0, url.indexOf("?"));
-				mWebView.loadUrl(url+"?address="+address+"&lat="+lat+"&lng="+lng+"&deviceid="+tMgr.getDeviceId());
+				mWebView.loadUrl("javascript:putlocationsetting('"+data+"');");
+//				String url = mWebView.getUrl();
+//				url = url.substring(0, url.indexOf("#"));
+//				url = url.substring(0, url.indexOf("?"));
+//				mWebView.loadUrl(url+"?address="+address+"&lat="+lat+"&lng="+lng+"&deviceid="+tMgr.getDeviceId());
 			} catch (JSONException e) {
 				e.printStackTrace();
 				// TODO: handle exception

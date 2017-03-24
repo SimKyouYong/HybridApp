@@ -75,7 +75,7 @@ public class SubNotActivity extends Activity {
 	private static Context mContext;
 	private Typeface ttf;
 	ImageButton btn1,btn2,btn3,btn4,btn5,btn6;
-	public LinearLayout bottomMenu;
+	public LinearLayout bottomMenu,bottomMenu2;
 	private boolean clearHistory = false;
 	String openURL="";
 	TelephonyManager tMgr;
@@ -107,7 +107,8 @@ public class SubNotActivity extends Activity {
 		wc = (WebView)findViewById(R.id.webview);
 		vi = (View)findViewById(R.id.loadingview);
 		bottomMenu = (LinearLayout)findViewById(R.id.bottomMenu);
-		
+		bottomMenu2 = (LinearLayout)findViewById(R.id.bottomMenu2);
+
 		
 		btn1 = (ImageButton)findViewById(R.id.prevBtn);
 		btn2 = (ImageButton)findViewById(R.id.nextBtn);
@@ -115,6 +116,18 @@ public class SubNotActivity extends Activity {
 		btn4 = (ImageButton)findViewById(R.id.reloadBtn);
 		btn5 = (ImageButton)findViewById(R.id.shareBtn);
 
+		findViewById(R.id.txt1).setOnClickListener(btnListener); 
+		findViewById(R.id.txt2).setOnClickListener(btnListener); 
+		findViewById(R.id.txt3).setOnClickListener(btnListener); 
+		findViewById(R.id.txt4).setOnClickListener(btnListener); 
+		findViewById(R.id.txt5).setOnClickListener(btnListener);
+		
+		((TextView)findViewById(R.id.txt1)).setTypeface(ttf);
+		((TextView)findViewById(R.id.txt2)).setTypeface(ttf);
+		((TextView)findViewById(R.id.txt3)).setTypeface(ttf);
+		((TextView)findViewById(R.id.txt4)).setTypeface(ttf);
+		((TextView)findViewById(R.id.txt5)).setTypeface(ttf);
+		
 		if (Check_Preferences.getAppPreferences(this, "bottomMenu").equals("GONE")) {
 			bottomMenu.setVisibility(View.GONE);
 		}else{
@@ -207,6 +220,21 @@ public class SubNotActivity extends Activity {
 				break;
 			case R.id.shareBtn:
 				shareUrl();
+				break;
+			case R.id.txt1:
+				wc.loadUrl(DEFINE.TXT1);
+				break;
+			case R.id.txt2:
+				wc.loadUrl(DEFINE.TXT2);
+				break;
+			case R.id.txt3:
+				wc.loadUrl(DEFINE.TXT3);
+				break;
+			case R.id.txt4:
+				wc.loadUrl(DEFINE.TXT4);
+				break;
+			case R.id.txt5:
+				wc.loadUrl(DEFINE.TXT5);
 				break;
 			}
 		}
@@ -377,10 +405,20 @@ public class SubNotActivity extends Activity {
 				addShortcut();
 				return true;      			
 			}else if(overrideUrl.startsWith("hybridapi://hideBottomMenu")){
+				Check_Preferences.setAppPreferences(SubNotActivity.this, "bottomMenu" , "GONE");
 				bottomMenu.setVisibility(View.GONE);
 				return true;       			
+			}else if(overrideUrl.startsWith("hybridapi://new_hideBottomMenu")){
+				Check_Preferences.setAppPreferences(SubNotActivity.this, "bottomMenu2" , "GONE");
+				bottomMenu2.setVisibility(View.GONE);
+				return true;       			
 			}else if(overrideUrl.startsWith("hybridapi://showBottomMenu")){
+				Check_Preferences.setAppPreferences(SubNotActivity.this, "bottomMenu" , "VISIBLE");
 				bottomMenu.setVisibility(View.VISIBLE);
+				return true;       			
+			}else if(overrideUrl.startsWith("hybridapi://new_showBottomMenu")){
+				Check_Preferences.setAppPreferences(SubNotActivity.this, "bottomMenu2" , "VISIBLE");
+				bottomMenu2.setVisibility(View.VISIBLE);
 				return true;       			
 			}else if(overrideUrl.startsWith("hybridapi://setBottomMenuStyle")){
 				final String kw[] = overrideUrl.split("\\?");
@@ -388,7 +426,13 @@ public class SubNotActivity extends Activity {
 					setBottomMenuStyle(kw[1]);
 				}
 				return true;       			
-			} else if(overrideUrl.startsWith("hybridapi://settingtitle")){
+			} else if(overrideUrl.startsWith("hybridapi://new_setBottomMenuStyle")){
+				final String kw[] = overrideUrl.split("\\?");
+				if(!kw[1].equals("")){
+					setBottomMenuStyle2(kw[1]);
+				}
+				return true;       			
+			}else if(overrideUrl.startsWith("hybridapi://settingtitle")){
 				//타이틀 바 변경 : ex)로그인 & 저장 & 로그아웃 기능 
 
 			} else {
@@ -525,7 +569,24 @@ public class SubNotActivity extends Activity {
 			//Toast.makeText(getApplicationContext(), "Error: "+description, Toast.LENGTH_SHORT).show();
 		}  
 	}
-
+	private void setBottomMenuStyle2(String style){
+		if(style.equals("default") || style.equals("")){
+			setBottomMenuStyleDefault2();
+		}else{
+			setBottomMenuStyleColor2(style);
+		}
+		Check_Preferences.setAppPreferences(SubNotActivity.this, "setBottomMenuStyle2", style );
+		SharedPreferences prefs = getSharedPreferences("co.kr.hybrid", MODE_PRIVATE);
+		final SharedPreferences.Editor editor = prefs.edit();	
+		editor.putString("tabstyle2", style);
+		editor.commit();		
+	}
+	private void setBottomMenuStyleColor2(String tabstyle){
+		bottomMenu2.setBackgroundColor(Color.parseColor(tabstyle));
+	}
+	private void setBottomMenuStyleDefault2(){
+		bottomMenu2.setBackgroundResource(R.drawable.tab_bg);
+	}
 	class SMOWebChromeClient extends WebChromeClient{
 		private View mCustomView;
 		private Activity mActivity;

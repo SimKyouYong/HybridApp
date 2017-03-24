@@ -18,6 +18,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -46,6 +47,7 @@ import android.webkit.WebViewClient;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import co.kr.hybridapp.MainActivity;
 import co.kr.hybridapp.R;
@@ -70,9 +72,9 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 	String openURL="";
 
 	ImageButton btn1,btn2,btn3,btn4,btn5,btn6;
-	public LinearLayout bottomMenu;
+	public LinearLayout bottomMenu , bottomMenu2;
 	private boolean clearHistory = false;
-
+	private Typeface ttf;
 
 	public SlideViewFregment(Context context , Activity av , int tag) {  //  액티비티 지정, 프래그먼트
 		mContext = context;  
@@ -84,11 +86,15 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 
 
 		Log.e("SKY" , "--MAIN START--");
+		ttf = Typeface.createFromAsset(av_.getAssets(), "HANYGO230.TTF");
+
 		View view = inflater.inflate(R.layout.activity_slidefregment, null);
 		SlideViewActivity.wc = (WebView)view.findViewById(R.id.webview);
 		vi = (View)view.findViewById(R.id.loadingview);
 		mainBody = (RelativeLayout)view.findViewById(R.id.mainBody);
 		bottomMenu = (LinearLayout)view.findViewById(R.id.bottomMenu);
+		bottomMenu2 = (LinearLayout)view.findViewById(R.id.bottomMenu2);
+
 		btn1 = (ImageButton)view.findViewById(R.id.prevBtn);
 		btn2 = (ImageButton)view.findViewById(R.id.nextBtn);
 		btn3 = (ImageButton)view.findViewById(R.id.homeBtn);
@@ -101,6 +107,18 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 		view.findViewById(R.id.reloadBtn).setOnClickListener(btnListener); 
 		view.findViewById(R.id.shareBtn).setOnClickListener(btnListener); 
 
+		view.findViewById(R.id.txt1).setOnClickListener(btnListener); 
+		view.findViewById(R.id.txt2).setOnClickListener(btnListener); 
+		view.findViewById(R.id.txt3).setOnClickListener(btnListener); 
+		view.findViewById(R.id.txt4).setOnClickListener(btnListener); 
+		view.findViewById(R.id.txt5).setOnClickListener(btnListener); 
+
+		((TextView)view.findViewById(R.id.txt1)).setTypeface(ttf);
+		((TextView)view.findViewById(R.id.txt2)).setTypeface(ttf);
+		((TextView)view.findViewById(R.id.txt3)).setTypeface(ttf);
+		((TextView)view.findViewById(R.id.txt4)).setTypeface(ttf);
+		((TextView)view.findViewById(R.id.txt5)).setTypeface(ttf);
+		
 		if (Check_Preferences.getAppPreferences(mContext, "bottomMenu").equals("GONE")) {
 			bottomMenu.setVisibility(View.GONE);
 		}else{
@@ -350,7 +368,41 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 			}else if(overrideUrl.startsWith("hybridapi://settingtitle")){
 				//타이틀 바 변경 : ex)로그인 & 저장 & 로그아웃 기능 
 
-			} else {
+			} else if(overrideUrl.startsWith("hybridapi://shareUrl")){
+				shareUrl();
+				return true;     			      
+			}else if(overrideUrl.startsWith("hybridapi://makeShortCut")){
+				addShortcut();
+				return true;      			
+			}else if(overrideUrl.startsWith("hybridapi://hideBottomMenu")){
+				Check_Preferences.setAppPreferences(av_, "bottomMenu" , "GONE");
+				bottomMenu.setVisibility(View.GONE);
+				return true;       			
+			}else if(overrideUrl.startsWith("hybridapi://new_hideBottomMenu")){
+				Check_Preferences.setAppPreferences(av_, "bottomMenu2" , "GONE");
+				bottomMenu2.setVisibility(View.GONE);
+				return true;       			
+			}else if(overrideUrl.startsWith("hybridapi://showBottomMenu")){
+				Check_Preferences.setAppPreferences(av_, "bottomMenu" , "VISIBLE");
+				bottomMenu.setVisibility(View.VISIBLE);
+				return true;       			
+			}else if(overrideUrl.startsWith("hybridapi://new_showBottomMenu")){
+				Check_Preferences.setAppPreferences(av_, "bottomMenu2" , "VISIBLE");
+				bottomMenu2.setVisibility(View.VISIBLE);
+				return true;       			
+			}else if(overrideUrl.startsWith("hybridapi://setBottomMenuStyle")){
+				final String kw[] = overrideUrl.split("\\?");
+				if(!kw[1].equals("")){
+					setBottomMenuStyle(kw[1]);
+				}
+				return true;       			
+			} else if(overrideUrl.startsWith("hybridapi://new_setBottomMenuStyle")){
+				final String kw[] = overrideUrl.split("\\?");
+				if(!kw[1].equals("")){
+					setBottomMenuStyle2(kw[1]);
+				}
+				return true;       			
+			}	else {
 				boolean override = false;
 				if (overrideUrl.startsWith("sms:")) {
 					Intent i = new Intent(Intent.ACTION_SENDTO, Uri.parse(overrideUrl));
@@ -723,6 +775,24 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 	public class WebAppViewClient extends WebViewClient{
 		@Override
 		public boolean shouldOverrideUrlLoading(WebView view, String overrideUrl){
+			Log.e("SKY", "overrideUrl :: " + overrideUrl);
+			//인터넷 확인후 시작
+			if (!checkNetwordState()) {
+				Toast.makeText(av_, "인터넷 끊김! url노출 안됨.", 0).show();
+				return true;
+			}
+			if (overrideUrl.startsWith("js2ios://")) {
+				try{
+					overrideUrl = URLDecoder.decode(overrideUrl, "UTF-8"); 
+					SplitFun(overrideUrl);
+					Log.e("SKY", "함수 시작");
+				}catch(Exception e){
+					Log.e("SKY", "e :: " + e.toString());
+
+				} 
+
+				return true;
+			}
 			if(overrideUrl.contains(".mp4")){
 				Intent i = new Intent(Intent.ACTION_VIEW);
 				Uri uri = Uri.parse(overrideUrl);
@@ -808,7 +878,41 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 					}    				
 				}
 				return true;      			
-			} else {
+			} else if(overrideUrl.startsWith("hybridapi://shareUrl")){
+				shareUrl();
+				return true;     			      
+			}else if(overrideUrl.startsWith("hybridapi://makeShortCut")){
+				addShortcut();
+				return true;      			
+			}else if(overrideUrl.startsWith("hybridapi://hideBottomMenu")){
+				Check_Preferences.setAppPreferences(av_, "bottomMenu" , "GONE");
+				bottomMenu.setVisibility(View.GONE);
+				return true;       			
+			}else if(overrideUrl.startsWith("hybridapi://new_hideBottomMenu")){
+				Check_Preferences.setAppPreferences(av_, "bottomMenu2" , "GONE");
+				bottomMenu2.setVisibility(View.GONE);
+				return true;       			
+			}else if(overrideUrl.startsWith("hybridapi://showBottomMenu")){
+				Check_Preferences.setAppPreferences(av_, "bottomMenu" , "VISIBLE");
+				bottomMenu.setVisibility(View.VISIBLE);
+				return true;       			
+			}else if(overrideUrl.startsWith("hybridapi://new_showBottomMenu")){
+				Check_Preferences.setAppPreferences(av_, "bottomMenu2" , "VISIBLE");
+				bottomMenu2.setVisibility(View.VISIBLE);
+				return true;       			
+			}else if(overrideUrl.startsWith("hybridapi://setBottomMenuStyle")){
+				final String kw[] = overrideUrl.split("\\?");
+				if(!kw[1].equals("")){
+					setBottomMenuStyle(kw[1]);
+				}
+				return true;       			
+			} else if(overrideUrl.startsWith("hybridapi://new_setBottomMenuStyle")){
+				final String kw[] = overrideUrl.split("\\?");
+				if(!kw[1].equals("")){
+					setBottomMenuStyle2(kw[1]);
+				}
+				return true;       			
+			}	else {
 				boolean override = false;
 				if (overrideUrl.startsWith("sms:")) {
 					Intent i = new Intent(Intent.ACTION_SENDTO, Uri.parse(overrideUrl));
@@ -843,10 +947,42 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 		}
 	}
 
+	private void setBottomMenuStyle2(String style){
+		if(style.equals("default") || style.equals("")){
+			setBottomMenuStyleDefault2();
+		}else{
+			setBottomMenuStyleColor2(style);
+		}
+		Check_Preferences.setAppPreferences(mContext, "setBottomMenuStyle2", style );
+		SharedPreferences prefs = av_.getSharedPreferences("co.kr.hybrid", av_.MODE_PRIVATE);
+		final SharedPreferences.Editor editor = prefs.edit();	
+		editor.putString("tabstyle2", style);
+		editor.commit();		
+	}
+	private void setBottomMenuStyleDefault2(){
+		bottomMenu2.setBackgroundResource(R.drawable.tab_bg);
+	}	
+	private void setBottomMenuStyleColor2(String tabstyle){
+		bottomMenu2.setBackgroundColor(Color.parseColor(tabstyle));
+	}
 
+	private void addShortcut() {
+		String packagename=mContext.getPackageName();
+		Intent shortcutIntent = new Intent(Intent.ACTION_MAIN);
+		shortcutIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+		shortcutIntent.setClassName(mContext, packagename+".SplashActivity");
+		shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 
+		Intent intent = new Intent();
+		intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+		intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.app_name));
+		intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+				Intent.ShortcutIconResource.fromContext(mContext, R.drawable.ic_launcher));
+		intent.putExtra("duplicate", false);
+		intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
 
-
+		av_.sendBroadcast(intent);
+	}	
 
 
 

@@ -393,11 +393,11 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 			//프로그레스바 띄우기
 			if (Check_Preferences.getAppPreferencesboolean(mContext, "PROGRESSBAR")) {
 				if (dialog == null) {
-					dialog = new ProgressDialog(mContext ,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+					dialog = new ProgressDialog(getActivity() ,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
 					dialog.setMessage(getString(R.string.loading));
 					dialog.setCancelable(false);
 					dialog.show();
-					if (Check_Preferences.getAppPreferencesboolean(mContext, "PROGRESSBAR_3")) {
+					if (Check_Preferences.getAppPreferencesboolean(getActivity(), "PROGRESSBAR_3")) {
 //					if (true) {
 						new Handler().postDelayed(new Runnable()
 						{

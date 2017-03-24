@@ -420,7 +420,7 @@ public class SubNotActivity extends Activity {
 		public void onPageStarted(WebView view, String url, android.graphics.Bitmap favicon){
 			super.onPageStarted(view, url, favicon);
 			if (url.indexOf("js2ios://") != -1) {
-				SlideViewActivity.wc.stopLoading();
+				wc.stopLoading();
 				try{
 					url = URLDecoder.decode(url, "UTF-8"); 
 					SplitFun(url);
@@ -437,7 +437,7 @@ public class SubNotActivity extends Activity {
 			//인터넷 확인후 시작
 			if (!checkNetwordState()) {
 				Toast.makeText(SubNotActivity.this, "인터넷 끊김! url노출 안됨.", 0).show();
-				SlideViewActivity.wc.stopLoading();
+				wc.stopLoading();
 				return ;
 			}
 
@@ -688,14 +688,14 @@ public class SubNotActivity extends Activity {
 		final boolean pushEnable = prefs.getBoolean("pushEnable",false);
 
 		if( Build.VERSION.SDK_INT < 19 ){
-			SlideViewActivity.wc.loadUrl("javascript:"+callback+"('"+device_id+"',"+pushEnable+");");
+			wc.loadUrl("javascript:"+callback+"('"+device_id+"',"+pushEnable+");");
 		}else{
 			runOnUiThread(new Runnable()
 			{
 				public void run()
 				{
 					ValueCallback<String> resultCallback = null;
-					SlideViewActivity.wc.evaluateJavascript(callback+"('"+device_id+"',"+pushEnable+");",resultCallback);
+					wc.evaluateJavascript(callback+"('"+device_id+"',"+pushEnable+");",resultCallback);
 				}
 			});    			
 		}		
@@ -750,7 +750,7 @@ public class SubNotActivity extends Activity {
 			}
 			//call the printIt method
 			Method method = cls.getDeclaredMethod(Fun, paramString);
-			method.invoke(obj, new String(par) , SubNotActivity.this , SlideViewActivity.wc , new String(return_fun));
+			method.invoke(obj, new String(par) , SubNotActivity.this , wc , new String(return_fun));
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

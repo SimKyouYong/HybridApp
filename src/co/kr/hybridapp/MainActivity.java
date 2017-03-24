@@ -5,6 +5,9 @@ import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -34,6 +37,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
+import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.GeolocationPermissions;
 import android.webkit.SslErrorHandler;
@@ -90,6 +94,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 	public RelativeLayout mainBody;
 	public LinearLayout bottomMenu , bottomMenu2;
 	public View vi;
+	TelephonyManager tMgr;
 
 	private CustomDialog mCustomDialog,mCustomDialog2;
 	@Override
@@ -104,7 +109,9 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		super.onCreate(savedInstanceState);
 		Log.e("SKY" , "onCreate");
 		setContentView(R.layout.activity_main);
-
+		tMgr = (TelephonyManager) this
+				.getSystemService(Context.TELEPHONY_SERVICE);
+		
 		if (Check_Preferences.getAppPreferences(this, "SETEXIT_TYPE").equals("true")) {
 			//인텐트
 			Intent it = new Intent(this, SlideViewActivity.class);
@@ -1093,6 +1100,48 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			Log.e("SKY", "type :: " + type);
 			Log.e("SKY", "data :: " + data);
 			mWebView.loadUrl("javascript:appLoginCallback('"+type+"', '"+data+"')");
+		}else if(requestCode == 120){
+			if(resultCode==120){
+				mWebView.loadUrl(DEFINE.SETTING_120);
+			}
+			//로그인시
+			if(resultCode==121){
+				//spu.put("islogin", 0);
+				mWebView.loadUrl(DEFINE.SETTING_121);
+				CookieManager cookieManager = CookieManager.getInstance();
+				cookieManager.removeSessionCookie();
+			}
+			//로그아웃시
+			if(resultCode==130){
+				mWebView.loadUrl(DEFINE.SETTING_130);
+			}
+			//공지
+			if(resultCode==131){
+				mWebView.loadUrl(DEFINE.SETTING_131);
+			}
+			if(resultCode==132){
+				mWebView.loadUrl(DEFINE.SETTING_132);
+			}
+			if(resultCode==133){
+				mWebView.loadUrl(DEFINE.SETTING_133);
+			}
+		}else if(requestCode == DEFINE.REQ_LOCATION) {
+			if(intent == null) return;
+			Bundle bundle = intent.getExtras();
+			String data = bundle.getString("data");
+			try {
+				JSONObject jobj = new JSONObject(data);
+				String address = jobj.getString("address");
+				double lat = jobj.getDouble("lat");
+				double lng = jobj.getDouble("lng");
+				String url = mWebView.getUrl();
+				url = url.substring(0, url.indexOf("#"));
+				url = url.substring(0, url.indexOf("?"));
+				mWebView.loadUrl(url+"?address="+address+"&lat="+lat+"&lng="+lng+"&deviceid="+tMgr.getDeviceId());
+			} catch (JSONException e) {
+				e.printStackTrace();
+				// TODO: handle exception
+			}
 		}
 	}
 	private void SplitFun(String url){

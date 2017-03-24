@@ -27,4 +27,15 @@ public class DEFINE {
 	public static final String TXT4 ="https://www.yahoo.com/";  						
 	public static final String TXT5 ="http://www.11st.co.kr/";  						
 
+	
+	public static final String SETTING_120 ="http://www.moindaum.com/moin/tbcard.membership.login.html";
+	public static final String SETTING_121 ="http://www.moindaum.com/moin/tbcard.membership.login_pro.php?_mode=logout";
+	public static final String SETTING_130 ="http://www.moindaum.com/moin/tbcard.community.notice_list.html";
+	public static final String SETTING_131 ="http://www.moindaum.com/moin/tbcard.contact.html";
+	public static final String SETTING_132 ="http://www.moindaum.com/moin/tbcard.agree.html";
+	public static final String SETTING_133 ="http://www.moindaum.com/moin/tbcard.privacy.html";
+
+	
+	public static final int REQ_LOCATION = 2000;
+
 }

@@ -9,10 +9,12 @@ import android.content.Intent;
 import android.util.Log;
 import android.webkit.WebView;
 import android.widget.Toast;
+import co.kr.hybridapp.LocationSetting;
 import co.kr.hybridapp.Login;
 import co.kr.hybridapp.MainActivity;
 import co.kr.hybridapp.R;
 import co.kr.hybridapp.SKRoute;
+import co.kr.hybridapp.SettingActivity;
 import co.kr.hybridapp.SlideViewActivity;
 import co.kr.hybridapp.SubNotActivity;
 
@@ -22,6 +24,30 @@ public class FunNative  {
 
 	private WebView Webview_copy;
 	
+	public void LocationSetting(String url , Activity ac , WebView vc , String return_fun){
+		Log.e("SKY" , "--LocationSetting-- :: ");
+		String val[] = url.split(",");
+		for (int i = 0; i < val.length; i++) {
+			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
+		}
+		
+		//인텐트 태우기
+		Intent it = new Intent(ac, LocationSetting.class);
+		ac.startActivityForResult(it , DEFINE.REQ_LOCATION);
+
+	}
+	public void startSetting(String url , Activity ac , WebView vc , String return_fun){
+		Log.e("SKY" , "--startSetting-- :: ");
+		String val[] = url.split(",");
+		for (int i = 0; i < val.length; i++) {
+			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
+		}
+		
+		//인텐트 태우기
+		Intent it = new Intent(ac, SettingActivity.class);
+		ac.startActivityForResult(it , 120);
+
+	}
 	public void startNavi(String url , Activity ac , WebView vc , String return_fun){
 		Log.e("SKY" , "--startNavi-- :: ");
 		String val[] = url.split(",");
@@ -246,6 +272,7 @@ public class FunNative  {
 		it.putExtra("BUTTON", val[4]);
 		it.putExtra("BUTTON_URL", return_fun);
 		ac.startActivity(it);
+		/*
 		if (val[2] . equals("top")) {
 			ac.overridePendingTransition(R.drawable.anim_slide_in_top, R.drawable.anim_slide_out_bottom);  // 위에서 -> 아래
 		}else if(val[2] . equals("right")){
@@ -258,8 +285,8 @@ public class FunNative  {
 			ac.overridePendingTransition(R.drawable.anim_slide_in_new, R.drawable.anim_slide_out_new);  // <-
 		}else{
 			ac.overridePendingTransition(0, 0);  // <-
-
 		}
+		*/
 		Check_Preferences.setAppPreferences(ac, "SUB_URL" , val[0]);
 		Check_Preferences.setAppPreferences(ac, "TITLE" ,  	val[1]);
 		Check_Preferences.setAppPreferences(ac, "NEW" ,  	val[3]);

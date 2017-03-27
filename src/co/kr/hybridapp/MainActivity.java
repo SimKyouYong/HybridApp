@@ -85,7 +85,8 @@ public class MainActivity extends ActivityEx implements LocationListener {
 	LocationListener locationListener;
 	public static double latitude = 0;
 	public static double longitude=0;
-
+	public static String address="";
+	
 	boolean popup = false;
 	private boolean pan = false;
 	private boolean clearHistory = false;
@@ -167,14 +168,16 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			editor.commit();
 			addShortcut();
 		}
-		if(!tabstyle.equals("default")){
+		if(!tabstyle.equals("default") && !tabstyle.equals("")){
+			Log.e("SKY", "tabstyle ::: " + tabstyle);
 			setBottomMenuStyleColor(tabstyle);
 		}
-		if(!tabstyle2.equals("default")){
+		if(!tabstyle2.equals("default") && !tabstyle.equals("")){
+			Log.e("SKY", "tabstyle2 ::: " + tabstyle2);
 			setBottomMenuStyleColor2(tabstyle2);
 		}
 		if(!pushAgreeCheck){
-			askPushAgree();
+			//askPushAgree();
 		}
 		Log.e("SKY" , "homeURL :: " + homeURL);
 		//		mWebView.loadUrl(homeURL);
@@ -499,6 +502,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 								if (dialog != null) {
 									dialog.dismiss();
 									dialog = null;
+									vi.setVisibility(View.INVISIBLE);
 								}
 							}
 						}, 3000);// 0.5초 정도 딜레이를 준 후 시작
@@ -561,8 +565,19 @@ public class MainActivity extends ActivityEx implements LocationListener {
 
 		@Override
 		public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-			super.onReceivedError(view, errorCode, description, failingUrl);
-			//Toast.makeText(getApplicationContext(), "Error: "+description, Toast.LENGTH_SHORT).show();
+			super.onReceivedError(view, errorCode, description, 
+					"<font id='altools-findtxt' style='color: rgb(0, 0, 0); font-size: 120%; font-weight: bold; background-color: rgb(255, 255, 0);'>failingUrl</font>");
+			AlertDialog.Builder builder = new AlertDialog.Builder(
+					getBaseContext());
+			builder.setPositiveButton("확인",
+					new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog,
+						int which) {
+					finish();
+				}
+			});
+			builder.setMessage("네트워크 상태가 원활하지 않습니다. 잠시 후 다시 시도해 주세요.");
+			builder.show();
 		}  
 	}
 	class SMOWebChromeClient extends WebChromeClient{
@@ -1223,12 +1238,13 @@ public class MainActivity extends ActivityEx implements LocationListener {
 				} else {
 					latitude = location.getLatitude();
 					longitude = location.getLongitude();
+					address = getAddress(mContext , latitude , longitude);
 					Log.e("SKY" , "GPS :: latitude :: " + latitude + "//longitude :: " + longitude);
 					//최초 한번만
 					if (FirstLoadUrl) {
 						FirstLoadUrl = false;
 						First_Flag = true;
-						FirstUrl = homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + getAddress(mContext , latitude , longitude) + "&d=" + dataSet.PHONE_ID;
+						FirstUrl = homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + address + "&d=" + dataSet.PHONE_ID;
 						mWebView.loadUrl(homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + getAddress(mContext , latitude , longitude) + "&d=" + dataSet.PHONE_ID);
 					}
 

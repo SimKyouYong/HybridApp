@@ -19,6 +19,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -402,7 +403,15 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 					setBottomMenuStyle2(kw[1]);
 				}
 				return true;       			
-			}	else {
+			} else if(overrideUrl.startsWith("hybridapi://setActionStyle")){
+				final String kw[] = overrideUrl.split("\\?");
+				Log.e("SKY", "overrideUrl :: " + overrideUrl);
+				Log.e("SKY", "kw :: " + kw[1]);
+				if(!kw[1].equals("")){
+					SlideViewActivity.action_bar.setBackgroundColor(Color.parseColor(kw[1]));
+				}
+				return true;       			
+			} else {
 				boolean override = false;
 				if (overrideUrl.startsWith("sms:")) {
 					Intent i = new Intent(Intent.ACTION_SENDTO, Uri.parse(overrideUrl));
@@ -460,6 +469,7 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 								if (dialog != null) {
 									dialog.dismiss();
 									dialog = null;
+									vi.setVisibility(View.INVISIBLE);
 								}
 							}
 						}, 3000);// 0.5초 정도 딜레이를 준 후 시작
@@ -511,8 +521,19 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 
 		@Override
 		public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-			super.onReceivedError(view, errorCode, description, failingUrl);
-			//Toast.makeText(getApplicationContext(), "Error: "+description, Toast.LENGTH_SHORT).show();
+			super.onReceivedError(view, errorCode, description, 
+					"<font id='altools-findtxt' style='color: rgb(0, 0, 0); font-size: 120%; font-weight: bold; background-color: rgb(255, 255, 0);'>failingUrl</font>");
+			AlertDialog.Builder builder = new AlertDialog.Builder(
+					getContext());
+			builder.setPositiveButton("확인",
+					new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog,
+						int which) {
+					av_.finish();
+				}
+			});
+			builder.setMessage("네트워크 상태가 원활하지 않습니다. 잠시 후 다시 시도해 주세요.");
+			builder.show();
 		}  
 	}
 
@@ -912,7 +933,7 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 					setBottomMenuStyle2(kw[1]);
 				}
 				return true;       			
-			}	else {
+			} else {
 				boolean override = false;
 				if (overrideUrl.startsWith("sms:")) {
 					Intent i = new Intent(Intent.ACTION_SENDTO, Uri.parse(overrideUrl));

@@ -15,14 +15,14 @@
         <LinearLayout
             android:id="@+id/bottomMenu2"
             android:layout_width="fill_parent"
-            android:layout_height="40dp"
+            android:layout_height="60dp"
             android:background="@drawable/tab_bg"
             android:orientation="horizontal" >
 
             <Button
                 android:id="@+id/txt1"
                 android:layout_width="0px"
-                android:layout_height="40dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_weight="30"
                 android:background="@drawable/new_tab_click"
@@ -32,13 +32,13 @@
 
             <View
                 android:layout_width="1dp"
-                android:layout_height="40dp"
+                android:layout_height="60dp"
                 android:background="#D3D3D3" />
 
             <Button
                 android:id="@+id/txt2"
                 android:layout_width="0px"
-                android:layout_height="40dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_weight="30"
                 android:background="@drawable/new_tab_click"
@@ -48,13 +48,13 @@
 
             <View
                 android:layout_width="1dp"
-                android:layout_height="40dp"
+                android:layout_height="60dp"
                 android:background="#D3D3D3" />
 
             <Button
                 android:id="@+id/txt3"
                 android:layout_width="0px"
-                android:layout_height="40dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_weight="30"
                 android:background="@drawable/new_tab_click"
@@ -64,13 +64,13 @@
 
             <View
                 android:layout_width="1dp"
-                android:layout_height="40dp"
+                android:layout_height="60dp"
                 android:background="#D3D3D3" />
 
             <Button
                 android:id="@+id/txt4"
                 android:layout_width="0px"
-                android:layout_height="40dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_weight="30"
                 android:background="@drawable/new_tab_click"
@@ -80,13 +80,13 @@
 
             <View
                 android:layout_width="1dp"
-                android:layout_height="40dp"
+                android:layout_height="60dp"
                 android:background="#D3D3D3" />
 
             <Button
                 android:id="@+id/txt5"
                 android:layout_width="0px"
-                android:layout_height="40dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_weight="30"
                 android:background="@drawable/new_tab_click"
@@ -98,7 +98,7 @@
         <LinearLayout
             android:id="@+id/bottomMenu"
             android:layout_width="fill_parent"
-            android:layout_height="40dp"
+            android:layout_height="60dp"
             android:background="@drawable/tab_bg"
             android:orientation="horizontal" >
 

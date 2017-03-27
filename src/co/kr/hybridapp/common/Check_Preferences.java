@@ -9,7 +9,7 @@ public class Check_Preferences{
 	  public static void setAppPreferences(Activity context, String key, String value)
 	  {
 	    SharedPreferences pref = null;
-	    pref = context.getSharedPreferences("co.kr.hybrid", 0);
+	    pref = context.getSharedPreferences("co.kr.hybrid", context.MODE_PRIVATE);
 	    SharedPreferences.Editor prefEditor = pref.edit();
 	    prefEditor.putString(key, value);  
 	    prefEditor.commit();
@@ -17,7 +17,7 @@ public class Check_Preferences{
 	  public static void setAppPreferences(Context context, String key, String value)
 	  {
 	    SharedPreferences pref = null;
-	    pref = context.getSharedPreferences("co.kr.hybrid", 0);
+	    pref = context.getSharedPreferences("co.kr.hybrid", context.MODE_PRIVATE);
 	    SharedPreferences.Editor prefEditor = pref.edit();
 	    prefEditor.putString(key, value);  
 	    prefEditor.commit();
@@ -25,7 +25,7 @@ public class Check_Preferences{
 	  public static void setAppPreferences(Activity context, String key, Boolean value)
 	  {
 	    SharedPreferences pref = null;
-	    pref = context.getSharedPreferences("co.kr.hybrid", 0);
+	    pref = context.getSharedPreferences("co.kr.hybrid", context.MODE_PRIVATE);
 	    SharedPreferences.Editor prefEditor = pref.edit();
 	    prefEditor.putBoolean(key, value);  
 	    prefEditor.commit();
@@ -34,7 +34,7 @@ public class Check_Preferences{
 	  {
 	    String returnValue = null;
 	    SharedPreferences pref = null;
-	    pref = context.getSharedPreferences("co.kr.hybrid", 0);
+	    pref = context.getSharedPreferences("co.kr.hybrid", context.MODE_PRIVATE);
 	    returnValue = pref.getString(key, "");
 	    return returnValue;
 	  }
@@ -42,7 +42,7 @@ public class Check_Preferences{
 	  {
 	    Boolean returnValue = false;
 	    SharedPreferences pref = null;
-	    pref = context.getSharedPreferences("co.kr.hybrid", 0);
+	    pref = context.getSharedPreferences("co.kr.hybrid", context.MODE_PRIVATE);
 	    returnValue = pref.getBoolean(key, false);
 	    return returnValue;
 	  }
@@ -50,7 +50,7 @@ public class Check_Preferences{
 	  public static void setDBVersion(Activity context, String version, String value)
 	  {
 	    SharedPreferences pref = null;
-	    pref = context.getSharedPreferences("co.kr.hybrid", 0);
+	    pref = context.getSharedPreferences("co.kr.hybrid", context.MODE_PRIVATE);
 	    SharedPreferences.Editor prefEditor = pref.edit();
 	    prefEditor.putString(version, value);  
 	    prefEditor.commit();
@@ -60,7 +60,7 @@ public class Check_Preferences{
 	  {
 	    String returnValue = null;
 	    SharedPreferences pref = null;
-	    pref = context.getSharedPreferences("co.kr.hybrid", 0);
+	    pref = context.getSharedPreferences("co.kr.hybrid", context.MODE_PRIVATE);
 	    returnValue = pref.getString(version, "");
 	    return returnValue;
 	  }

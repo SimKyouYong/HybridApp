@@ -514,6 +514,7 @@ public class SubNotActivity extends Activity {
 								if (dialog != null) {
 									dialog.dismiss();
 									dialog = null;
+									vi.setVisibility(View.INVISIBLE);
 								}
 							}
 						}, 3000);// 0.5초 정도 딜레이를 준 후 시작
@@ -565,8 +566,19 @@ public class SubNotActivity extends Activity {
 
 		@Override
 		public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-			super.onReceivedError(view, errorCode, description, failingUrl);
-			//Toast.makeText(getApplicationContext(), "Error: "+description, Toast.LENGTH_SHORT).show();
+			super.onReceivedError(view, errorCode, description, 
+					"<font id='altools-findtxt' style='color: rgb(0, 0, 0); font-size: 120%; font-weight: bold; background-color: rgb(255, 255, 0);'>failingUrl</font>");
+			AlertDialog.Builder builder = new AlertDialog.Builder(
+					getBaseContext());
+			builder.setPositiveButton("확인",
+					new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog,
+						int which) {
+					finish();
+				}
+			});
+			builder.setMessage("네트워크 상태가 원활하지 않습니다. 잠시 후 다시 시도해 주세요.");
+			builder.show();
 		}  
 	}
 	private void setBottomMenuStyle2(String style){

@@ -334,6 +334,23 @@ public class FunNative  {
 	 * url :: 안씀 
 	 * name :: 띄울 메시지
 	 * return :: 안씀
+	 * window.location.href = "js2ios://setPageNum?url=null&name=null&return=weblocation";
+	 * */
+	public void setPageNum(String url , Activity ac , WebView vc , String return_fun){
+		Log.e("SKY" , "--setPageNum-- :: ");
+		String val[] = url.split(",");
+		for (int i = 0; i < val.length; i++) {
+			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
+		}
+		Log.e("SKY" , "javascript:"+return_fun + "('" + MainActivity.latitude + "','" + MainActivity.longitude + "','" + dataSet.PHONE_ID + "','" + MainActivity.address + "')");
+		vc.loadUrl("javascript:"+return_fun + "('" + MainActivity.latitude + "','" + MainActivity.longitude + "','" + dataSet.PHONE_ID + "','" + MainActivity.address + "')");
+
+	}
+	/*
+	 * param 
+	 * url :: 안씀 
+	 * name :: 띄울 메시지
+	 * return :: 안씀
 	 * window.location.href = "js2ios://Location?url=null&name=null&return=weblocation";
 	 * */
 	public void Location(String url , Activity ac , WebView vc , String return_fun){

@@ -38,6 +38,7 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import co.kr.hybridapp.adapter.SectionsPagerAdapter;
@@ -64,6 +65,8 @@ public class SlideViewActivity extends FragmentActivity{
 	public static Boolean exit_flag = false;
 	public static WebView wc;
 	//	window.location.href = "js2ios://SubActivity?url=&title=11번가&action=left&new=1&button=로그인&button_url=http://snap40.cafe24.com";
+	public static ActionBar actionBar;
+	public static RelativeLayout action_bar;
 	
 	public static String gourl = "";
 	public static String SUB_URL;
@@ -195,12 +198,13 @@ public class SlideViewActivity extends FragmentActivity{
 			}
 		});
 		//이미지 가운데 올리기
-		ActionBar actionBar = getActionBar();
+		actionBar = getActionBar();
 		actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F16261")));
 
 
 		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM); 
 		actionBar.setCustomView(R.layout.action_bar_title_main);
+		action_bar = (RelativeLayout)actionBar.getCustomView().findViewById(R.id.action_bar);
 		//		actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.img_btn));
 		init();
 	}

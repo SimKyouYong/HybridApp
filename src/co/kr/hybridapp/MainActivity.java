@@ -1225,6 +1225,22 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		}
 	}
 	private void GPS_Start(){
+		//2초동안 응답 없으면 빈값 으로 보내기
+		new Handler().postDelayed(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				Log.e("SKY", "2초지나면 바로호출!!");
+				if (FirstLoadUrl) {
+					FirstLoadUrl = false;
+					First_Flag = true;
+					FirstUrl = homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + address + "&d=" + dataSet.PHONE_ID;
+					Log.e("SKY", "gogo ::!" + homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + "" + "&d=" + dataSet.PHONE_ID);
+					mWebView.loadUrl(homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + getAddress(mContext , latitude , longitude) + "&d=" + dataSet.PHONE_ID);
+				}
+			}
+		}, 2000);
 		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 		locationListener = new LocationListener() {
 			public void onLocationChanged(Location location) {

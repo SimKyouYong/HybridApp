@@ -15,7 +15,7 @@ public class DEFINE {
 	public static final int SPLASH_TIME = 1000;  		// 인트로 시간
 	public static final int TIME_OUT = 50000;			// 타임아웃
 	//public static Boolean PROGRESSBAR = false;			// 프로그레스바 : true : 보이게 한다, false : 안보이게 한다.
-	public static final Boolean GPS_SWICH   = false;		// GPS CHECK : true : GPS 가 off 이면 앱 구동시 알럿 띄움. , false : off 여도 그냥 무시하고 메인 진입함. 
+	public static final Boolean GPS_SWICH   = true;		// GPS CHECK : true : GPS 가 off 이면 앱 구동시 알럿 띄움. , false : off 여도 그냥 무시하고 메인 진입함. 
 	public static final Boolean LOADINGVIEW = true;		// 로딩 뷰     : true : 로딩 완료될떄까지 화면 가리기. , false : 로딩중에도 화면 보여주기
 	public static final Boolean PROGRESSBAR_3 = true;		// 3초이후 꺼지도록 프로그레스바 : true : 3초이후 꺼지게... , false : 안꺼지도록 한다.
 	

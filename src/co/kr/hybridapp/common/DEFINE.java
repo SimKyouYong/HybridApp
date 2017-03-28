@@ -34,6 +34,8 @@ public class DEFINE {
 	public static final String SETTING_131 ="http://www.moindaum.com/moin/tbcard.contact.html";
 	public static final String SETTING_132 ="http://www.moindaum.com/moin/tbcard.agree.html";
 	public static final String SETTING_133 ="http://www.moindaum.com/moin/tbcard.privacy.html";
+	
+	public static final String EXITPOP ="http://ch2ho.bible25.com/bible25ad/ad/mobile_exit_ad";
 
 	
 	public static final int REQ_LOCATION = 2000;

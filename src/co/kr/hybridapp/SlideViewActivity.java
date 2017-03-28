@@ -3,21 +3,24 @@ package co.kr.hybridapp;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.R.integer;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,13 +31,13 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.DrawerLayout;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 import android.webkit.ValueCallback;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -46,6 +49,7 @@ import co.kr.hybridapp.common.Check_Preferences;
 import co.kr.hybridapp.common.CustomDialog;
 import co.kr.hybridapp.common.DEFINE;
 import co.kr.hybridapp.common.ExitCustomDialog;
+import co.kr.hybridapp.common.UtilFunction;
 
 public class SlideViewActivity extends FragmentActivity{
 	private FrameLayout flContainer;
@@ -292,7 +296,8 @@ public class SlideViewActivity extends FragmentActivity{
 			return true;
 		}else{
 			//종료 타입 1, 2
-			if (Check_Preferences.getAppPreferences(SlideViewActivity.this , "SETPOPEXIT_TYPE1" ).equals("true")) {
+			//if (Check_Preferences.getAppPreferences(SlideViewActivity.this , "SETPOPEXIT_TYPE1" ).equals("true")) {
+			if (false) {
 				//디폴트 종료하기
 				final AlertDialog.Builder builder = new AlertDialog.Builder(SlideViewActivity.this , AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
 				builder.setMessage("종료 하시겠습니까?");
@@ -312,6 +317,7 @@ public class SlideViewActivity extends FragmentActivity{
 				dialog.show();
 			}else{
 				//이미지만 나오는 푸시 팝업
+				/*
 				Intent i = new Intent(SlideViewActivity.this , ShowIMGActivity.class);
 				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 				i.setComponent(new ComponentName(SlideViewActivity.this, ShowIMGActivity.class));
@@ -320,7 +326,9 @@ public class SlideViewActivity extends FragmentActivity{
 				i.putExtra("openurl","http://www.naver.com/");
 				i.putExtra("bottomview","true");
 				startActivity(i);
-				
+				*/
+				showDialog(1);
+				getExitAdAlertDialg(SlideViewActivity.this);
 //				//이미지 팝업 종료
 //				mexitCustomDialog = new ExitCustomDialog(SlideViewActivity.this, 
 //						"https://byunsooblog.files.wordpress.com/2014/06/find-in-path.png",
@@ -332,6 +340,97 @@ public class SlideViewActivity extends FragmentActivity{
 		}
 
 		return super.onKeyDown(keyCode, event);
+	}
+	private static Boolean GetInternet(Activity ac){
+		ConnectivityManager connManager =(ConnectivityManager)ac.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo state_3g = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+	    NetworkInfo state_wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+	    NetworkInfo state_blue = connManager.getNetworkInfo(ConnectivityManager.TYPE_BLUETOOTH);
+	    Boolean val = true;
+	    if (state_3g != null) {
+			val = state_3g.isConnected() || state_wifi.isConnected()|| state_blue.isConnected();
+		}else{
+			val = state_wifi.isConnected()|| state_blue.isConnected();
+		}
+	    return val;
+	}
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		return getExitAdAlertDialg(this);
+	}	
+	public static AlertDialog getExitAdAlertDialg(final Activity activity) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+		builder.setMessage("종료").setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				activity.finish();
+			}
+		})
+		.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.dismiss();
+			}
+		});
+		WebView webView = new WebView(activity);
+		WebSettings webSettings = webView.getSettings();
+		webSettings.setUseWideViewPort(true); // wide viewport를 사용하도록 설정
+		webSettings.setBuiltInZoomControls(false); // 확대 축소 false
+		webSettings.setSupportZoom(false); // disable pinch zoom
+		webView.getSettings().setLoadWithOverviewMode(true);
+		webView.setScrollContainer(false);
+		webView.loadUrl(DEFINE.EXITPOP);
+		
+		if (!GetInternet(activity)) {
+			webView.setVisibility(View.GONE);
+		}else{
+			webView.setVisibility(View.VISIBLE);
+		}
+		webView.setWebViewClient(new WebViewClient() {
+			ProgressDialog progressDialog;
+			private Context mContext;
+			@Override
+			public boolean shouldOverrideUrlLoading(WebView view, String url) {
+				this.mContext = view.getContext();
+				Log.e("SKY" , "url ::" + url);
+				if (url.startsWith("bible25:blank")) {
+					Log.e("SKY" , "launchExternalBrowser ::");
+
+					return UtilFunction.launchExternalBrowser(mContext, url);
+				} else if (url.startsWith("bible25:launch_app")) {
+					Log.e("SKY" , "startAppProcess ::");
+
+					int startPos = url.indexOf('?');
+					String packageName = url.substring(startPos + 1);
+					return UtilFunction.startAppProcess(mContext, "bible25:start_app?packageName=" + packageName);
+				} else {
+					Log.e("SKY" , "else ::");
+
+					view.loadUrl(url);
+					return true;
+				}
+			}
+			@SuppressWarnings("deprecation")
+			@Override
+			public void onPageStarted(WebView view, String url, Bitmap favicon) {
+				if (progressDialog == null) {
+					progressDialog = new ProgressDialog(activity);
+				}
+				progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+				progressDialog.setMessage("로딩중입니다. 잠시 기다려주세요.");
+				progressDialog.setCancelable(false);
+				progressDialog.show();
+			}
+
+			@Override
+			public void onPageFinished(WebView view, String url) {
+				if (progressDialog.isShowing()) {
+					progressDialog.dismiss();
+				}
+			}
+		});
+
+		AlertDialog alert = builder.create();
+		alert.setView(webView);
+		return alert;
 	}
 	private View.OnClickListener leftClickListener = new View.OnClickListener() {
 		@Override

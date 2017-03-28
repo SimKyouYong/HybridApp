@@ -147,9 +147,9 @@ public class KakaoLinkData {
 		
 		data.setText("[하이브리드 Demo]" + text);
 		data.setButtonType("web");
-		data.setButtonText("앱 설치하러 가기");
-		data.setImageSrc("http://emview.godohosting.com/ic_launcher.png");
-		data.setButtonUrl("http://ch2ho.bible25.com/bible25.php");
+		data.setButtonText("웹 이동하기");
+//		data.setImageSrc("http://emview.godohosting.com/ic_launcher.png");
+		data.setButtonUrl("http://www.naver.com/");
 		
 		return data;
 	}

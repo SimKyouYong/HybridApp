@@ -99,7 +99,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 	public View vi;
 	TelephonyManager tMgr;
 	private Typeface ttf;
-
+	String key;
 	private CustomDialog mCustomDialog,mCustomDialog2;
 	@Override
 	public void onDestroy() {
@@ -114,6 +114,12 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		Log.e("SKY" , "onCreate");
 		ttf = Typeface.createFromAsset(getAssets(), "HANYGO230.TTF");
 
+		Intent intent = getIntent();
+		Uri uri = intent.getData();
+		if (uri != null) {
+			key = uri.getQueryParameter("key");
+		}
+		
 		setContentView(R.layout.activity_main);
 		tMgr = (TelephonyManager) this
 				.getSystemService(Context.TELEPHONY_SERVICE);
@@ -1237,7 +1243,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 					First_Flag = true;
 					FirstUrl = homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + address + "&d=" + dataSet.PHONE_ID;
 					Log.e("SKY", "gogo ::!" + homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + "" + "&d=" + dataSet.PHONE_ID);
-					mWebView.loadUrl(homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + getAddress(mContext , latitude , longitude) + "&d=" + dataSet.PHONE_ID);
+					mWebView.loadUrl(homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + getAddress(mContext , latitude , longitude) + "&d=" + dataSet.PHONE_ID +"&e="+key);
 				}
 			}
 		}, 2000);
@@ -1261,7 +1267,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 						FirstLoadUrl = false;
 						First_Flag = true;
 						FirstUrl = homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + address + "&d=" + dataSet.PHONE_ID;
-						mWebView.loadUrl(homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + getAddress(mContext , latitude , longitude) + "&d=" + dataSet.PHONE_ID);
+						mWebView.loadUrl(homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + getAddress(mContext , latitude , longitude) + "&d=" + dataSet.PHONE_ID+"&e="+key);
 					}
 
 				}
@@ -1281,7 +1287,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 					First_Flag = true;
 					FirstLoadUrl = false;
 					FirstUrl = homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + "" + "&d=" + dataSet.PHONE_ID;
-					mWebView.loadUrl(homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + "" + "&d=" + dataSet.PHONE_ID);
+					mWebView.loadUrl(homeURL + "?a=" + latitude + "&b=" + longitude + "&c=" + "" + "&d=" + dataSet.PHONE_ID+"&e="+key);
 				}
 			}
 		};

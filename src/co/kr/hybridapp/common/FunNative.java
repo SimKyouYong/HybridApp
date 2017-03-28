@@ -3,10 +3,10 @@ package co.kr.hybridapp.common;
 import java.io.UnsupportedEncodingException;
 
 import com.kakao.kakaolink.AppActionBuilder;
+import com.kakao.kakaolink.AppActionInfoBuilder;
 import com.kakao.kakaolink.KakaoLink;
 import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder;
 import com.kakao.util.KakaoParameterException;
-import com.kakao.util.exception.KakaoException;
 
 import android.app.Activity;
 import android.content.ClipboardManager;
@@ -19,7 +19,6 @@ import co.kr.hybridapp.LocationSetting;
 import co.kr.hybridapp.Login;
 import co.kr.hybridapp.MainActivity;
 import co.kr.hybridapp.R;
-import co.kr.hybridapp.R.string;
 import co.kr.hybridapp.SKRoute;
 import co.kr.hybridapp.SettingActivity;
 import co.kr.hybridapp.SlideViewActivity;
@@ -33,6 +32,32 @@ public class FunNative  {
 	private WebView Webview_copy;
 
 
+	public void kakaoshareweb(String url , Activity ac , WebView vc , String return_fun) throws KakaoParameterException{
+		Log.e("SKY" , "--kakaoshareweb-- :: ");
+		String val[] = url.split(",");
+		for (int i = 0; i < val.length; i++) {
+			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
+		}
+		KakaoLinkData kakaoLinkData;
+		kakaoLinkData = KakaoLinkData.getInstanceForShareBibleVerse("");
+		try {
+			KakaoLink kakaoLink = KakaoLink.getKakaoLink(ac);
+			KakaoTalkLinkMessageBuilder kakaoTalkLinkMessageBuilder = kakaoLink.createKakaoTalkLinkMessageBuilder();
+			kakaoTalkLinkMessageBuilder.addText(kakaoLinkData.getText());
+//			if (kakaoLinkData.hasImage()) {
+//				kakaoTalkLinkMessageBuilder.addImage(kakaoLinkData.getImageSrc(), 100, 100);
+//			}
+			if (kakaoLinkData.hasWebButton()) {
+				kakaoTalkLinkMessageBuilder.addWebButton(kakaoLinkData.getButtonText(), kakaoLinkData.getButtonUrl());
+			}
+			if (kakaoLinkData.hasWebLink()) {
+				kakaoTalkLinkMessageBuilder.addWebLink(kakaoLinkData.getLinkText(), kakaoLinkData.getLinkUrl());
+			}
+			kakaoLink.sendMessage(kakaoTalkLinkMessageBuilder, ac);
+		} catch (KakaoParameterException e) {
+		}
+
+	}
 	public void kakaoshare(String url , Activity ac , WebView vc , String return_fun) throws KakaoParameterException{
 		Log.e("SKY" , "--kakaoshare-- :: ");
 		String val[] = url.split(",");
@@ -44,16 +69,30 @@ public class FunNative  {
 		try {
 			KakaoLink kakaoLink = KakaoLink.getKakaoLink(ac);
 			KakaoTalkLinkMessageBuilder kakaoTalkLinkMessageBuilder = kakaoLink.createKakaoTalkLinkMessageBuilder();
-			kakaoTalkLinkMessageBuilder.addText(kakaoLinkData.getText());
-			if (kakaoLinkData.hasImage()) {
-				kakaoTalkLinkMessageBuilder.addImage(kakaoLinkData.getImageSrc(), 100, 100);
-			}
-			if (kakaoLinkData.hasWebButton()) {
-				kakaoTalkLinkMessageBuilder.addWebButton(kakaoLinkData.getButtonText(), kakaoLinkData.getButtonUrl());
-			}
-			if (kakaoLinkData.hasWebLink()) {
-				kakaoTalkLinkMessageBuilder.addWebLink(kakaoLinkData.getLinkText(), kakaoLinkData.getLinkUrl());
-			}
+//			kakaoTalkLinkMessageBuilder.addText(kakaoLinkData.getText());
+//			if (kakaoLinkData.hasImage()) {
+//				kakaoTalkLinkMessageBuilder.addImage(kakaoLinkData.getImageSrc(), 100, 100);
+//			}
+//			if (kakaoLinkData.hasWebButton()) {
+//				kakaoTalkLinkMessageBuilder.addWebButton(kakaoLinkData.getButtonText(), kakaoLinkData.getButtonUrl());
+//			}
+//			if (kakaoLinkData.hasWebLink()) {
+//				kakaoTalkLinkMessageBuilder.addWebLink(kakaoLinkData.getLinkText(), kakaoLinkData.getLinkUrl());
+//			}
+			
+			kakaoTalkLinkMessageBuilder.addAppButton("앱으로 이동",
+			         new AppActionBuilder()
+			             .addActionInfo(AppActionInfoBuilder
+			                                .createAndroidActionInfoBuilder()
+			                                .setExecuteParam("key="+val[0] + "&return="+return_fun )
+			                                .setMarketParam("referrer=kakaotalklink")
+			                                .build())
+			             .addActionInfo(AppActionInfoBuilder
+			                                .createiOSActionInfoBuilder()
+			                                .setExecuteParam("return="+val[1])
+			                                .build())
+			             .build());
+			
 			kakaoLink.sendMessage(kakaoTalkLinkMessageBuilder, ac);
 		} catch (KakaoParameterException e) {
 		}

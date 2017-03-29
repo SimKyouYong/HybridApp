@@ -1,5 +1,6 @@
 package co.kr.hybridapp.fregment;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
@@ -19,7 +20,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -50,7 +50,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import co.kr.hybridapp.MainActivity;
 import co.kr.hybridapp.R;
 import co.kr.hybridapp.SlideViewActivity;
 import co.kr.hybridapp.common.Check_Preferences;
@@ -413,10 +412,18 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 				return true;       			
 			} else if(overrideUrl.startsWith("hybridapi://setRightButton")){
 				final String kw[] = overrideUrl.split("\\?");
-				Log.e("SKY", "kw1 :: " + kw[1]);
-				Log.e("SKY", "kw2 :: " + kw[2]);
-				SlideViewActivity.bt.setText("" + kw[1]);
-				SlideViewActivity.BUTTON_URL = kw[2];
+				Log.e("SKY", "kw1 :: " + kw[0]);
+				Log.e("SKY", "kw2 :: " + kw[1]);
+				String str2 ="";
+				try {
+					str2 = URLDecoder.decode( kw[1] , "UTF-8" );
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				final String kw1[] = str2.split(",");
+				SlideViewActivity.bt.setText("" + kw1[0]);
+				SlideViewActivity.BUTTON_URL = kw1[1];
 				return true;  	
 			} else {
 				boolean override = false;
@@ -942,10 +949,18 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 				return true;       			
 			} else if(overrideUrl.startsWith("hybridapi://setRightButton")){
 				final String kw[] = overrideUrl.split("\\?");
-				Log.e("SKY", "kw1 :: " + kw[1]);
-				Log.e("SKY", "kw2 :: " + kw[2]);
-				SlideViewActivity.bt.setText("" + kw[1]);
-				SlideViewActivity.BUTTON_URL = kw[2];
+				Log.e("SKY", "kw1 :: " + kw[0]);
+				Log.e("SKY", "kw2 :: " + kw[1]);
+				String str2 ="";
+				try {
+					str2 = URLDecoder.decode( kw[1] , "UTF-8" );
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				final String kw1[] = str2.split(",");
+				SlideViewActivity.bt.setText("" + kw1[0]);
+				SlideViewActivity.BUTTON_URL = kw1[1];
 				return true;  	
 			} else {
 				boolean override = false;

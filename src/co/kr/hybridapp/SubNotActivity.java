@@ -454,8 +454,8 @@ public class SubNotActivity extends Activity {
 					e.printStackTrace();
 				}
 				final String kw1[] = str2.split(",");
-				bt.setText("" + kw1[1]);
-				BUTTON_URL = kw1[2];
+				bt.setText("" + kw1[0]);
+				BUTTON_URL = kw1[1];
 				return true;  	
 			} else {
 				boolean override = false;

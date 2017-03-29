@@ -67,6 +67,7 @@ public class SubNotActivity extends Activity {
 	public static String BUTTON;
 	public static String BUTTON_URL;
 	ProgressDialog dialog;
+	Button bt;
 	boolean popup = false;
 	WebView pWebView;
 	private ValueCallback<Uri> mUploadMessage;
@@ -147,7 +148,7 @@ public class SubNotActivity extends Activity {
 		btn2.setClickable(false);
 
 		mainBody = (LinearLayout)findViewById(R.id.mainBody);
-		Button bt = (Button)findViewById(R.id.btn_right);
+		bt = (Button)findViewById(R.id.btn_right);
 		bt.setText("" + BUTTON);
 		bt.setTypeface(ttf);
 
@@ -199,7 +200,13 @@ public class SubNotActivity extends Activity {
 				break;
 			case R.id.btn_right:	
 				Log.e("SKY" , "btn_right");
-				wc.loadUrl(BUTTON_URL);
+				if (BUTTON_URL.equals("") || BUTTON_URL == null) {
+					//스크립트 함수 호출
+					wc.loadUrl("javascript:"+"getRightButton" + "()");
+				}else{
+					wc.loadUrl(BUTTON_URL);
+				}
+				
 				break;
 			case R.id.prevBtn:
 				wc.goBack();
@@ -435,6 +442,13 @@ public class SubNotActivity extends Activity {
 			}else if(overrideUrl.startsWith("hybridapi://settingtitle")){
 				//타이틀 바 변경 : ex)로그인 & 저장 & 로그아웃 기능 
 
+			} else if(overrideUrl.startsWith("hybridapi://setRightButton")){
+				final String kw[] = overrideUrl.split("\\?");
+				Log.e("SKY", "kw1 :: " + kw[1]);
+				Log.e("SKY", "kw2 :: " + kw[2]);
+				bt.setText("" + kw[1]);
+				BUTTON_URL = kw[2];
+				return true;  	
 			} else {
 				boolean override = false;
 				if (overrideUrl.startsWith("sms:")) {
@@ -943,6 +957,13 @@ public class SubNotActivity extends Activity {
 					}    				
 				}
 				return true;      			
+			} else if(overrideUrl.startsWith("hybridapi://setRightButton")){
+				final String kw[] = overrideUrl.split("\\?");
+				Log.e("SKY", "kw1 :: " + kw[1]);
+				Log.e("SKY", "kw2 :: " + kw[2]);
+				bt.setText("" + kw[1]);
+				BUTTON_URL = kw[2];
+				return true;  	
 			} else {
 				boolean override = false;
 				if (overrideUrl.startsWith("sms:")) {

@@ -411,6 +411,13 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 					SlideViewActivity.action_bar.setBackgroundColor(Color.parseColor(kw[1]));
 				}
 				return true;       			
+			} else if(overrideUrl.startsWith("hybridapi://setRightButton")){
+				final String kw[] = overrideUrl.split("\\?");
+				Log.e("SKY", "kw1 :: " + kw[1]);
+				Log.e("SKY", "kw2 :: " + kw[2]);
+				SlideViewActivity.bt.setText("" + kw[1]);
+				SlideViewActivity.BUTTON_URL = kw[2];
+				return true;  	
 			} else {
 				boolean override = false;
 				if (overrideUrl.startsWith("sms:")) {
@@ -933,6 +940,13 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 					setBottomMenuStyle2(kw[1]);
 				}
 				return true;       			
+			} else if(overrideUrl.startsWith("hybridapi://setRightButton")){
+				final String kw[] = overrideUrl.split("\\?");
+				Log.e("SKY", "kw1 :: " + kw[1]);
+				Log.e("SKY", "kw2 :: " + kw[2]);
+				SlideViewActivity.bt.setText("" + kw[1]);
+				SlideViewActivity.BUTTON_URL = kw[2];
+				return true;  	
 			} else {
 				boolean override = false;
 				if (overrideUrl.startsWith("sms:")) {

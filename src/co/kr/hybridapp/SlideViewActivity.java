@@ -78,6 +78,7 @@ public class SlideViewActivity extends FragmentActivity{
 	public static String NEW;
 	public static String BUTTON;
 	public static String BUTTON_URL;
+	public static Button bt;
 	private Typeface ttf;
 	ProgressDialog dialog;
 	TelephonyManager tMgr;
@@ -213,7 +214,7 @@ public class SlideViewActivity extends FragmentActivity{
 		init();
 	}
 	private void init(){
-		Button bt = (Button)findViewById(R.id.btn_list);
+		bt = (Button)findViewById(R.id.btn_list);
 		bt.setText("" + BUTTON);
 		bt.setTypeface(ttf);
 
@@ -262,7 +263,12 @@ public class SlideViewActivity extends FragmentActivity{
 				break;
 			case R.id.btn_list:	
 				Log.e("SKY" , "btn_list");
-				wc.loadUrl(BUTTON_URL);
+				if (BUTTON_URL.equals("") || BUTTON_URL == null) {
+					//스크립트 함수 호출
+					wc.loadUrl("javascript:"+"getRightButton" + "()");
+				}else{
+					wc.loadUrl(BUTTON_URL);
+				}
 				break;
 			case R.id.btn1:	
 				Log.e("SKY" , "btn1");

@@ -446,9 +446,16 @@ public class SubNotActivity extends Activity {
 			} else if(overrideUrl.startsWith("hybridapi://setRightButton")){
 				final String kw[] = overrideUrl.split("\\?");
 				Log.e("SKY", "kw1 :: " + kw[1]);
-				Log.e("SKY", "kw2 :: " + kw[2]);
-				bt.setText("" + kw[1]);
-				BUTTON_URL = kw[2];
+				String str2 ="";
+				try {
+					str2 = URLDecoder.decode( kw[1] , "UTF-8" );
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				final String kw1[] = str2.split(",");
+				bt.setText("" + kw1[1]);
+				BUTTON_URL = kw1[2];
 				return true;  	
 			} else {
 				boolean override = false;

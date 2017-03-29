@@ -263,7 +263,7 @@ public class SlideViewActivity extends FragmentActivity{
 				break;
 			case R.id.btn_list:	
 				Log.e("SKY" , "btn_list");
-				if (BUTTON_URL.equals("") || BUTTON_URL == null) {
+				if (BUTTON_URL.equals("null") || BUTTON_URL == null) {
 					//스크립트 함수 호출
 					wc.loadUrl("javascript:"+"getRightButton" + "()");
 				}else{

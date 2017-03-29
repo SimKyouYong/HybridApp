@@ -201,7 +201,7 @@ public class SubNotActivity extends Activity {
 				break;
 			case R.id.btn_right:	
 				Log.e("SKY" , "btn_right");
-				if (BUTTON_URL.equals("") || BUTTON_URL == null) {
+				if (BUTTON_URL.equals("null") || BUTTON_URL == null) {
 					//스크립트 함수 호출
 					wc.loadUrl("javascript:"+"getRightButton" + "()");
 				}else{

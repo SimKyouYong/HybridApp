@@ -83,10 +83,8 @@ public class MainActivity extends ActivityEx implements LocationListener {
 	String homeURL;
 	LocationManager locationManager;
 	LocationListener locationListener;
-	public static double latitude = 0;
-	public static double longitude=0;
 	public static String address="";
-	
+
 	boolean popup = false;
 	private boolean pan = false;
 	private boolean clearHistory = false;
@@ -114,12 +112,12 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		Log.e("SKY" , "onCreate");
 		ttf = Typeface.createFromAsset(getAssets(), "HANYGO230.TTF");
 
-		
-		
+
+
 		setContentView(R.layout.activity_main);
 		tMgr = (TelephonyManager) this
 				.getSystemService(Context.TELEPHONY_SERVICE);
-		
+
 		if (Check_Preferences.getAppPreferences(this, "SETEXIT_TYPE").equals("true")) {
 			//인텐트
 			Intent it = new Intent(this, SlideViewActivity.class);
@@ -182,7 +180,17 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			//askPushAgree();
 		}
 		Log.e("SKY" , "homeURL :: " + homeURL);
-		//		mWebView.loadUrl(homeURL);
+		//카톡 값 들어올때! 바로 url 태우기
+		Intent intent = getIntent();
+		Uri uri = intent.getData();
+		if (uri != null) {
+			key = uri.getQueryParameter("key");
+			mWebView.loadUrl("" + key);
+			return;
+		}
+		//GPS_Start();
+		mWebView.loadUrl(homeURL + "?a=" + dataSet.latitude + "&b=" + dataSet.longitude + "&c=" + dataSet.address + "&d=" + dataSet.PHONE_ID+"&e="+key);
+
 	}
 
 	private void inint(){
@@ -222,15 +230,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		btn1.setClickable(false);  
 		btn2.getBackground().setAlpha(90);
 		btn2.setClickable(false);
-		//카톡 값 들어올때! 바로 url 태우기
-		Intent intent = getIntent();
-		Uri uri = intent.getData();
-		if (uri != null) {
-			key = uri.getQueryParameter("key");
-			mWebView.loadUrl("" + key);
-			return;
-		}
-		GPS_Start();
+
 	}
 	private void WebSetting(){
 		mWebView = (WebView) findViewById(R.id.webview);
@@ -510,7 +510,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 					dialog.setCancelable(false);
 					dialog.show();
 					if (Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR_3")) {
-//					if (true) {
+						//					if (true) {
 						new Handler().postDelayed(new Runnable()
 						{
 							@Override
@@ -1118,7 +1118,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			}
 		}
 
-		GPS_Start();
+		//GPS_Start();
 		CookieSyncManager.getInstance().startSync();
 	}
 	@Override
@@ -1179,10 +1179,10 @@ public class MainActivity extends ActivityEx implements LocationListener {
 				double lat = jobj.getDouble("lat");
 				double lng = jobj.getDouble("lng");
 				mWebView.loadUrl("javascript:putlocationsetting('"+data+"');");
-//				String url = mWebView.getUrl();
-//				url = url.substring(0, url.indexOf("#"));
-//				url = url.substring(0, url.indexOf("?"));
-//				mWebView.loadUrl(url+"?address="+address+"&lat="+lat+"&lng="+lng+"&deviceid="+tMgr.getDeviceId());
+				//				String url = mWebView.getUrl();
+				//				url = url.substring(0, url.indexOf("#"));
+				//				url = url.substring(0, url.indexOf("?"));
+				//				mWebView.loadUrl(url+"?address="+address+"&lat="+lat+"&lng="+lng+"&deviceid="+tMgr.getDeviceId());
 			} catch (JSONException e) {
 				e.printStackTrace();
 				// TODO: handle exception
@@ -1242,6 +1242,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			e.printStackTrace();
 		}
 	}
+	/*
 	private void GPS_Start(){
 		//2초동안 응답 없으면 빈값 으로 보내기
 		new Handler().postDelayed(new Runnable()
@@ -1305,6 +1306,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		};
 		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, locationListener);
 	}
+	 */
 	@Override
 	public void onLocationChanged(Location location) {
 		// TODO Auto-generated method stub

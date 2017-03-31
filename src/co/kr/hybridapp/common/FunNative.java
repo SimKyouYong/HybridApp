@@ -381,8 +381,8 @@ public class FunNative  {
 		for (int i = 0; i < val.length; i++) {
 			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
 		}
-		Log.e("SKY" , "javascript:"+return_fun + "('" + MainActivity.latitude + "','" + MainActivity.longitude + "','" + dataSet.PHONE_ID + "','" + MainActivity.address + "')");
-		vc.loadUrl("javascript:"+return_fun + "('" + MainActivity.latitude + "','" + MainActivity.longitude + "','" + dataSet.PHONE_ID + "','" + MainActivity.address + "')");
+		Log.e("SKY" , "javascript:"+return_fun + "('" + dataSet.latitude + "','" + dataSet.longitude + "','" + dataSet.PHONE_ID + "','" + MainActivity.address + "')");
+		vc.loadUrl("javascript:"+return_fun + "('" + dataSet.latitude + "','" + dataSet.longitude + "','" + dataSet.PHONE_ID + "','" + MainActivity.address + "')");
 
 	}
 	/*
@@ -398,8 +398,8 @@ public class FunNative  {
 		for (int i = 0; i < val.length; i++) {
 			Log.e("SKY" , "VAL["+i + "]  :: " + i + " --> " + val[i]);
 		}
-		Log.e("SKY" , "javascript:"+return_fun + "('" + MainActivity.latitude + "','" + MainActivity.longitude + "')");
-		vc.loadUrl("javascript:"+return_fun + "('" + MainActivity.latitude + "','" + MainActivity.longitude + "')");
+		Log.e("SKY" , "javascript:"+return_fun + "('" + dataSet.latitude + "','" + dataSet.longitude + "')");
+		vc.loadUrl("javascript:"+return_fun + "('" + dataSet.latitude + "','" + dataSet.longitude + "')");
 
 	}
 	/*

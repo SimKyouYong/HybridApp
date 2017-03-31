@@ -13,7 +13,9 @@ public class CommonUtil {
 
 	public String PHONE;
 	public String PHONE_ID;
-	
+	public String address;
+	public double latitude = 0;
+	public double longitude=0;
 	
 
 	static {
@@ -21,6 +23,9 @@ public class CommonUtil {
 		try {								 
 			_instance.PHONE = 	   		"";
 			_instance.PHONE_ID = 	   		"";
+			_instance.address = 	   		"";
+			_instance.latitude = 	   		0;
+			_instance.longitude = 	   		0;
 
 			
 		} catch (Exception e) {

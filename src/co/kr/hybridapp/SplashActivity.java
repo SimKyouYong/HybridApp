@@ -12,6 +12,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +22,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import co.kr.hybridapp.common.ActivityEx;
+import co.kr.hybridapp.common.CommonUtil;
 import co.kr.hybridapp.common.DEFINE;
 import co.kr.sky.AccumThread;
 
@@ -31,6 +34,11 @@ public class SplashActivity extends ActivityEx {
 	public static Context context;
 	LocationManager myLocationManager;
 	Dialog dialog;
+	LocationManager locationManager;
+	LocationListener locationListener;
+	CommonUtil dataSet = CommonUtil.getInstance();
+
+	
 	int i = 0;
 	@Override
 	public void onResume() {
@@ -89,14 +97,62 @@ public class SplashActivity extends ActivityEx {
 			if (!isGpsEnabled) {
 				alertCheckGPS();
 			}else{
-				Handler h = new Handler ();
-		    	h.postDelayed(new splashhandler(), DEFINE.SPLASH_TIME);
+				//GPS 연동
+				GPS_Start();
+				
+				//Handler h = new Handler ();
+		    	//h.postDelayed(new splashhandler(), DEFINE.SPLASH_TIME);
 			}
 		}else{
 			Handler h = new Handler ();
 	    	h.postDelayed(new splashhandler(), DEFINE.SPLASH_TIME);
 		}
     	
+	}
+	private void GPS_Start(){
+		//2초동안 응답 없으면 빈값 으로 보내기
+		new Handler().postDelayed(new Runnable(){
+			@Override
+			public void run()
+			{
+				Log.e("SKY", "2초지나면 바로호출!!");
+				//인텐트 태우기
+				Handler h = new Handler ();
+		    	h.postDelayed(new splashhandler(), DEFINE.SPLASH_TIME);
+			}
+		}, 2000);
+		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+		locationListener = new LocationListener() {
+			public void onLocationChanged(Location location) {
+				Log.e("SKY" , "latitude :: onLocationChanged");
+				String gps = android.provider.Settings.Secure.getString(
+						getContentResolver(),
+						android.provider.Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+				if (!(gps.matches(".*gps.*") && gps.matches(".*network.*"))) {
+					dataSet.latitude = 0;
+					dataSet.longitude = 0;
+				} else {
+					dataSet.latitude = location.getLatitude();
+					dataSet.longitude = location.getLongitude();
+					dataSet.address = getAddress(SplashActivity.this , dataSet.latitude , dataSet.longitude);
+					Log.e("SKY" , "GPS :: latitude :: " + dataSet.latitude + "//longitude :: " + dataSet.longitude);
+					//인텐트 태우기
+					Handler h = new Handler ();
+			    	h.postDelayed(new splashhandler(), DEFINE.SPLASH_TIME);
+				}
+				locationManager.removeUpdates(locationListener);
+			}
+			public void onStatusChanged(String provider, int status, Bundle extras) {
+				Log.e("SKY" , "onStatusChanged");
+			}
+			public void onProviderEnabled(String provider) {
+				Log.e("SKY" , "onProviderEnabled");
+			}
+			public void onProviderDisabled(String provider) {
+				Log.e("SKY" , "onProviderDisabled");
+			}
+		};
+		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, locationListener);
 	}
 	private void alertCheckGPS() {
 			

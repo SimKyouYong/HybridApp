@@ -440,6 +440,14 @@ public class SubNotActivity extends Activity {
 					setBottomMenuStyle2(kw[1]);
 				}
 				return true;       			
+			}else if(overrideUrl.startsWith("hybridapi://setActionStyle")){
+				final String kw[] = overrideUrl.split("\\?");
+				Log.e("SKY", "overrideUrl :: " + overrideUrl);
+				Log.e("SKY", "kw :: " + kw[1]);
+				if(!kw[1].equals("")){
+					Check_Preferences.setAppPreferences(mContext, "setActionStyle", kw[1] );
+				}
+				return true;       			
 			}else if(overrideUrl.startsWith("hybridapi://settingtitle")){
 				//타이틀 바 변경 : ex)로그인 & 저장 & 로그아웃 기능 
 
@@ -454,8 +462,14 @@ public class SubNotActivity extends Activity {
 					e.printStackTrace();
 				}
 				final String kw1[] = str2.split(",");
-				bt.setText("" + kw1[0]);
-				BUTTON_URL = kw1[1];
+				if (kw1[0].equals("null")) {
+					//안보이게 처리
+					bt.setVisibility(View.GONE);
+				}else{
+					bt.setText("" + kw1[0]);
+					BUTTON_URL = kw1[1];
+				}
+				
 				return true;  	
 			} else {
 				boolean override = false;

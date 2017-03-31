@@ -114,11 +114,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		Log.e("SKY" , "onCreate");
 		ttf = Typeface.createFromAsset(getAssets(), "HANYGO230.TTF");
 
-		Intent intent = getIntent();
-		Uri uri = intent.getData();
-		if (uri != null) {
-			key = uri.getQueryParameter("key");
-		}
+		
 		
 		setContentView(R.layout.activity_main);
 		tMgr = (TelephonyManager) this
@@ -226,6 +222,14 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		btn1.setClickable(false);  
 		btn2.getBackground().setAlpha(90);
 		btn2.setClickable(false);
+		//카톡 값 들어올때! 바로 url 태우기
+		Intent intent = getIntent();
+		Uri uri = intent.getData();
+		if (uri != null) {
+			key = uri.getQueryParameter("key");
+			mWebView.loadUrl("" + key);
+			return;
+		}
 		GPS_Start();
 	}
 	private void WebSetting(){
@@ -449,6 +453,14 @@ public class MainActivity extends ActivityEx implements LocationListener {
 				final String kw[] = overrideUrl.split("\\?");
 				if(!kw[1].equals("")){
 					setBottomMenuStyle2(kw[1]);
+				}
+				return true;       			
+			}else if(overrideUrl.startsWith("hybridapi://setActionStyle")){
+				final String kw[] = overrideUrl.split("\\?");
+				Log.e("SKY", "overrideUrl :: " + overrideUrl);
+				Log.e("SKY", "kw :: " + kw[1]);
+				if(!kw[1].equals("")){
+					Check_Preferences.setAppPreferences(mContext, "setActionStyle", kw[1] );
 				}
 				return true;       			
 			}		

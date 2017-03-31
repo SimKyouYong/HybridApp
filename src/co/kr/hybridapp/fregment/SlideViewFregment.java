@@ -407,7 +407,8 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 				Log.e("SKY", "overrideUrl :: " + overrideUrl);
 				Log.e("SKY", "kw :: " + kw[1]);
 				if(!kw[1].equals("")){
-					SlideViewActivity.action_bar.setBackgroundColor(Color.parseColor(kw[1]));
+					Check_Preferences.setAppPreferences(mContext, "setActionStyle", kw[1] );
+					SlideViewActivity.action_bar.setBackgroundColor(Color.parseColor(Check_Preferences.getAppPreferences(mContext, "setActionStyle")));
 				}
 				return true;       			
 			} else if(overrideUrl.startsWith("hybridapi://setRightButton")){
@@ -422,8 +423,13 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 					e.printStackTrace();
 				}
 				final String kw1[] = str2.split(",");
-				SlideViewActivity.bt.setText("" + kw1[0]);
-				SlideViewActivity.BUTTON_URL = kw1[1];
+				if (kw1[0].equals("null")) {
+					//안보이게 처리
+					SlideViewActivity.bt.setVisibility(View.GONE);
+				}else{
+					SlideViewActivity.bt.setText("" + kw1[0]);
+					SlideViewActivity.BUTTON_URL = kw1[1];
+				}
 				return true;  	
 			} else {
 				boolean override = false;

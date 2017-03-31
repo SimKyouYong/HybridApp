@@ -211,6 +211,8 @@ public class SlideViewActivity extends FragmentActivity{
 		actionBar.setCustomView(R.layout.action_bar_title_main);
 		action_bar = (RelativeLayout)actionBar.getCustomView().findViewById(R.id.action_bar);
 		//		actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.img_btn));
+		SlideViewActivity.action_bar.setBackgroundColor(Color.parseColor(Check_Preferences.getAppPreferences(mContext, "setActionStyle")));
+		
 		init();
 	}
 	private void init(){

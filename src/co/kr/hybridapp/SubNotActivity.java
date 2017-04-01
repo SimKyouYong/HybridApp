@@ -55,6 +55,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import co.kr.hybridapp.common.Check_Preferences;
+import co.kr.hybridapp.common.CommonUtil;
 import co.kr.hybridapp.common.CustomDialog;
 import co.kr.hybridapp.common.DEFINE;
 
@@ -70,6 +71,8 @@ public class SubNotActivity extends Activity {
 	ProgressDialog dialog;
 	Button bt;
 	boolean popup = false;
+	CommonUtil dataSet = CommonUtil.getInstance();
+
 	WebView pWebView;
 	private ValueCallback<Uri> mUploadMessage;
 	private final static int FILECHOOSER_RESULTCODE = 1;
@@ -112,6 +115,16 @@ public class SubNotActivity extends Activity {
 		bottomMenu2 = (LinearLayout)findViewById(R.id.bottomMenu2);
 
 		
+		if (Check_Preferences.getAppPreferences(this, "bottomMenu").equals("GONE")) {
+			bottomMenu.setVisibility(View.GONE);
+		}else{
+			bottomMenu.setVisibility(View.VISIBLE);
+		}
+		if (Check_Preferences.getAppPreferences(this, "bottomMenu2").equals("GONE")) {
+			bottomMenu2.setVisibility(View.GONE);
+		}else{
+			bottomMenu2.setVisibility(View.VISIBLE);
+		}
 		btn1 = (ImageButton)findViewById(R.id.prevBtn);
 		btn2 = (ImageButton)findViewById(R.id.nextBtn);
 		btn3 = (ImageButton)findViewById(R.id.homeBtn);
@@ -329,11 +342,7 @@ public class SubNotActivity extends Activity {
 				return super.shouldOverrideUrlLoading(view, overrideUrl);
 			}else if(overrideUrl.startsWith("about:")){
 				return true;    		   
-			}else if(overrideUrl.startsWith("http://")||overrideUrl.startsWith("https://")){
-				view.loadUrl(overrideUrl);
-				return true;
-			}
-			else if(overrideUrl.startsWith("intent")||overrideUrl.startsWith("Intent"))
+			}else if(overrideUrl.startsWith("intent")||overrideUrl.startsWith("Intent"))
 			{
 				Intent intent = null;
 				try{
@@ -471,6 +480,12 @@ public class SubNotActivity extends Activity {
 				}
 				
 				return true;  	
+			} else if(overrideUrl.startsWith("http://") || overrideUrl.startsWith("https://")){
+				Log.e("SKY", "can url :: " + overrideUrl);
+				if(dataSet.paget(overrideUrl , SubNotActivity.this)){
+					view.loadUrl(overrideUrl);
+				}
+				return true;
 			} else {
 				boolean override = false;
 				if (overrideUrl.startsWith("sms:")) {
@@ -495,12 +510,14 @@ public class SubNotActivity extends Activity {
 				}else if(overrideUrl.startsWith("about:")){
 					return true;
 				}
+				/*
 				try{
 					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(overrideUrl));
 					startActivity(intent);
 					override = true;
 				}
 				catch(ActivityNotFoundException ex) {}
+				*/
 				return override;
 			}
 			return false;  
@@ -558,7 +575,7 @@ public class SubNotActivity extends Activity {
 				}
 			}
 			//Loading 뷰 가리기
-			if (DEFINE.LOADINGVIEW) {
+			if (Check_Preferences.getAppPreferencesboolean(SubNotActivity.this, "PROGRESSBAR_3")) {
 				vi.setVisibility(View.VISIBLE);
 			}
 		}
@@ -572,7 +589,7 @@ public class SubNotActivity extends Activity {
 				dialog.dismiss();
 			}
 			//Loading 뷰 가리기
-			if (DEFINE.LOADINGVIEW) {
+			if (Check_Preferences.getAppPreferencesboolean(SubNotActivity.this, "PROGRESSBAR_3")) {
 				vi.setVisibility(View.GONE);
 			}
 			if(clearHistory){
@@ -902,9 +919,6 @@ public class SubNotActivity extends Activity {
 				return super.shouldOverrideUrlLoading(view, overrideUrl);
 			}else if(overrideUrl.startsWith("about:")){
 				return true;    		   
-			}else if(overrideUrl.startsWith("http://")||overrideUrl.startsWith("https://")){
-				view.loadUrl(overrideUrl);
-				return true;
 			}
 			else if(overrideUrl.startsWith("intent")||overrideUrl.startsWith("Intent"))
 			{
@@ -994,7 +1008,13 @@ public class SubNotActivity extends Activity {
 				bt.setText("" + kw1[0]);
 				BUTTON_URL = kw1[1];
 				return true;  	
-			} else {
+			} else if(overrideUrl.startsWith("http://") || overrideUrl.startsWith("https://")){
+				Log.e("SKY", "can url :: " + overrideUrl);
+				if(dataSet.paget(overrideUrl , SubNotActivity.this)){
+					view.loadUrl(overrideUrl);
+				}
+				return true;
+			}else {
 				boolean override = false;
 				if (overrideUrl.startsWith("sms:")) {
 					Intent i = new Intent(Intent.ACTION_SENDTO, Uri.parse(overrideUrl));
@@ -1018,12 +1038,14 @@ public class SubNotActivity extends Activity {
 				}else if(overrideUrl.startsWith("about:")){
 					return true;
 				}
+				/*
 				try{
 					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(overrideUrl));
 					startActivity(intent);
 					override = true;
 				}
 				catch(ActivityNotFoundException ex) {}
+				*/
 				return override;
 			}    		
 		}

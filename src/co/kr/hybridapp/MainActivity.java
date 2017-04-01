@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -20,11 +21,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
@@ -60,6 +64,8 @@ import co.kr.hybridapp.common.Check_Preferences;
 import co.kr.hybridapp.common.CommonUtil;
 import co.kr.hybridapp.common.CustomDialog;
 import co.kr.hybridapp.common.DEFINE;
+import co.kr.hybridapp.common.DataSync;
+import co.kr.hybridapp.common.UtilFunction;
 
 
 @SuppressLint("JavascriptInterface")
@@ -179,6 +185,17 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		if(!pushAgreeCheck){
 			//askPushAgree();
 		}
+		
+		if (Check_Preferences.getAppPreferences(this, "bottomMenu").equals("GONE")) {
+			bottomMenu.setVisibility(View.GONE);
+		}else{
+			bottomMenu.setVisibility(View.VISIBLE);
+		}
+		if (Check_Preferences.getAppPreferences(this, "bottomMenu2").equals("GONE")) {
+			bottomMenu2.setVisibility(View.GONE);
+		}else{
+			bottomMenu2.setVisibility(View.VISIBLE);
+		}
 		Log.e("SKY" , "homeURL :: " + homeURL);
 		//카톡 값 들어올때! 바로 url 태우기
 		Intent intent = getIntent();
@@ -189,6 +206,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			return;
 		}
 		//GPS_Start();
+		FirstUrl = homeURL + "?a=" + dataSet.latitude + "&b=" + dataSet.longitude + "&c=" + dataSet.address + "&d=" + dataSet.PHONE_ID+"&e="+key;
 		mWebView.loadUrl(homeURL + "?a=" + dataSet.latitude + "&b=" + dataSet.longitude + "&c=" + dataSet.address + "&d=" + dataSet.PHONE_ID+"&e="+key);
 
 	}
@@ -245,7 +263,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		mWebView.getSettings().setDisplayZoomControls(false);
 		mWebView.getSettings().setSupportZoom(true);
 		mWebView.getSettings().setUseWideViewPort(true);
-		mWebView.getSettings().setLoadWithOverviewMode(true);
+		//mWebView.getSettings().setLoadWithOverviewMode(true);
 		mWebView.getSettings().setSupportMultipleWindows(true);
 		mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 		mWebView.getSettings().setPluginState(PluginState. ON);
@@ -318,7 +336,8 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		}
 		@Override //Tel,MailTo �±��϶� �׼Ǻ� ����Ʈ
 		public boolean shouldOverrideUrlLoading(WebView view, String overrideUrl) {
-			Log.e("SKY", "overrideUrl :: " + overrideUrl);
+			Log.e("SKY", "1overrideUrl :: " + overrideUrl);
+			
 			//인터넷 확인후 시작
 			if (!checkNetwordState()) {
 				Toast.makeText(getApplicationContext(), "인터넷 끊김! url노출 안됨.", 0).show();
@@ -344,12 +363,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 				return super.shouldOverrideUrlLoading(view, overrideUrl);
 			}else if(overrideUrl.startsWith("about:")){
 				return true;    		   
-			}else if(overrideUrl.startsWith("http://")||overrideUrl.startsWith("https://")){
-				view.loadUrl(overrideUrl);
-				return true;
-			}
-			else if(overrideUrl.startsWith("intent")||overrideUrl.startsWith("Intent"))
-			{
+			}else if(overrideUrl.startsWith("intent")||overrideUrl.startsWith("Intent")){
 				Intent intent = null;
 				try{
 					intent = Intent.parseUri(overrideUrl,  Intent.URI_INTENT_SCHEME);
@@ -457,14 +471,19 @@ public class MainActivity extends ActivityEx implements LocationListener {
 				return true;       			
 			}else if(overrideUrl.startsWith("hybridapi://setActionStyle")){
 				final String kw[] = overrideUrl.split("\\?");
-				Log.e("SKY", "overrideUrl :: " + overrideUrl);
+				Log.e("SKY", "2overrideUrl :: " + overrideUrl);
 				Log.e("SKY", "kw :: " + kw[1]);
 				if(!kw[1].equals("")){
 					Check_Preferences.setAppPreferences(mContext, "setActionStyle", kw[1] );
 				}
 				return true;       			
-			}		
-			else {
+			}else if(overrideUrl.startsWith("http://") || overrideUrl.startsWith("https://")){
+				Log.e("SKY", "can url :: " + overrideUrl);
+				if(dataSet.paget(overrideUrl , MainActivity.this)){
+					view.loadUrl(overrideUrl);
+				}
+				return true;
+			}else {
 				boolean override = false;
 				if (overrideUrl.startsWith("sms:")) {
 					Intent i = new Intent(Intent.ACTION_SENDTO, Uri.parse(overrideUrl));
@@ -488,20 +507,22 @@ public class MainActivity extends ActivityEx implements LocationListener {
 				}else if(overrideUrl.startsWith("about:")){
 					return true;
 				}
+				/*
 				try{
 					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(overrideUrl));
 					startActivity(intent);
 					override = true;
 				}
 				catch(ActivityNotFoundException ex) {}
+				*/
 				return override;
-			}  
+			}
 		}
 
 		@Override
 		public void onPageStarted(WebView view, String url, android.graphics.Bitmap favicon){
 			super.onPageStarted(view, url, favicon);
-
+			
 			//프로그레스바 띄우기
 			if (Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR")) {
 				if (dialog == null) {
@@ -528,7 +549,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 				}
 			}
 			//Loading 뷰 가리기
-			if (DEFINE.LOADINGVIEW) {
+			if (Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR_3")) {
 				vi.setVisibility(View.VISIBLE);
 			}
 		}
@@ -549,7 +570,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 
 			}
 			//Loading 뷰 가리기
-			if (DEFINE.LOADINGVIEW) {
+			if (Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR_3")) {
 				vi.setVisibility(View.GONE);
 			}
 			mProgressHorizontal.setVisibility(View.GONE);
@@ -583,19 +604,45 @@ public class MainActivity extends ActivityEx implements LocationListener {
 
 		@Override
 		public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-			super.onReceivedError(view, errorCode, description, 
+			super.onReceivedError(
+					view,
+					errorCode,
+					description,
 					"<font id='altools-findtxt' style='color: rgb(0, 0, 0); font-size: 120%; font-weight: bold; background-color: rgb(255, 255, 0);'>failingUrl</font>");
-			AlertDialog.Builder builder = new AlertDialog.Builder(
-					getBaseContext());
-			builder.setPositiveButton("확인",
-					new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog,
-						int which) {
-					finish();
-				}
-			});
-			builder.setMessage("네트워크 상태가 원활하지 않습니다. 잠시 후 다시 시도해 주세요.");
-			builder.show();
+			Log.e("webview_error", "1");
+			switch (errorCode) {
+			case ERROR_AUTHENTICATION: // 서버에서 사용자 인증 실패
+			case ERROR_BAD_URL: // 잘못된 URL
+			case ERROR_CONNECT: // 서버로 연결 실패
+				Log.e("ERR!", "Code" + errorCode);
+			case ERROR_FAILED_SSL_HANDSHAKE: // SSL handshake 수행 실패
+			case ERROR_FILE: // 일반 파일 오류
+			case ERROR_FILE_NOT_FOUND: // 파일을 찾을 수 없습니다
+			case ERROR_HOST_LOOKUP: // 서버 또는 프록시 호스트 이름 조회 실패
+			case ERROR_IO: // 서버에서 읽거나 서버로 쓰기 실패
+			case ERROR_PROXY_AUTHENTICATION: // 프록시에서 사용자 인증 실패
+			case ERROR_REDIRECT_LOOP: // 너무 많은 리디렉션
+			case ERROR_TIMEOUT: // 연결 시간 초과
+			case ERROR_TOO_MANY_REQUESTS: // 페이지 로드중 너무 많은 요청 발생
+			case ERROR_UNKNOWN: // 일반 오류
+			case ERROR_UNSUPPORTED_AUTH_SCHEME: // 지원되지 않는 인증 체계
+			case ERROR_UNSUPPORTED_SCHEME:
+				Toast.makeText(getApplicationContext(), "인터넷 끊김! url노출 안됨.", 0).show();
+				Log.e("SKY", "CANGOBACK :: " + mWebView.canGoBack());
+				mWebView.canGoBackOrForward(-2);
+//				AlertDialog.Builder builder = new AlertDialog.Builder(
+//						MainActivity.this);
+//				builder.setPositiveButton("확인",
+//						new DialogInterface.OnClickListener() {
+//					public void onClick(DialogInterface dialog,
+//							int which) {
+//						//finish();
+//					}
+//				});
+//				builder.setMessage("네트워크 상태가 원활하지 않습니다. 잠시 후 다시 시도해 주세요.");
+//				builder.show();
+				break; // URI가 지원되지 않는 방식
+			}
 		}  
 	}
 	class SMOWebChromeClient extends WebChromeClient{
@@ -875,6 +922,8 @@ public class MainActivity extends ActivityEx implements LocationListener {
 	@Override
 	@SuppressLint("NewApi")
 	public boolean onKeyDown(int keyCode, KeyEvent event){
+		Log.e("SKY", "pan :: " + pan);
+		Log.e("SKY", "openURL :: " + openURL);
 		if(popup&&keyCode == KeyEvent.KEYCODE_BACK&&pWebView.canGoBack()){
 			pWebView.goBack();
 			return true;
@@ -899,25 +948,48 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			pan = false;
 			mWebView.goBack();
 			return true;
-		}else if(!pan&&openURL.equals("")&&(keyCode == KeyEvent.KEYCODE_BACK)){
-			final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this , AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
-			builder.setMessage("종료 하시겠습니까?");
-			builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					finish();
-				}
-			});
-			builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-				}
-			});
-			final AlertDialog dialog = builder.create();
-			dialog.show();
-			//			finish_popup();
-
-			//			pan = true;
+		}else if(!pan&&(keyCode == KeyEvent.KEYCODE_BACK)){
+			//종료 타입 1, 2
+			if (Check_Preferences.getAppPreferences(MainActivity.this , "SETPOPEXIT_TYPE1" ).equals("true")) {
+//			if (false) {
+				//디폴트 종료하기
+				final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this , AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+				builder.setMessage("종료 하시겠습니까?");
+				builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						Log.e("SKY","AAA:: " + Check_Preferences.getAppPreferences(MainActivity.this , "SETEXIT_TYPE"));
+						finish();
+					}
+				});
+				builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+					}
+				});
+				final AlertDialog dialog = builder.create();
+				dialog.show();
+			}else{
+				//이미지만 나오는 푸시 팝업
+				/*
+				Intent i = new Intent(SlideViewActivity.this , ShowIMGActivity.class);
+				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+				i.setComponent(new ComponentName(SlideViewActivity.this, ShowIMGActivity.class));
+				i.putExtra("flag", true);
+				i.putExtra("imgurl","http://img1.tmon.kr/deals/2017/03/08/520859290/front_3325a.jpg");
+				i.putExtra("openurl","http://www.naver.com/");
+				i.putExtra("bottomview","true");
+				startActivity(i);
+				*/
+				showDialog(1);
+				getExitAdAlertDialg(MainActivity.this);
+//				//이미지 팝업 종료
+//				mexitCustomDialog = new ExitCustomDialog(SlideViewActivity.this, 
+//						"https://byunsooblog.files.wordpress.com/2014/06/find-in-path.png",
+//						leftClickListener, 
+//						rightClickListener);
+//				mexitCustomDialog.show();
+			}
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
@@ -1327,4 +1399,96 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		// TODO Auto-generated method stub
 
 	}
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		return getExitAdAlertDialg(this);
+	}	
+	public static AlertDialog getExitAdAlertDialg(final Activity activity) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+		builder.setMessage("종료").setCancelable(false).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				activity.finish();
+			}
+		})
+		.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.dismiss();
+			}
+		});
+		WebView webView = new WebView(activity);
+		WebSettings webSettings = webView.getSettings();
+		webSettings.setUseWideViewPort(true); // wide viewport를 사용하도록 설정
+		webSettings.setBuiltInZoomControls(false); // 확대 축소 false
+		webSettings.setSupportZoom(false); // disable pinch zoom
+		webView.getSettings().setLoadWithOverviewMode(true);
+		webView.setScrollContainer(false);
+		webView.loadUrl(DEFINE.EXITPOP);
+		
+		if (!GetInternet(activity)) {
+			webView.setVisibility(View.GONE);
+		}else{
+			webView.setVisibility(View.VISIBLE);
+		}
+		webView.setWebViewClient(new WebViewClient() {
+			ProgressDialog progressDialog;
+			private Context mContext;
+			@Override
+			public boolean shouldOverrideUrlLoading(WebView view, String url) {
+				this.mContext = view.getContext();
+				Log.e("SKY" , "url ::" + url);
+				if (url.startsWith("bible25:blank")) {
+					Log.e("SKY" , "launchExternalBrowser ::");
+
+					return UtilFunction.launchExternalBrowser(mContext, url);
+				} else if (url.startsWith("bible25:launch_app")) {
+					Log.e("SKY" , "startAppProcess ::");
+
+					int startPos = url.indexOf('?');
+					String packageName = url.substring(startPos + 1);
+					return UtilFunction.startAppProcess(mContext, "bible25:start_app?packageName=" + packageName);
+				} else {
+					Log.e("SKY" , "else ::");
+
+					view.loadUrl(url);
+					return true;
+				}
+			}
+			@SuppressWarnings("deprecation")
+			@Override
+			public void onPageStarted(WebView view, String url, Bitmap favicon) {
+				if (progressDialog == null) {
+					progressDialog = new ProgressDialog(activity);
+				}
+				progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+				progressDialog.setMessage("로딩중입니다. 잠시 기다려주세요.");
+				progressDialog.setCancelable(false);
+				//progressDialog.show();
+			}
+
+			@Override
+			public void onPageFinished(WebView view, String url) {
+				if (progressDialog.isShowing()) {
+					//progressDialog.dismiss();
+				}
+			}
+		});
+
+		AlertDialog alert = builder.create();
+		alert.setView(webView);
+		return alert;
+	}
+	private static Boolean GetInternet(Activity ac){
+		ConnectivityManager connManager =(ConnectivityManager)ac.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo state_3g = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+	    NetworkInfo state_wifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+	    NetworkInfo state_blue = connManager.getNetworkInfo(ConnectivityManager.TYPE_BLUETOOTH);
+	    Boolean val = true;
+	    if (state_3g != null) {
+			val = state_3g.isConnected() || state_wifi.isConnected()|| state_blue.isConnected();
+		}else{
+			val = state_wifi.isConnected()|| state_blue.isConnected();
+		}
+	    return val;
+	}
+	
 }

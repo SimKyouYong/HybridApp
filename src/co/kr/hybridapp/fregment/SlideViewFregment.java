@@ -6,6 +6,8 @@ import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 
+import com.google.android.gms.internal.av;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -50,9 +52,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import co.kr.hybridapp.MainActivity;
 import co.kr.hybridapp.R;
 import co.kr.hybridapp.SlideViewActivity;
+import co.kr.hybridapp.SubNotActivity;
 import co.kr.hybridapp.common.Check_Preferences;
+import co.kr.hybridapp.common.CommonUtil;
 import co.kr.hybridapp.common.CustomDialog;
 import co.kr.hybridapp.common.DEFINE;
 import co.kr.hybridapp.common.FragmentEx;
@@ -70,6 +75,7 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 	private final static int FILECHOOSER_RESULTCODE = 1;
 	public View vi;
 	String openURL="";
+	CommonUtil dataSet = CommonUtil.getInstance();
 
 	ImageButton btn1,btn2,btn3,btn4,btn5,btn6;
 	public LinearLayout bottomMenu , bottomMenu2;
@@ -95,6 +101,16 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 		bottomMenu = (LinearLayout)view.findViewById(R.id.bottomMenu);
 		bottomMenu2 = (LinearLayout)view.findViewById(R.id.bottomMenu2);
 
+		if (Check_Preferences.getAppPreferences(av_, "bottomMenu").equals("GONE")) {
+			bottomMenu.setVisibility(View.GONE);
+		}else{
+			bottomMenu.setVisibility(View.VISIBLE);
+		}
+		if (Check_Preferences.getAppPreferences(av_, "bottomMenu2").equals("GONE")) {
+			bottomMenu2.setVisibility(View.GONE);
+		}else{
+			bottomMenu2.setVisibility(View.VISIBLE);
+		}
 		btn1 = (ImageButton)view.findViewById(R.id.prevBtn);
 		btn2 = (ImageButton)view.findViewById(R.id.nextBtn);
 		btn3 = (ImageButton)view.findViewById(R.id.homeBtn);
@@ -288,9 +304,6 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 				return super.shouldOverrideUrlLoading(view, overrideUrl);
 			}else if(overrideUrl.startsWith("about:")){
 				return true;    		   
-			}else if(overrideUrl.startsWith("http://")||overrideUrl.startsWith("https://")){
-				view.loadUrl(overrideUrl);
-				return true;
 			}
 			else if(overrideUrl.startsWith("intent")||overrideUrl.startsWith("Intent"))
 			{
@@ -412,6 +425,8 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 				}
 				return true;       			
 			} else if(overrideUrl.startsWith("hybridapi://setRightButton")){
+				//'hybridapi://setRightButton?'+val+","+val2;
+
 				final String kw[] = overrideUrl.split("\\?");
 				Log.e("SKY", "kw1 :: " + kw[0]);
 				Log.e("SKY", "kw2 :: " + kw[1]);
@@ -427,11 +442,48 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 					//안보이게 처리
 					SlideViewActivity.bt.setVisibility(View.GONE);
 				}else{
+					SlideViewActivity.bt.setVisibility(View.VISIBLE);
 					SlideViewActivity.bt.setText("" + kw1[0]);
 					SlideViewActivity.BUTTON_URL = kw1[1];
 				}
 				return true;  	
-			} else {
+			} else if(overrideUrl.startsWith("hybridapi://SETSLIDE")){
+				final String kw[] = overrideUrl.split("\\?");
+				Log.e("SKY", "val :: " +kw[1]);
+				final String kw1[] = kw[1].split(",");
+				SlideViewActivity.rednew1.setVisibility(View.GONE);
+				SlideViewActivity.rednew2.setVisibility(View.GONE);
+				SlideViewActivity.rednew3.setVisibility(View.GONE);
+				SlideViewActivity.rednew4.setVisibility(View.GONE);
+				SlideViewActivity.rednew5.setVisibility(View.GONE);
+
+				for (int i = 0; i < kw1.length; i++) {
+					switch (Integer.parseInt(kw1[i])) {
+					case 1:
+						SlideViewActivity.rednew1.setVisibility(View.VISIBLE);
+						break;
+					case 2:
+						SlideViewActivity.rednew2.setVisibility(View.VISIBLE);
+						break;
+					case 3:
+						SlideViewActivity.rednew3.setVisibility(View.VISIBLE);
+						break;
+					case 4:
+						SlideViewActivity.rednew4.setVisibility(View.VISIBLE);
+						break;
+					case 5:
+						SlideViewActivity.rednew5.setVisibility(View.VISIBLE);
+						break;
+					}
+				}
+				return true;
+			}else if(overrideUrl.startsWith("http://") || overrideUrl.startsWith("https://")){
+				Log.e("SKY", "can url :: " + overrideUrl);
+				if(dataSet.paget(overrideUrl , av_)){
+					view.loadUrl(overrideUrl);
+				}
+				return true;
+			}else {
 				boolean override = false;
 				if (overrideUrl.startsWith("sms:")) {
 					Intent i = new Intent(Intent.ACTION_SENDTO, Uri.parse(overrideUrl));
@@ -455,12 +507,14 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 				}else if(overrideUrl.startsWith("about:")){
 					return true;
 				}
+				/*
 				try{
 					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(overrideUrl));
 					startActivity(intent);
 					override = true;
 				}
 				catch(ActivityNotFoundException ex) {}
+				*/
 				return override;
 			}
 			return false;  
@@ -489,7 +543,7 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 								if (dialog != null) {
 									dialog.dismiss();
 									dialog = null;
-									vi.setVisibility(View.INVISIBLE);
+									vi.setVisibility(View.GONE);
 								}
 							}
 						}, 3000);// 0.5초 정도 딜레이를 준 후 시작
@@ -497,8 +551,8 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 				}
 			}
 			//Loading 뷰 가리기
-			if (DEFINE.LOADINGVIEW) {
-				vi.setVisibility(View.VISIBLE);
+			if (Check_Preferences.getAppPreferencesboolean(av_, "PROGRESSBAR_3")) {
+				//vi.setVisibility(View.VISIBLE);
 			}
 		}
 
@@ -511,7 +565,7 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 				dialog.dismiss();
 			}
 			//Loading 뷰 가리기
-			if (DEFINE.LOADINGVIEW) {
+			if (Check_Preferences.getAppPreferencesboolean(av_, "PROGRESSBAR_3")) {
 				vi.setVisibility(View.GONE);
 			}
 			if(clearHistory){
@@ -812,6 +866,7 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 			e.printStackTrace();
 		}
 	}
+	//팝업!!
 	@SuppressLint("NewApi")
 	public class WebAppViewClient extends WebViewClient{
 		@Override
@@ -842,11 +897,7 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 				return super.shouldOverrideUrlLoading(view, overrideUrl);
 			}else if(overrideUrl.startsWith("about:")){
 				return true;    		   
-			}else if(overrideUrl.startsWith("http://")||overrideUrl.startsWith("https://")){
-				view.loadUrl(overrideUrl);
-				return true;
-			}
-			else if(overrideUrl.startsWith("intent")||overrideUrl.startsWith("Intent"))
+			}else if(overrideUrl.startsWith("intent")||overrideUrl.startsWith("Intent"))
 			{
 				Intent intent = null;
 				try{
@@ -968,6 +1019,12 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 				SlideViewActivity.bt.setText("" + kw1[0]);
 				SlideViewActivity.BUTTON_URL = kw1[1];
 				return true;  	
+			}else if(overrideUrl.startsWith("http://") || overrideUrl.startsWith("https://")){
+				Log.e("SKY", "can url :: " + overrideUrl);
+				if(dataSet.paget(overrideUrl , av_)){
+					view.loadUrl(overrideUrl);
+				}
+				return true;
 			} else {
 				boolean override = false;
 				if (overrideUrl.startsWith("sms:")) {
@@ -992,12 +1049,14 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 				}else if(overrideUrl.startsWith("about:")){
 					return true;
 				}
+				/*
 				try{
 					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(overrideUrl));
 					startActivity(intent);
 					override = true;
 				}
 				catch(ActivityNotFoundException ex) {}
+				*/
 				return override;
 			}    		
 		}

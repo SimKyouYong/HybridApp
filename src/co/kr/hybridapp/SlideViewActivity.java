@@ -83,7 +83,7 @@ public class SlideViewActivity extends FragmentActivity{
 	ProgressDialog dialog;
 	TelephonyManager tMgr;
 
-	ImageView rednew1 , rednew2 , rednew3 , rednew4, rednew5;
+	public static ImageView rednew1 , rednew2 , rednew3 , rednew4, rednew5;
 	@Override
 	protected void onResume(){
 		super.onResume();
@@ -211,7 +211,10 @@ public class SlideViewActivity extends FragmentActivity{
 		actionBar.setCustomView(R.layout.action_bar_title_main);
 		action_bar = (RelativeLayout)actionBar.getCustomView().findViewById(R.id.action_bar);
 		//		actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.img_btn));
-		SlideViewActivity.action_bar.setBackgroundColor(Color.parseColor(Check_Preferences.getAppPreferences(mContext, "setActionStyle")));
+		if (!Check_Preferences.getAppPreferences(mContext, "setActionStyle").equals("")) {
+			SlideViewActivity.action_bar.setBackgroundColor(Color.parseColor(Check_Preferences.getAppPreferences(mContext, "setActionStyle")));
+		}
+		
 		
 		init();
 	}
@@ -304,8 +307,8 @@ public class SlideViewActivity extends FragmentActivity{
 			return true;
 		}else{
 			//종료 타입 1, 2
-			//if (Check_Preferences.getAppPreferences(SlideViewActivity.this , "SETPOPEXIT_TYPE1" ).equals("true")) {
-			if (false) {
+			if (Check_Preferences.getAppPreferences(SlideViewActivity.this , "SETPOPEXIT_TYPE1" ).equals("true")) {
+//			if (false) {
 				//디폴트 종료하기
 				final AlertDialog.Builder builder = new AlertDialog.Builder(SlideViewActivity.this , AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
 				builder.setMessage("종료 하시겠습니까?");
@@ -336,7 +339,7 @@ public class SlideViewActivity extends FragmentActivity{
 				startActivity(i);
 				*/
 				showDialog(1);
-				getExitAdAlertDialg(SlideViewActivity.this);
+				//getExitAdAlertDialg(SlideViewActivity.this);
 //				//이미지 팝업 종료
 //				mexitCustomDialog = new ExitCustomDialog(SlideViewActivity.this, 
 //						"https://byunsooblog.files.wordpress.com/2014/06/find-in-path.png",
@@ -425,13 +428,13 @@ public class SlideViewActivity extends FragmentActivity{
 				progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 				progressDialog.setMessage("로딩중입니다. 잠시 기다려주세요.");
 				progressDialog.setCancelable(false);
-				progressDialog.show();
+				//progressDialog.show();
 			}
 
 			@Override
 			public void onPageFinished(WebView view, String url) {
 				if (progressDialog.isShowing()) {
-					progressDialog.dismiss();
+					//progressDialog.dismiss();
 				}
 			}
 		});

@@ -38,7 +38,6 @@ public class SplashActivity extends ActivityEx {
 	LocationListener locationListener;
 	CommonUtil dataSet = CommonUtil.getInstance();
 
-	
 	int i = 0;
 	@Override
 	public void onResume() {
@@ -52,7 +51,8 @@ public class SplashActivity extends ActivityEx {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.splash);
-		
+		dataSet.latitude = 0;
+		dataSet.longitude = 0;
 		if (!checkNetwordState()) {
 			//인터넷이 꺼져있으면 finish();
 			AlertDialog.Builder ab = new AlertDialog.Builder(this , AlertDialog.THEME_HOLO_LIGHT);
@@ -120,7 +120,7 @@ public class SplashActivity extends ActivityEx {
 				Handler h = new Handler ();
 		    	h.postDelayed(new splashhandler(), DEFINE.SPLASH_TIME);
 			}
-		}, 2000);
+		}, 3000);
 		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 		locationListener = new LocationListener() {
 			public void onLocationChanged(Location location) {
@@ -197,15 +197,19 @@ public class SplashActivity extends ActivityEx {
     	}
     	}
 
+    Boolean falggg = false;
 	public class splashhandler implements Runnable{
 		public void run(){
-			
-     		Intent i = new Intent(context, MainActivity.class);
-    		i.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-    		i.putExtra("openurl", "");
-    		startActivity(i);  
-    		
-			SplashActivity.this.finish();
+			if (!falggg) {
+				falggg=true;
+				Intent i = new Intent(context, MainActivity.class);
+	    		i.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+	    		i.putExtra("openurl", "");
+	    		startActivity(i);  
+	    		
+				finish();
+			}
+     		
 		}
 	}	
 	public void GCMRegistration_id()
@@ -253,12 +257,13 @@ public class SplashActivity extends ActivityEx {
 		public void handleMessage(Message msg)
 		{
 			if (msg.arg1  == 0 ) {
-				Intent i = new Intent(context, MainActivity.class);
-				i.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-				i.putExtra("openurl", "");
-				startActivity(i);  
-				
-				SplashActivity.this.finish();	
+				start();
+//				Intent i = new Intent(context, MainActivity.class);
+//				i.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+//				i.putExtra("openurl", "");
+//				startActivity(i);  
+//				
+//				SplashActivity.this.finish();	
 			}
 		}
 	};

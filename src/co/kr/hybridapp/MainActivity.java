@@ -297,18 +297,23 @@ public class MainActivity extends ActivityEx implements LocationListener {
 				shareUrl();
 				break;
 			case R.id.txt1:
+				mWebView.clearHistory();
 				mWebView.loadUrl(DEFINE.TXT1);
 				break;
 			case R.id.txt2:
+				mWebView.clearHistory();
 				mWebView.loadUrl(DEFINE.TXT2);
 				break;
 			case R.id.txt3:
+				mWebView.clearHistory();
 				mWebView.loadUrl(DEFINE.TXT3);
 				break;
 			case R.id.txt4:
+				mWebView.clearHistory();
 				mWebView.loadUrl(DEFINE.TXT4);
 				break;
 			case R.id.txt5:
+				mWebView.clearHistory();
 				mWebView.loadUrl(DEFINE.TXT5);
 				break;
 			}

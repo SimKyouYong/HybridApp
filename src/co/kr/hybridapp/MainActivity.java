@@ -271,6 +271,9 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		mWebView.getSettings().setUserAgentString(mWebView.getSettings().getUserAgentString()+" Hybrid 2.0");
 		mWebView.setWebChromeClient(new SMOWebChromeClient(this));
 		mWebView.setWebViewClient(new ITGOWebChromeClient());
+		if (Build.VERSION_CODES.HONEYCOMB <= Build.VERSION.SDK_INT) {
+			mWebView.setLayerType(WebView.LAYER_TYPE_HARDWARE, null);
+		}
 	}
 	//버튼 리스너 구현 부분 
 	View.OnClickListener btnListener = new View.OnClickListener() {
@@ -297,22 +300,27 @@ public class MainActivity extends ActivityEx implements LocationListener {
 				shareUrl();
 				break;
 			case R.id.txt1:
+				mWebView.stopLoading();
 				mWebView.clearHistory();
 				mWebView.loadUrl(DEFINE.TXT1);
 				break;
 			case R.id.txt2:
+				mWebView.stopLoading();
 				mWebView.clearHistory();
 				mWebView.loadUrl(DEFINE.TXT2);
 				break;
 			case R.id.txt3:
+				mWebView.stopLoading();
 				mWebView.clearHistory();
 				mWebView.loadUrl(DEFINE.TXT3);
 				break;
 			case R.id.txt4:
+				mWebView.stopLoading();
 				mWebView.clearHistory();
 				mWebView.loadUrl(DEFINE.TXT4);
 				break;
 			case R.id.txt5:
+				mWebView.stopLoading();
 				mWebView.clearHistory();
 				mWebView.loadUrl(DEFINE.TXT5);
 				break;
@@ -527,7 +535,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		@Override
 		public void onPageStarted(WebView view, String url, android.graphics.Bitmap favicon){
 			super.onPageStarted(view, url, favicon);
-			
+			Log.e("SKY", "onPageStarted  *===== " + url);
 			//프로그레스바 띄우기
 			if (Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR")) {
 				if (dialog == null) {
@@ -563,8 +571,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 		@Override
 		public void onPageFinished(WebView view, String url){
 			super.onPageFinished(view, url);
-			Log.e("SKY", "onPageFinished = = = = = = = "+url);
-
+			Log.e("SKY", "onPageFinished  *===== " + url);
 			exit_type = true;
 
 			//프로그레스바 끔.

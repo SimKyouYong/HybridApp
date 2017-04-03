@@ -193,8 +193,8 @@
         android:layout_height="fill_parent"
         android:layout_above="@id/bottomview1"
         android:layout_below="@id/progress_horizontal"
-        android:focusable="true"
-        android:focusableInTouchMode="true" />
+        android:layerType="software"
+         />
 
     <View
         android:id="@+id/loadingview"

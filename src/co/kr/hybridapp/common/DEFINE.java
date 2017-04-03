@@ -21,13 +21,13 @@ public class DEFINE {
 	
 	
 	
-	public static final String TXT1 ="http://www.naver.com/";  						
-	public static final String TXT2 ="http://www.daum.net/";  						
+	public static final String TXT1 ="http://m.naver.com/";  						
+	public static final String TXT2 ="http://m.daum.net/?nil_top=mobile";  						
 	public static final String TXT3 ="https://www.google.co.kr/";  						
 	public static final String TXT4 ="https://www.yahoo.com/";  						
-	public static final String TXT5 ="http://www.11st.co.kr/";  						
+	public static final String TXT5 ="http://m.11st.co.kr/MW/html/main.html?referrer=";  						
 
-	
+
 	public static final String SETTING_120 ="http://www.moindaum.com/moin/tbcard.membership.login.html";
 	public static final String SETTING_121 ="http://www.moindaum.com/moin/tbcard.membership.login_pro.php?_mode=logout";
 	public static final String SETTING_130 ="http://www.moindaum.com/moin/tbcard.community.notice_list.html";

@@ -526,6 +526,10 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			//프로그레스바 띄우기
 			if (Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR")) {
 				if (dialog == null) {
+					//Loading 뷰 가리기
+					if (Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR_3")) {
+						vi.setVisibility(View.VISIBLE);
+					}
 					dialog = new ProgressDialog(mContext ,AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
 					dialog.setMessage(getString(R.string.loading));
 					dialog.setCancelable(false);
@@ -548,10 +552,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 					}
 				}
 			}
-			//Loading 뷰 가리기
-			if (Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR_3")) {
-				vi.setVisibility(View.VISIBLE);
-			}
+			
 		}
 
 		@Override
@@ -563,16 +564,17 @@ public class MainActivity extends ActivityEx implements LocationListener {
 
 			//프로그레스바 끔.
 			if (Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR")) {
+				//Loading 뷰 가리기
+				if (Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR_3")) {
+					vi.setVisibility(View.GONE);
+				}
 				if (dialog != null) {
 					dialog.dismiss();
 					dialog = null;
 				}
 
 			}
-			//Loading 뷰 가리기
-			if (Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR_3")) {
-				vi.setVisibility(View.GONE);
-			}
+			
 			mProgressHorizontal.setVisibility(View.GONE);
 
 			if(clearHistory){

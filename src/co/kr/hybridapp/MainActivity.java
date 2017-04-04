@@ -252,21 +252,21 @@ public class MainActivity extends ActivityEx implements LocationListener {
 	}
 	private void WebSetting(){
 		mWebView = (WebView) findViewById(R.id.webview);
-		mWebView.setVerticalScrollbarOverlay(true);
-		mWebView.setHorizontalScrollbarOverlay(true);
-		mWebView.setHorizontalScrollBarEnabled(false);
+		//mWebView.setVerticalScrollbarOverlay(true);
+		//mWebView.setHorizontalScrollbarOverlay(true);
+		//mWebView.setHorizontalScrollBarEnabled(false);
 		mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);      
 		mWebView.getSettings().setJavaScriptEnabled(true);
 		mWebView.getSettings().setDomStorageEnabled(true);
-		mWebView.getSettings().setAppCacheEnabled(true);
+		//mWebView.getSettings().setAppCacheEnabled(true);
 		mWebView.getSettings().setBuiltInZoomControls(true);
-		mWebView.getSettings().setDisplayZoomControls(false);
+		//mWebView.getSettings().setDisplayZoomControls(false);
 		mWebView.getSettings().setSupportZoom(true);
 		mWebView.getSettings().setUseWideViewPort(true);
 		//mWebView.getSettings().setLoadWithOverviewMode(true);
 		mWebView.getSettings().setSupportMultipleWindows(true);
 		mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-		mWebView.getSettings().setPluginState(PluginState. ON);
+		//mWebView.getSettings().setPluginState(PluginState. ON);
 		mWebView.getSettings().setDefaultTextEncodingName(DEFINE.URI_ENCODE);
 		mWebView.getSettings().setUserAgentString(mWebView.getSettings().getUserAgentString()+" Hybrid 2.0");
 		mWebView.setWebChromeClient(new SMOWebChromeClient(this));
@@ -302,27 +302,27 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			case R.id.txt1:
 				mWebView.stopLoading();
 				mWebView.clearHistory();
-				//mWebView.loadUrl(DEFINE.TXT1);
-				mWebView.loadUrl("http://m.naver.com/");
+				mWebView.loadUrl(DEFINE.TXT1);
+//				mWebView.loadUrl("http://m.naver.com/");
 				break;
 			case R.id.txt2:
 				mWebView.stopLoading();
 				mWebView.clearHistory();
-				//mWebView.loadUrl(DEFINE.TXT2);
-				mWebView.loadUrl("http://m.daum.net");
+				mWebView.loadUrl(DEFINE.TXT2);
+//				mWebView.loadUrl("http://m.daum.net");
 				break;
 			case R.id.txt3:
 				mWebView.stopLoading();
 				mWebView.clearHistory();
-				//mWebView.loadUrl(DEFINE.TXT3);
-				mWebView.loadUrl("https://www.google.co.kr/");
+				mWebView.loadUrl(DEFINE.TXT3);
+//				mWebView.loadUrl("https://www.google.co.kr/");
 
 				break;
 			case R.id.txt4:
 				mWebView.stopLoading();
 				mWebView.clearHistory();
-				//mWebView.loadUrl(DEFINE.TXT4);
-				mWebView.loadUrl("https://www.yahoo.com/");
+				mWebView.loadUrl(DEFINE.TXT4);
+//				mWebView.loadUrl("https://www.yahoo.com/");
 				break;
 			case R.id.txt5:
 				mWebView.stopLoading();
@@ -496,10 +496,11 @@ public class MainActivity extends ActivityEx implements LocationListener {
 					Check_Preferences.setAppPreferences(mContext, "setActionStyle", kw[1] );
 				}
 				return true;       			
-			}else if(overrideUrl.startsWith("http://") || overrideUrl.startsWith("https://")){
+			}else if(overrideUrl.startsWith("http://")){
 				Log.e("SKY", "can url :: " + overrideUrl);
 				if(dataSet.paget(overrideUrl , MainActivity.this)){
-					view.loadUrl(overrideUrl);
+					mWebView.goBack();
+					mWebView.loadUrl(overrideUrl);
 				}
 				return true;
 			}else {
@@ -525,6 +526,9 @@ public class MainActivity extends ActivityEx implements LocationListener {
 					return true;
 				}else if(overrideUrl.startsWith("about:")){
 					return true;
+				}else{
+					Log.e("should_loadpage", overrideUrl);
+					view.loadUrl(overrideUrl); // 새창 열림 위에 소스 추가
 				}
 				/*
 				try{
@@ -566,7 +570,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 									vi.setVisibility(View.GONE);
 								}
 							}
-						}, 3000);// 0.5초 정도 딜레이를 준 후 시작
+						}, 2000);// 0.5초 정도 딜레이를 준 후 시작
 					}
 				}
 			}
@@ -583,11 +587,11 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			if (Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR")) {
 				//Loading 뷰 가리기
 				if (Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR_3")) {
-					vi.setVisibility(View.GONE);
+					//vi.setVisibility(View.GONE);
 				}
 				if (dialog != null) {
-					dialog.dismiss();
-					dialog = null;
+					//dialog.dismiss();
+					//dialog = null;
 				}
 
 			}

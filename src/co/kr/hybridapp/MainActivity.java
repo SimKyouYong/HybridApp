@@ -302,27 +302,33 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			case R.id.txt1:
 				mWebView.stopLoading();
 				mWebView.clearHistory();
-				mWebView.loadUrl(DEFINE.TXT1);
+				//mWebView.loadUrl(DEFINE.TXT1);
+				mWebView.loadUrl("http://m.naver.com/");
 				break;
 			case R.id.txt2:
 				mWebView.stopLoading();
 				mWebView.clearHistory();
-				mWebView.loadUrl(DEFINE.TXT2);
+				//mWebView.loadUrl(DEFINE.TXT2);
+				mWebView.loadUrl("http://m.daum.net");
 				break;
 			case R.id.txt3:
 				mWebView.stopLoading();
 				mWebView.clearHistory();
-				mWebView.loadUrl(DEFINE.TXT3);
+				//mWebView.loadUrl(DEFINE.TXT3);
+				mWebView.loadUrl("https://www.google.co.kr/");
+
 				break;
 			case R.id.txt4:
 				mWebView.stopLoading();
 				mWebView.clearHistory();
-				mWebView.loadUrl(DEFINE.TXT4);
+				//mWebView.loadUrl(DEFINE.TXT4);
+				mWebView.loadUrl("https://www.yahoo.com/");
 				break;
 			case R.id.txt5:
 				mWebView.stopLoading();
 				mWebView.clearHistory();
-				mWebView.loadUrl(DEFINE.TXT5);
+				//mWebView.loadUrl(DEFINE.TXT5);
+				mWebView.loadUrl("http://m.11st.co.kr");
 				break;
 			}
 		}
@@ -548,7 +554,6 @@ public class MainActivity extends ActivityEx implements LocationListener {
 					dialog.setCancelable(false);
 					dialog.show();
 					if (Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR_3")) {
-						//					if (true) {
 						new Handler().postDelayed(new Runnable()
 						{
 							@Override
@@ -558,7 +563,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 								if (dialog != null) {
 									dialog.dismiss();
 									dialog = null;
-									vi.setVisibility(View.INVISIBLE);
+									vi.setVisibility(View.GONE);
 								}
 							}
 						}, 3000);// 0.5초 정도 딜레이를 준 후 시작
@@ -578,7 +583,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			if (Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR")) {
 				//Loading 뷰 가리기
 				if (Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR_3")) {
-					vi.setVisibility(View.VISIBLE);
+					vi.setVisibility(View.GONE);
 				}
 				if (dialog != null) {
 					dialog.dismiss();
@@ -586,19 +591,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 				}
 
 			}
-			new Handler().postDelayed(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					Log.e("SKY", "3초지나면 프로그레스바 종료!!!");
-					if (dialog != null) {
-						dialog.dismiss();
-						dialog = null;
-						vi.setVisibility(View.GONE);
-					}
-				}
-			}, 2000);// 0.5초 정도 딜레이를 준 후 시작
+			
 			mProgressHorizontal.setVisibility(View.GONE);
 
 			if(clearHistory){

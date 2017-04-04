@@ -8,6 +8,7 @@ public class DEFINE {
 	 
 	public static final String GCM_ID ="911440898197";  						// GCM ID
 	public static final String DEFAULT_URL = "http://emview.godohosting.com/api_help.php";     	// URL 주소
+//	public static final String DEFAULT_URL = "https://m.naver.com/";     	// URL 주소
 	public static final String URI_ENCODE="utf-8";			// 인코딩 
 	public static final Boolean SHORT_CUT = false;				// 인트로화면 제어
 	public static final String BOTTOM_MENU_TABSTYLE = "default";   	// �ϴ� �׺���̼� �޴� ����(�⺻:default �ɴ� RGB hexcode ��: #FF0000)
@@ -21,11 +22,11 @@ public class DEFINE {
 	
 	
 	
-	public static final String TXT1 ="http://m.naver.com/";  						
+	public static final String TXT1 ="https://m.naver.com/";  						
 	public static final String TXT2 ="http://m.daum.net/?nil_top=mobile";  						
 	public static final String TXT3 ="https://www.google.co.kr/";  						
 	public static final String TXT4 ="https://www.yahoo.com/";  						
-	public static final String TXT5 ="http://m.11st.co.kr/MW/html/main.html?referrer=";  						
+	public static final String TXT5 ="http://m.11st.co.kr/MW/html/main.html";  						
 
 
 	public static final String SETTING_120 ="http://www.moindaum.com/moin/tbcard.membership.login.html";

@@ -301,34 +301,30 @@ public class MainActivity extends ActivityEx implements LocationListener {
 				break;
 			case R.id.txt1:
 				mWebView.stopLoading();
-				mWebView.clearHistory();
 				mWebView.loadUrl(DEFINE.TXT1);
 //				mWebView.loadUrl("http://m.naver.com/");
 				break;
 			case R.id.txt2:
 				mWebView.stopLoading();
-				mWebView.clearHistory();
 				mWebView.loadUrl(DEFINE.TXT2);
 //				mWebView.loadUrl("http://m.daum.net");
 				break;
 			case R.id.txt3:
 				mWebView.stopLoading();
-				mWebView.clearHistory();
 				mWebView.loadUrl(DEFINE.TXT3);
 //				mWebView.loadUrl("https://www.google.co.kr/");
 
 				break;
 			case R.id.txt4:
 				mWebView.stopLoading();
-				mWebView.clearHistory();
 				mWebView.loadUrl(DEFINE.TXT4);
 //				mWebView.loadUrl("https://www.yahoo.com/");
 				break;
 			case R.id.txt5:
+				Log.e("SKY", "--TXT5--");
 				mWebView.stopLoading();
-				mWebView.clearHistory();
-				//mWebView.loadUrl(DEFINE.TXT5);
-				mWebView.loadUrl("http://m.11st.co.kr");
+				mWebView.loadUrl(DEFINE.TXT5);
+				//mWebView.loadUrl("http://m.11st.co.kr/MW/html/main.html");
 				break;
 			}
 		}
@@ -353,10 +349,11 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			final AlertDialog dialog = builder.create();
 			dialog.show();
 		}
-		@Override //Tel,MailTo �±��϶� �׼Ǻ� ����Ʈ
+		@Override 
 		public boolean shouldOverrideUrlLoading(WebView view, String overrideUrl) {
 			Log.e("SKY", "1overrideUrl :: " + overrideUrl);
-			
+			//view.loadUrl(overrideUrl); // 새창 열림 위에 소스 추가
+			//return true;
 			//인터넷 확인후 시작
 			if (!checkNetwordState()) {
 				Toast.makeText(getApplicationContext(), "인터넷 끊김! url노출 안됨.", 0).show();
@@ -499,11 +496,11 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			}else if(overrideUrl.startsWith("http://")){
 				Log.e("SKY", "can url :: " + overrideUrl);
 				if(dataSet.paget(overrideUrl , MainActivity.this)){
-					mWebView.goBack();
 					mWebView.loadUrl(overrideUrl);
 				}
 				return true;
 			}else {
+				Log.e("SKY", "can url not :: " + overrideUrl);
 				boolean override = false;
 				if (overrideUrl.startsWith("sms:")) {
 					Intent i = new Intent(Intent.ACTION_SENDTO, Uri.parse(overrideUrl));
@@ -527,8 +524,9 @@ public class MainActivity extends ActivityEx implements LocationListener {
 				}else if(overrideUrl.startsWith("about:")){
 					return true;
 				}else{
-					Log.e("should_loadpage", overrideUrl);
-					view.loadUrl(overrideUrl); // 새창 열림 위에 소스 추가
+					Log.e("SKY", "overrideUrl  ELSE:: "  + overrideUrl);
+					mWebView.loadUrl(overrideUrl); // 새창 열림 위에 소스 추가
+					return true;
 				}
 				/*
 				try{
@@ -538,7 +536,6 @@ public class MainActivity extends ActivityEx implements LocationListener {
 				}
 				catch(ActivityNotFoundException ex) {}
 				*/
-				return override;
 			}
 		}
 
@@ -625,48 +622,6 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			//CookieSyncManager.getInstance().sync();
 		}
 
-		@Override
-		public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-			super.onReceivedError(
-					view,
-					errorCode,
-					description,
-					"<font id='altools-findtxt' style='color: rgb(0, 0, 0); font-size: 120%; font-weight: bold; background-color: rgb(255, 255, 0);'>failingUrl</font>");
-			Log.e("webview_error", "1");
-			switch (errorCode) {
-			case ERROR_AUTHENTICATION: // 서버에서 사용자 인증 실패
-			case ERROR_BAD_URL: // 잘못된 URL
-			case ERROR_CONNECT: // 서버로 연결 실패
-				Log.e("ERR!", "Code" + errorCode);
-			case ERROR_FAILED_SSL_HANDSHAKE: // SSL handshake 수행 실패
-			case ERROR_FILE: // 일반 파일 오류
-			case ERROR_FILE_NOT_FOUND: // 파일을 찾을 수 없습니다
-			case ERROR_HOST_LOOKUP: // 서버 또는 프록시 호스트 이름 조회 실패
-			case ERROR_IO: // 서버에서 읽거나 서버로 쓰기 실패
-			case ERROR_PROXY_AUTHENTICATION: // 프록시에서 사용자 인증 실패
-			case ERROR_REDIRECT_LOOP: // 너무 많은 리디렉션
-			case ERROR_TIMEOUT: // 연결 시간 초과
-			case ERROR_TOO_MANY_REQUESTS: // 페이지 로드중 너무 많은 요청 발생
-			case ERROR_UNKNOWN: // 일반 오류
-			case ERROR_UNSUPPORTED_AUTH_SCHEME: // 지원되지 않는 인증 체계
-			case ERROR_UNSUPPORTED_SCHEME:
-				Toast.makeText(getApplicationContext(), "인터넷 끊김! url노출 안됨.", 0).show();
-				Log.e("SKY", "CANGOBACK :: " + mWebView.canGoBack());
-				mWebView.canGoBackOrForward(-2);
-//				AlertDialog.Builder builder = new AlertDialog.Builder(
-//						MainActivity.this);
-//				builder.setPositiveButton("확인",
-//						new DialogInterface.OnClickListener() {
-//					public void onClick(DialogInterface dialog,
-//							int which) {
-//						//finish();
-//					}
-//				});
-//				builder.setMessage("네트워크 상태가 원활하지 않습니다. 잠시 후 다시 시도해 주세요.");
-//				builder.show();
-				break; // URI가 지원되지 않는 방식
-			}
-		}  
 	}
 	class SMOWebChromeClient extends WebChromeClient{
 		private View mCustomView;

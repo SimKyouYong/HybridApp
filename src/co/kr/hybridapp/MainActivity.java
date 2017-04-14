@@ -496,7 +496,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			}else if(overrideUrl.startsWith("http://")){
 				Log.e("SKY", "can url :: " + overrideUrl);
 				if(dataSet.paget(overrideUrl , MainActivity.this)){
-					mWebView.loadUrl(overrideUrl);
+					view.loadUrl(overrideUrl);
 				}
 				return true;
 			}else {
@@ -525,7 +525,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 					return true;
 				}else{
 					Log.e("SKY", "overrideUrl  ELSE:: "  + overrideUrl);
-					mWebView.loadUrl(overrideUrl); // 새창 열림 위에 소스 추가
+					view.loadUrl(overrideUrl); // 새창 열림 위에 소스 추가
 					return true;
 				}
 				/*
@@ -584,11 +584,11 @@ public class MainActivity extends ActivityEx implements LocationListener {
 			if (Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR")) {
 				//Loading 뷰 가리기
 				if (Check_Preferences.getAppPreferencesboolean(MainActivity.this, "PROGRESSBAR_3")) {
-					//vi.setVisibility(View.GONE);
+					vi.setVisibility(View.GONE);
 				}
 				if (dialog != null) {
-					//dialog.dismiss();
-					//dialog = null;
+					dialog.dismiss();
+					dialog = null;
 				}
 
 			}

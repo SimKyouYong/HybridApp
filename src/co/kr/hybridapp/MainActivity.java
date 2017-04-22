@@ -116,7 +116,7 @@ public class MainActivity extends ActivityEx implements LocationListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.e("SKY" , "onCreate");
-		ttf = Typeface.createFromAsset(getAssets(), "HANYGO230.TTF");
+		ttf = Typeface.createFromAsset(getAssets(), "RixL.ttf");
 
 
 
@@ -571,7 +571,6 @@ public class MainActivity extends ActivityEx implements LocationListener {
 					}
 				}
 			}
-			
 		}
 
 		@Override

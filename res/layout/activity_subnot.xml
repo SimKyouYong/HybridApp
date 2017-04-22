@@ -10,6 +10,7 @@
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:background="#F16261"
+        android:id="@+id/toptitilebar"
         android:orientation="horizontal" >
 
         <Button
@@ -19,7 +20,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:background="#708090"
+            android:background="@drawable/btn_02"
             android:paddingBottom="10dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"

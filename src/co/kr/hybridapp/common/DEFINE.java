@@ -11,8 +11,8 @@ public class DEFINE {
 //	public static final String DEFAULT_URL = "https://m.naver.com/";     	// URL 주소
 	public static final String URI_ENCODE="utf-8";			// 인코딩 
 	public static final Boolean SHORT_CUT = false;				// 인트로화면 제어
-	public static final String BOTTOM_MENU_TABSTYLE = "default";   	// �ϴ� �׺���̼� �޴� ����(�⺻:default �ɴ� RGB hexcode ��: #FF0000)
-	public static final String BOTTOM_MENU_TABSTYLE2 = "default";   	// �ϴ� �׺���̼� �޴� ����(�⺻:default �ɴ� RGB hexcode ��: #FF0000)
+	public static final String BOTTOM_MENU_TABSTYLE = "default";   	
+	public static final String BOTTOM_MENU_TABSTYLE2 = "default";   
 	public static final int SPLASH_TIME = 0;  		// 인트로 시간
 	public static final int TIME_OUT = 50000;			// 타임아웃
 	//public static Boolean PROGRESSBAR = false;			// 프로그레스바 : true : 보이게 한다, false : 안보이게 한다.

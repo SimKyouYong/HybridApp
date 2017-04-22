@@ -92,7 +92,7 @@ public class SlideViewFregment extends FragmentEx implements OnTouchListener{
 
 
 		Log.e("SKY" , "--MAIN START--");
-		ttf = Typeface.createFromAsset(av_.getAssets(), "HANYGO230.TTF");
+		ttf = Typeface.createFromAsset(av_.getAssets(), "RixL.ttf");
 
 		View view = inflater.inflate(R.layout.activity_slidefregment, null);
 		SlideViewActivity.wc = (WebView)view.findViewById(R.id.webview);

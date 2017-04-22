@@ -80,9 +80,11 @@ public class SlideViewActivity extends FragmentActivity{
 	public static String BUTTON_URL;
 	public static Button bt;
 	private Typeface ttf;
+	private Typeface ttf2;
 	ProgressDialog dialog;
 	TelephonyManager tMgr;
 
+	TextView font_1 , font_2 , font_3 , font_4  ,font_5;
 	public static ImageView rednew1 , rednew2 , rednew3 , rednew4, rednew5;
 	@Override
 	protected void onResume(){
@@ -101,7 +103,8 @@ public class SlideViewActivity extends FragmentActivity{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_slideview);
-		ttf = Typeface.createFromAsset(getAssets(), "RixB.ttf");
+		ttf = Typeface.createFromAsset(getAssets(), "RixL.ttf");
+		ttf2 = Typeface.createFromAsset(getAssets(), "RixB.ttf");
 		mContext = this;
 		tMgr = (TelephonyManager) this
 				.getSystemService(Context.TELEPHONY_SERVICE);
@@ -111,8 +114,19 @@ public class SlideViewActivity extends FragmentActivity{
 		rednew3 = (ImageView) findViewById(R.id.rednew3);
 		rednew4 = (ImageView) findViewById(R.id.rednew4);
 		rednew5 = (ImageView) findViewById(R.id.rednew5);
+		
+		
+		font_1 = (TextView) findViewById(R.id.font_1);
+		font_2 = (TextView) findViewById(R.id.font_2);
+		font_3 = (TextView) findViewById(R.id.font_3);
+		font_4 = (TextView) findViewById(R.id.font_4);
+		font_5 = (TextView) findViewById(R.id.font_5);
 
-
+		font_1.setTypeface(ttf);
+		font_2.setTypeface(ttf);
+		font_3.setTypeface(ttf);
+		font_4.setTypeface(ttf);
+		font_5.setTypeface(ttf);
 
 		SUB_URL = getIntent().getStringExtra("SUB_URL");
 		TITLE = getIntent().getStringExtra("TITLE");
@@ -202,6 +216,8 @@ public class SlideViewActivity extends FragmentActivity{
 				Log.e("SKY" , "--onPageScrollStateChanged--");
 			}
 		});
+		
+		
 		//이미지 가운데 올리기
 		actionBar = getActionBar();
 		actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#F16261")));
@@ -211,22 +227,31 @@ public class SlideViewActivity extends FragmentActivity{
 		actionBar.setCustomView(R.layout.action_bar_title_main);
 		action_bar = (RelativeLayout)actionBar.getCustomView().findViewById(R.id.action_bar);
 		//		actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.img_btn));
-		if (!Check_Preferences.getAppPreferences(mContext, "setActionStyle").equals("")) {
-			SlideViewActivity.action_bar.setBackgroundColor(Color.parseColor(Check_Preferences.getAppPreferences(mContext, "setActionStyle")));
-		}
-		
-		
 		init();
 	}
 	private void init(){
 		bt = (Button)findViewById(R.id.btn_list);
 		bt.setText("" + BUTTON);
 		bt.setTypeface(ttf);
-
+		ImageView slide = (ImageView)findViewById(R.id.slide);
+		 
 		TextView tt = (TextView)findViewById(R.id.titlea);
 		tt.setText("" + TITLE);
-		tt.setTypeface(ttf);
-
+		tt.setTypeface(ttf2);
+		
+		Log.e("SKY","타이틀바  색갈 : " + Check_Preferences.getAppPreferences(mContext, "setActionStyle"));
+		if(Check_Preferences.getAppPreferences(mContext, "setActionStyle").equals("#ffffff")){
+			tt.setTextColor(Color.BLACK);
+			bt.setTextColor(Color.BLACK);
+			slide.setBackgroundResource(R.drawable.btn_04);
+			SlideViewActivity.action_bar.setBackgroundColor(Color.parseColor(Check_Preferences.getAppPreferences(mContext, "setActionStyle")));
+		}else{
+			tt.setTextColor(Color.WHITE);
+			bt.setTextColor(Color.WHITE);
+			slide.setBackgroundResource(R.drawable.slide);
+			SlideViewActivity.action_bar.setBackgroundColor(Color.parseColor(Check_Preferences.getAppPreferences(mContext, "setActionStyle")));
+		}
+		
 
 		//		TextView txt1 = (TextView)findViewById(R.id.txt1);
 		//		txt1.setTypeface(ttf);

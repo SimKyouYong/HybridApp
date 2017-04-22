@@ -52,6 +52,7 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import co.kr.hybridapp.common.Check_Preferences;
@@ -84,8 +85,9 @@ public class SubNotActivity extends Activity {
 	private boolean clearHistory = false;
 	String openURL="";
 	TelephonyManager tMgr;
+	RelativeLayout toptitilebar;
 
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -95,7 +97,7 @@ public class SubNotActivity extends Activity {
 				.getSystemService(Context.TELEPHONY_SERVICE);
 		
 		
-		ttf = Typeface.createFromAsset(getAssets(), "HANYGO230.TTF");
+		ttf = Typeface.createFromAsset(getAssets(), "RixL.ttf");
 
 		SUB_URL = getIntent().getStringExtra("SUB_URL");
 		TITLE = getIntent().getStringExtra("TITLE");
@@ -113,7 +115,10 @@ public class SubNotActivity extends Activity {
 		vi = (View)findViewById(R.id.loadingview);
 		bottomMenu = (LinearLayout)findViewById(R.id.bottomMenu);
 		bottomMenu2 = (LinearLayout)findViewById(R.id.bottomMenu2);
+		toptitilebar = (RelativeLayout)findViewById(R.id.toptitilebar);
 
+		
+		
 		
 		if (Check_Preferences.getAppPreferences(this, "bottomMenu").equals("GONE")) {
 			bottomMenu.setVisibility(View.GONE);
@@ -170,6 +175,20 @@ public class SubNotActivity extends Activity {
 		tt.setText("" + TITLE);
 		tt.setTypeface(ttf);
 
+		
+		//fffff defaul 일때 이미지 바꾸시고 btn_01 , btn_02 이미지 변경해주세요 고대로 이미지 동시에 쓰면 다른데 문제 생기니 새로운 이미지 이름 추가하세요.
+		//activity_subnot.xml 파일안에 이미지 도 바꿔주세요. android:background="@drawable/btn_02  <<이부분 바꾸시면됩니다.
+		if (Check_Preferences.getAppPreferences(mContext, "setActionStyle").equals("")) {
+			toptitilebar.setBackgroundColor(Color.parseColor(Check_Preferences.getAppPreferences(mContext, "setActionStyle")));
+		}else if(Check_Preferences.getAppPreferences(mContext, "setActionStyle").equals("#ffffff")){
+			tt.setTextColor(Color.BLACK);
+			bt.setBackgroundResource(R.drawable.btn_01);
+			toptitilebar.setBackgroundColor(Color.parseColor(Check_Preferences.getAppPreferences(mContext, "setActionStyle")));
+		}else{
+			tt.setTextColor(Color.WHITE);
+			bt.setBackgroundResource(R.drawable.btn_02);
+			toptitilebar.setBackgroundColor(Color.parseColor(Check_Preferences.getAppPreferences(mContext, "setActionStyle")));
+		}
 
 
 
